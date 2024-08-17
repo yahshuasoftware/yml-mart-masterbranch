@@ -71,7 +71,7 @@ const Footer = () => {
               <input
                 className="text"
                 type="email"
-                placeholder="arjunahanwate358@gmail.com"
+                placeholder="Enter your Email"
                 name=""
                 id=""
               />
