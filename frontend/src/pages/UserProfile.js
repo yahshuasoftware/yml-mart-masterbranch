@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from 'react-icons/fa';
-import { MdSpeakerNotesOff } from "react-icons/md";
 import { BsBagXFill } from "react-icons/bs";
-import { RiDiscountPercentFill } from "react-icons/ri";
 import { CgTrack } from "react-icons/cg";
 import { useSelector } from 'react-redux'
 import { MdModeEditOutline } from "react-icons/md";
