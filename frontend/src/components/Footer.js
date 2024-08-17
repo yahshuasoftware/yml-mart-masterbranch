@@ -40,7 +40,7 @@ const Footer = () => {
             <img className="logo" src="logo.png" alt="" />
             </a>
             
-            <h2>Download our app</h2>
+            <h2>Install our app</h2>
             <div className="images">
                 <a href="https://play.google.com/"><img className="img1" src="Google-play.png" alt="img"/></a>
                 <a href="https://www.apple.com/in/app-store/"><img className="img2" src="App-store.png" alt="img"/></a>
