@@ -192,7 +192,7 @@ const Cart = () => {
                                         <p>{displayINRCurrency(totalPrice)}</p>    
                                     </div>
 
-                                    <Link to="/place-order" className='bg-blue-600 p-2 text-white w-full mt-2 inline-block text-center'>Place Order</Link>
+                                    <button  className='bg-blue-600 p-2 text-white w-full mt-2 inline-block text-center'>Place Order</button>
                                 </div>
                             )
                         }

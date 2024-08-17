@@ -14,6 +14,7 @@ const SignUp = () => {
       email : "",
       password : "",
       name : "",
+      address : "",
       confirmPassword : "",
       profilePic : "",
       mobileNo:""
@@ -102,7 +103,7 @@ const SignUp = () => {
                               <div className='bg-slate-100 p-2'>
                                   <input 
                                       type='text' 
-                                      placeholder='enter your name' 
+                                      placeholder='Enter Your Name' 
                                       name='name'
                                       value={data.name}
                                       onChange={handleOnChange}
@@ -115,7 +116,7 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2'>
                                 <input 
                                     type='email' 
-                                    placeholder='enter email' 
+                                    placeholder='Enter Email' 
                                     name='email'
                                     value={data.email}
                                     onChange={handleOnChange}
@@ -129,9 +130,23 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2'>
                                 <input 
                                     type='number' 
-                                    placeholder='enter email' 
+                                    placeholder='Enter Mobile No' 
                                     name='mobileNo'
                                     value={data.mobileNo}
+                                    onChange={handleOnChange}
+                                    required
+                                    className='w-full h-full outline-none bg-transparent'/>
+                            </div>
+                        </div>
+
+                        <div className='grid'>
+                            <label>Address : </label>
+                            <div className='bg-slate-100 p-2'>
+                                <input 
+                                    type='text' 
+                                    placeholder='Enter Address' 
+                                    name='address'
+                                    value={data.address}
                                     onChange={handleOnChange}
                                     required
                                     className='w-full h-full outline-none bg-transparent'/>
@@ -143,7 +158,7 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2 flex'>
                                 <input 
                                     type={showPassword ? "text" : "password"} 
-                                    placeholder='enter password'
+                                    placeholder='Enter Password'
                                     value={data.password}
                                     name='password' 
                                     onChange={handleOnChange}
@@ -170,9 +185,9 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2 flex'>
                                 <input 
                                     type={showConfirmPassword ? "text" : "password"} 
-                                    placeholder='enter confirm password'
+                                    placeholder='Enter Confirm password'
                                     value={data.confirmPassword}
-                                    name='confirmPassword' 
+                                    name='confirmPassword' x
                                     onChange={handleOnChange}
                                     required
                                     className='w-full h-full outline-none bg-transparent'/>
