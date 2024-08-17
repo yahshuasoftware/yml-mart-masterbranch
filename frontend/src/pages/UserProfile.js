@@ -81,10 +81,16 @@ const Profile = () => {
         return (
           <div>
             <h1 className="text-2xl font-bold mb-4">Address</h1>
-            <div className="flex flex-col items-center">
-              <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
-              <p>No address is saved</p>
-            </div>
+            <div>
+      {user.address ? (
+        <p>{user.address}</p>
+      ) : (
+        <div className="flex flex-col items-center">
+          <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
+          <p>No address is saved</p>
+        </div>
+      )}
+    </div>
           </div>
         );
       // case 'Coupons':
