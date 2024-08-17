@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-// PASSWORD = QQyMHleIsFtdzq4E
+// PASSWORD = Q7LGdE7DFgQ9TalQ
+// shrikantj2001
 // DB_URI = mongodb+srv://shrikantj2001:QQyMHleIsFtdzq4E@cluster0.a9lke.mongodb.net/yahshuadata
 async function connectDB() {
     try {
-        await mongoose.connect("mongodb://127.0.0.1:27017/yml", {
+        await mongoose.connect("mongodb+srv://shrikantj2001:Q7LGdE7DFgQ9TalQ@cluster0.bmtf4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
 
         });
         console.log("MongoDB connected successfully");
