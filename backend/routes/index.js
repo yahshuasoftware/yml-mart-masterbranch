@@ -23,7 +23,7 @@ router.get("/get-categoryProduct", require('../controller/product/getCategoryPro
 router.post("/category-product", require('../controller/product/getCategoryWiseProduct'));
 router.post("/product-details", require('../controller/product/getProductDetails'));
 router.get("/search", require('../controller/product/searchProduct'));
-router.post("/filter-product", require('../controller/product/filterProductController'));
+router.post("/filter-product", require('../controller/product/filterProduct'));
 
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));
