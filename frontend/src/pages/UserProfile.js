@@ -125,7 +125,7 @@ const Profile = () => {
   {sidebarOpen ? <FaTimes /> : <FaBars />}
 </button>
 
-        <aside className={`z-50 md:z-10 fixed top-0 left-0 mt[0] h-full bg-gray-100 p-4 transition-transform transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64`}>
+        <aside className={`z-50 md:z-10 md:h-auto fixed top-0 left-0 mt[0] h-[100vh] bg-gray-100 p-4 transition-transform transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64`}>
           <ul className="space-y-5">
             <li className={activeSection === 'Profile Information' ? 'font-bold text-sky-600' : ''}>
               <button onClick={() => { setActiveSection('Profile Information'); toggleSidebar(); }} className="text-lg">Profile Information</button>
