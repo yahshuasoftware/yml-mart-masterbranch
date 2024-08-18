@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import SummaryApi from '../common'
 import Context from '../context'
 import displayINRCurrency from '../helpers/displayCurrency'
-import { MdDelete } from "react-icons/md";
-import { Link } from 'react-router-dom';
+import { MdDelete } from "react-icons/md"
+
 
 const Cart = () => {
     const [data,setData] = useState([])
@@ -138,12 +138,12 @@ const Cart = () => {
 
         // Open Razorpay payment gateway
         const options = {
-            key: 'rzp_test_U4XuiM2cjeWzma', // replace with your Razorpay key_id
+            key: 'rzp_test_U4XuiM2cjeWzma', //Razorpay key_id
             amount: responseData.order.amount, // Amount in paisa
             currency: responseData.order.currency,
-            name: 'Your Company Name',
+            name: 'YML mart',
             description: 'Payment for Order',
-            image: '/your_logo.png',
+            image: '/logo.png',
             order_id: responseData.order.id, // order_id returned from backend
             handler: function (response) {
                 alert('Payment Successful');
@@ -153,9 +153,9 @@ const Cart = () => {
                 console.log(response.razorpay_signature);
             },
             prefill: {
-                name: 'John Doe',
-                email: 'johndoe@example.com',
-                contact: '9999999999',
+                name: 'shri',
+                email: 'shri@gmail.com',
+                contact: '0000000000',
             },
             theme: {
                 color: '#3399cc',
@@ -249,11 +249,11 @@ const Cart = () => {
                                         <p>{displayINRCurrency(totalPrice)}</p>    
                                     </div>
                                     <button
-                className='bg-blue-600 p-2 text-white w-full mt-2'
-                onClick={handlePayment}
-            >
-                Place Order
-            </button>
+                                        className='bg-blue-600 p-2 text-white w-full mt-2'
+                                        onClick={handlePayment}
+                                    >
+                                    Place Order
+                                    </button>
 
                                 </div>
                             )
