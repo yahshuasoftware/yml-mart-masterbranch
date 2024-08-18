@@ -2,8 +2,8 @@ const Razorpay = require('razorpay');
 
 // Import keys from environment variables or your config file
 const razorpay = new Razorpay({
-    key_id:'rzp_test_U4XuiM2cjeWzma',
-    key_secret:'2CXOAspw2Cgr0wlTz6vc0e8J',
+    key_id: 'rzp_test_U4XuiM2cjeWzma',
+    key_secret: '2CXOAspw2Cgr0wlTz6vc0e8J',
 });
 
 // Create an order
