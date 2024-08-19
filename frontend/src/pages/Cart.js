@@ -116,7 +116,7 @@ const Cart = () => {
     // Razorpay 
     const handlePayment = async () => {
         // Create an order on the backend
-        const response = await fetch('http://localhost:8080/api/payment/order', {
+        const response = await fetch('http://localhost:8080/api/payment/create-order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
