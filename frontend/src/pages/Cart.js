@@ -176,7 +176,6 @@ const Cart = () => {
                                 Refer a Friend
                             </button>
                         </Link>
-
                         </div>
                     )}
                 </div>
