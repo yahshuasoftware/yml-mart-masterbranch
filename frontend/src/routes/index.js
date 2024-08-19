@@ -12,6 +12,7 @@ import ProductDetails from '../pages/ProductDetails'
 import Cart from '../pages/Cart'
 import SearchProduct from '../pages/SearchProduct'
 import UserProfile from '../pages/UserProfile'
+import Refer from '../pages/Refer'
 
 const router = createBrowserRouter([
     {
