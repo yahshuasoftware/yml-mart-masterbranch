@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
-import SummaryApi from '../common';
-import Context from '../context';
-import { Link } from 'react-router-dom';
-import displayINRCurrency from '../helpers/displayCurrency';
+import React, { useContext, useEffect, useState } from 'react'
+import SummaryApi from '../common'
+import Context from '../context'
+import displayINRCurrency from '../helpers/displayCurrency'
 import { MdDelete } from "react-icons/md";
-import Refer from './Refer';
 
 const Cart = () => {
     const [data, setData] = useState([]);
@@ -98,7 +96,7 @@ const Cart = () => {
             fetchData();
             context.fetchUserAddToCart();
         }
-    };
+    }
 
     const totalQty = data.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
     const totalPrice = data.reduce((prev, curr) => prev + (curr.quantity * curr?.productId?.sellingPrice), 0);
@@ -165,17 +163,12 @@ const Cart = () => {
                                 <p>{totalQty}</p>
                             </div>
 
-                            <div className='flex items-center justify-between px-4 gap-2 font-medium text-lg text-slate-600'>
-                                <p>Total Price</p>
-                                <p>{displayINRCurrency(totalPrice)}</p>
-                            </div>
+                                    <div className='flex items-center justify-between px-4 gap-2 font-medium text-lg text-slate-600'>
+                                        <p>Total Price</p>
+                                        <p>{displayINRCurrency(totalPrice)}</p>    
+                                    </div>
 
-                            <button className='bg-blue-600 p-2 text-white w-full mt-2'>Payment</button>
-                            <Link to="/refer">
-                            <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-semibold p-2 w-full mt-2 rounded'>
-                                Refer a Friend
-                            </button>
-                        </Link>
+                                    <button className='bg-blue-600 p-2 text-white w-full mt-2'>Payment</button>
 
                         </div>
                     )}

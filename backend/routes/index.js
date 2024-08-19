@@ -1,63 +1,36 @@
-const express = require('express')
+const express = require('express');
+const router = express.Router();
 
-const router = express.Router()
+// payment routes
+const paymentRoutes = require('../controller/payment/paymentRoutes');
+router.use('/payment', paymentRoutes);
 
-const userSignUpController = require("../controller/user/userSignUp")
-const userSignInController = require('../controller/user/userSignIn')
-const userDetailsController = require('../controller/user/userDetails')
-const authToken = require('../middleware/authToken')
-const userLogout = require('../controller/user/userLogout')
-const allUsers = require('../controller/user/allUsers')
-const updateUser = require('../controller/user/updateUser')
-const UploadProductController = require('../controller/product/uploadProduct')
-const getProductController = require('../controller/product/getProduct')
-const updateProductController = require('../controller/product/updateProduct')
-const getCategoryProduct = require('../controller/product/getCategoryProductOne')
-const getCategoryWiseProduct = require('../controller/product/getCategoryWiseProduct')
-const getProductDetails = require('../controller/product/getProductDetails')
-const addToCartController = require('../controller/user/addToCartController')
-const countAddToCartProduct = require('../controller/user/countAddToCartProduct')
-const addToCartViewProduct  = require('../controller/user/addToCartViewProduct')
-const updateAddToCartProduct = require('../controller/user/updateAddToCartProduct')
-const deleteAddToCartProduct = require('../controller/user/deleteAddToCartProduct')
-const searchProduct = require('../controller/product/searchProduct')
-const filterProductController = require('../controller/product/filterProduct')
-const profile = require('../controller/user/userProfileController');
+// User and Product routes
+router.post("/signup", require("../controller/user/userSignUp"));
+router.post("/signin", require('../controller/user/userSignIn'));
+router.get("/user-details", require('../middleware/authToken'), require('../controller/user/userDetails'));
+router.get("/userLogout", require('../controller/user/userLogout'));
 
+// Admin Panel Routes
+router.get("/all-user", require('../middleware/authToken'), require('../controller/user/allUsers'));
+router.post("/update-user", require('../middleware/authToken'), require('../controller/user/updateUser'));
 
+// Product Routes
+router.post("/upload-product", require('../middleware/authToken'), require('../controller/product/uploadProduct'));
+router.get("/get-product", require('../controller/product/getProduct'));
+router.post("/update-product", require('../middleware/authToken'), require('../controller/product/updateProduct'));
+router.get("/get-categoryProduct", require('../controller/product/getCategoryProductOne'));
+router.post("/category-product", require('../controller/product/getCategoryWiseProduct'));
+router.post("/product-details", require('../controller/product/getProductDetails'));
+router.get("/search", require('../controller/product/searchProduct'));
+router.post("/filter-product", require('../controller/product/filterProduct'));
 
-router.post("/signup",userSignUpController)
-router.post("/signin",userSignInController)
-router.get("/user-details",authToken,userDetailsController)
+// User Cart Routes
+router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));
+router.get("/countAddToCartProduct", require('../middleware/authToken'), require('../controller/user/countAddToCartProduct'));
+router.get("/view-card-product", require('../middleware/authToken'), require('../controller/user/addToCartViewProduct'));
+router.post("/update-cart-product", require('../middleware/authToken'), require('../controller/user/updateAddToCartProduct'));
+router.post("/delete-cart-product", require('../middleware/authToken'), require('../controller/user/deleteAddToCartProduct'));
+router.get("/user-profile", require('../middleware/authToken'), require('../controller/user/userProfileController'));
 
-router.get("/userLogout",userLogout)
-
-//admin panel 
-router.get("/all-user",authToken,allUsers)
-router.post("/update-user",authToken,updateUser)
-
-//product
-router.post("/upload-product",authToken,UploadProductController)
-router.get("/get-product",getProductController)
-router.post("/update-product",authToken,updateProductController)
-router.get("/get-categoryProduct",getCategoryProduct)
-router.post("/category-product",getCategoryWiseProduct)
-router.post("/product-details",getProductDetails)
-router.get("/search",searchProduct)
-router.post("/filter-product",filterProductController)
-
-//user add to cart
-router.post("/addtocart",authToken,addToCartController)
-router.get("/countAddToCartProduct",authToken,countAddToCartProduct)
-router.get("/view-card-product",authToken,addToCartViewProduct)
-router.post("/update-cart-product",authToken,updateAddToCartProduct)
-router.post("/delete-cart-product",authToken,deleteAddToCartProduct)
-router.get("/user-profile",authToken,profile)
-
-
-
-
-
-
-
-module.exports = router
+module.exports = router;

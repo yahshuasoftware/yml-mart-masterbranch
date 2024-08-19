@@ -54,6 +54,8 @@ input::placeholder {
 
 
 h3{
+    font-size: larger;
+    font-weight: 500;
     margin-top: 0;
 
 }
@@ -101,6 +103,7 @@ a:hover{
 .logo{
     height: 50px;
     width: 120px;
+    margin-bottom: 20px;
 }
 .Download-section h2{
     margin-bottom: 0;
@@ -111,8 +114,9 @@ a:hover{
 }
 .images .img2{
     padding-bottom: 5px;
-    height: 50px;
-    width: 150px;
+    height: 53px;
+    width: 153px;
+    margin-left: -2px;
 }
 .text {
     font-size: 15px;
@@ -137,6 +141,10 @@ a:hover{
     cursor: pointer; 
     transition: background-color 0.3s ease; 
 }
+h2{
+    font-size: larger;
+    font-weight: 500;
+}
 
 
 .address{
@@ -156,8 +164,15 @@ a:hover{
 }
 .up{
     display: flex;
-    justify-content: space-around;
+  
 }
+.conversation{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 60%;
+}
+
 .up p{
 margin: 0px;
 }
@@ -182,7 +197,27 @@ margin: 0px;
 }
 .socials a{
    text-decoration: none;
-} 
+}
+
+.btn{
+    color: white;
+}
+.btn:hover{
+    background: white;
+    color: #214C69;
+}
+
+
+.email{
+    height: 50px;
+    padding:  0 10px;
+    border-radius: 10px;
+}
+.call{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .social-icons{
         display: flex;
@@ -197,6 +232,8 @@ margin: 0px;
     .footer-top-img{
         width: 100%;
     }
+
+    
 
     .top img{
         height: 40px;
@@ -219,9 +256,13 @@ margin: 0px;
         margin-bottom: 20px; /* Add spacing between sections */
     }
 
-    .vertical{
-        flex-direction: column;
-    }
+   .vertical{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   }
+  
 
     .horizantal .Special-section,
     .horizantal .Account-shipping,

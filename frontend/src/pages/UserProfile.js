@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from 'react-icons/fa';
-import { MdSpeakerNotesOff } from "react-icons/md";
 import { BsBagXFill } from "react-icons/bs";
-import { RiDiscountPercentFill } from "react-icons/ri";
 import { CgTrack } from "react-icons/cg";
 import { useSelector } from 'react-redux'
 import { MdModeEditOutline } from "react-icons/md";
@@ -83,10 +81,16 @@ const Profile = () => {
         return (
           <div>
             <h1 className="text-2xl font-bold mb-4">Address</h1>
-            <div className="flex flex-col items-center">
-              <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
-              <p>No address is saved</p>
-            </div>
+            <div>
+      {user.address ? (
+        <p>{user.address}</p>
+      ) : (
+        <div className="flex flex-col items-center">
+          <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
+          <p>No address is saved</p>
+        </div>
+      )}
+    </div>
           </div>
         );
       // case 'Coupons':
@@ -121,7 +125,7 @@ const Profile = () => {
   {sidebarOpen ? <FaTimes /> : <FaBars />}
 </button>
 
-        <aside className={`z-50 md:z-10 fixed top-0 left-0 mt[0] h-full bg-gray-100 p-4 transition-transform transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64`}>
+        <aside className={`z-50 md:z-10 md:h-auto fixed top-0 left-0 mt[0] h-[100vh] bg-gray-100 p-4 transition-transform transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64`}>
           <ul className="space-y-5">
             <li className={activeSection === 'Profile Information' ? 'font-bold text-sky-600' : ''}>
               <button onClick={() => { setActiveSection('Profile Information'); toggleSidebar(); }} className="text-lg">Profile Information</button>
