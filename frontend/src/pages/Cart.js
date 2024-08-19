@@ -168,7 +168,12 @@ const Cart = () => {
                                         <p>{displayINRCurrency(totalPrice)}</p>    
                                     </div>
 
-                                    <button className='bg-blue-600 p-2 text-white w-full mt-2'>Payment</button>
+                            <button className='bg-blue-600 p-2 text-white w-full mt-2'>Payment</button>
+                            <Link to="/refer">
+                            <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-semibold p-2 w-full mt-2 rounded'>
+                                Refer a Friend
+                            </button>
+                        </Link>
 
                         </div>
                     )}

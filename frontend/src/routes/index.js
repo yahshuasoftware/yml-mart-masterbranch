@@ -51,6 +51,10 @@ const router = createBrowserRouter([
                 element : <SearchProduct/>
             },
             {
+              path : "refer",
+              element : <Refer/>
+            },
+            {
                 path : "user-details",
                 element : <UserProfile/>
             },
