@@ -12,8 +12,12 @@ import ProductDetails from '../pages/ProductDetails'
 import Cart from '../pages/Cart'
 import SearchProduct from '../pages/SearchProduct'
 import UserProfile from '../pages/UserProfile'
-import Contact from "../pages/Contact"
-import About from "../pages/AboutCompany"
+import Refer from '../pages/Refer'
+import AboutCompany from '../pages/AboutCompany' 
+import AskQuestion from '../pages/AskQuestion'
+import ContactUs from '../pages/ContactUs'
+
+
 
 const router = createBrowserRouter([
     {
@@ -27,6 +31,14 @@ const router = createBrowserRouter([
             {
                 path : "login",
                 element : <Login/>
+            },
+            {
+                path : "about",
+                element : <AboutCompany/>
+            },
+            {
+                path : "contact",
+                element : <ContactUs/>
             },
             {
                 path : "forgot-password",
@@ -53,16 +65,16 @@ const router = createBrowserRouter([
                 element : <SearchProduct/>
             },
             {
+              path : "refer",
+              element : <Refer/>
+            },
+            {
+                path : "askquestion",
+                element : <AskQuestion/>
+            },
+            {
                 path : "user-details",
                 element : <UserProfile/>
-            },
-            {
-                path : "contact",
-                element : <Contact/>
-            },
-            {
-                path : "about",
-                element : <About/>
             },
             {
                 path : "admin-panel",

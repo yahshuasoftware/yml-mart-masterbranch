@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import 'animate.css';
 import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -10,6 +11,7 @@ import SummaryApi from './common';
 import Context from './context';
 import { useDispatch } from 'react-redux';
 import { setUserDetails } from './store/userSlice';
+import 'animate.css';
 
 function App() {
   const dispatch = useDispatch()

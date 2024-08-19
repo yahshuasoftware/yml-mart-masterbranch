@@ -3,7 +3,8 @@ import SummaryApi from '../common'
 import Context from '../context'
 import displayINRCurrency from '../helpers/displayCurrency'
 import { MdDelete } from "react-icons/md"
-
+import refer from './Refer'
+import { Link } from 'react-router-dom'
 
 const Cart = () => {
     const [data,setData] = useState([])
@@ -271,6 +272,11 @@ const Cart = () => {
                                     >
                                     Place Order
                                     </button>
+                                    <Link to="/refer">
+                                    <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-semibold p-2 w-full mt-2 rounded'>
+                                        Refer a Friend
+                                    </button>
+                                    </Link>
 
                                 </div>
                             )

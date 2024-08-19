@@ -3,7 +3,7 @@ import { FaInstagram, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { IoIosCall,IoMdMail  } from "react-icons/io";
 import { IoRemoveOutline } from "react-icons/io5";
 import {Link} from "react-router-dom"
-import contact from "../pages/Contact"
+import contact from "../pages/ContactUs"
 // import "../Footer/footer.css";
 <style>
   
