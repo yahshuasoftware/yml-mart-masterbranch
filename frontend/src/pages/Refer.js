@@ -1,55 +1,69 @@
-import React, { useState } from 'react';
-import 'animate.css';
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
-const ReferralPage = () => {
-  const referralLink = "Enter your refferal code";
-  const [copied, setCopied] = useState(false);
+const Refer = () => {
+  const [randomValue, setRandomValue] = useState(0);
+
+  useEffect(() => {
+    // Generate a random value between 1000 and 9999 when the component mounts
+    const value = Math.floor(1000 + Math.random() * 9000);
+    setRandomValue(value);
+  }, []);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(referralLink);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    // Copy the referral link to the clipboard
+    navigator.clipboard.writeText(`https://example.com/refer?code=${randomValue}`);
+    alert('Referral link copied to clipboard!');
+  };
+
+  const shareOnWhatsApp = () => {
+    const message = `Hey! Use my referral code ${randomValue} to get a bonus. Check it out here: https://example.com/refer?code=${randomValue}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const shareOnInstagram = () => {
+    // Instagram sharing logic (usually requires an API or a direct share link, but for simplicity, let's just open Instagram)
+    window.open('https://www.instagram.com/', '_blank');
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center relative">
-      {/* Background image */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gray-200 z-10 animate__animated animate__slideInDown animate__delay-1s">
-        <img src="https://cdn.vectorstock.com/i/1000v/52/58/refer-a-friend-flat-style-design-vector-23865258.avif" alt="Background" className="w-full h-full object-cover opacity-70" />
-      </div>
-
-      {/* Referral page */}
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full text-center z-20 relative transform transition-transform duration-500 hover:scale-105 animate__animated animate__fadeIn animate__delay-2s">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Refer a Friend</h2>
-        <p className="text-gray-600 mb-6">Share the link below with your friends and get rewards!</p>
-        
-        <div className="bg-gray-200 p-4 rounded-lg mb-4 transition-all duration-300 hover:bg-gray-300">
-          <p className="text-gray-800 truncate">{referralLink}</p>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Refer a Friend</h2>
+        <p className="text-gray-700 mb-4">Hey Piyush Singanjude,</p>
+        <p className="text-gray-700 mb-4">Your unique referral code is:</p>
+        <div className="text-3xl font-bold text-blue-600 text-center mb-6">{randomValue}</div>
+        <p className="text-gray-600 mb-6">Copy the link below and forward it to your friends to earn referral rewards.</p>
+        <div className="bg-gray-100 p-4 rounded-lg mb-4 text-center">
+          <p className="text-sm">https://example.com/refer?code={randomValue}</p>
         </div>
-        
         <button
           onClick={handleCopy}
-          className={`bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300 ${copied ? 'animate__animated animate__pulse' : ''}`}
+          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors mb-4"
         >
-          {copied ? 'Link Copied!' : 'Copy Referral Link'}
+          Copy Referral Link
         </button>
-
-        <p className="mt-6 text-gray-500">Or share directly:</p>
-
-        <div className="flex justify-center space-x-4 mt-4">
-          <a href={`https://www.facebook.com/sharer/sharer.php?u=${referralLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 transition-transform duration-300 transform hover:scale-110 animate__animated animate__fadeIn animate__delay-3s">
-            <i className="fab fa-facebook-f"></i>
-          </a>
-          <a href={`https://twitter.com/intent/tweet?url=${referralLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 transition-transform duration-300 transform hover:scale-110 animate__animated animate__fadeIn animate__delay-4s">
-            <i className="fab fa-twitter"></i>
-          </a>
-          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${referralLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-700 transition-transform duration-300 transform hover:scale-110 animate__animated animate__fadeIn animate__delay-5s">
-            <i className="fab fa-linkedin-in"></i>
-          </a>
+        <div className="flex justify-center space-x-4">
+          <button
+            onClick={shareOnWhatsApp}
+            className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center"
+          >
+            <FontAwesomeIcon icon={faWhatsapp} className="mr-2" />
+            Share on WhatsApp
+          </button>
+          <button
+            onClick={shareOnInstagram}
+            className="bg-pink-500 text-white py-2 px-4 rounded-lg hover:bg-pink-600 transition-colors flex items-center"
+          >
+            <FontAwesomeIcon icon={faInstagram} className="mr-2" />
+            Share on Instagram
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default ReferralPage;
+export default Refer;

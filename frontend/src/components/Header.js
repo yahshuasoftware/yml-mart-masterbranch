@@ -70,6 +70,10 @@ const Header = () => {
 
 
             <div className='flex items-center gap-7'>
+
+            <button className="bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-green-500 hover:animate-blink">
+                 Refer
+            </button>
                 
                 <div className='relative flex justify-center'>
 
