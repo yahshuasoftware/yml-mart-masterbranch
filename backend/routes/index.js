@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const userDetailsController = require('../controller/user/userDetails') ;
 // payment routes
 const paymentRoutes = require('../controller/payment/paymentRoutes');
 router.use('/payment', paymentRoutes);
@@ -8,7 +8,7 @@ router.use('/payment', paymentRoutes);
 // User and Product routes
 router.post("/signup", require("../controller/user/userSignUp"));
 router.post("/signin", require('../controller/user/userSignIn'));
-router.get("/user-details", require('../middleware/authToken'), require('../controller/user/userDetails'));
+router.get("/user-details", require('../middleware/authToken'), userDetailsController);
 router.get("/userLogout", require('../controller/user/userLogout'));
 
 // Admin Panel Routes
@@ -31,6 +31,6 @@ router.get("/countAddToCartProduct", require('../middleware/authToken'), require
 router.get("/view-card-product", require('../middleware/authToken'), require('../controller/user/addToCartViewProduct'));
 router.post("/update-cart-product", require('../middleware/authToken'), require('../controller/user/updateAddToCartProduct'));
 router.post("/delete-cart-product", require('../middleware/authToken'), require('../controller/user/deleteAddToCartProduct'));
-router.get("/user-profile", require('../middleware/authToken'), require('../controller/user/userProfileController'));
+// router.get("/user-profile", require('../middleware/authToken'), require('../controller/user/userProfileController'));
 
 module.exports = router;

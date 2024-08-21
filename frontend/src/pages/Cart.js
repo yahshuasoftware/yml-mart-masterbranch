@@ -11,8 +11,6 @@ const Cart = () => {
     const [loading,setLoading] = useState(false)
     const context = useContext(Context)
     const loadingCart = new Array(4).fill(null)
-
-
     const fetchData = async() =>{
         
         const response = await fetch(SummaryApi.addToCartProductView.url,{
@@ -126,7 +124,11 @@ const Cart = () => {
                 amount: totalPrice, // in INR
                 currency: 'INR',
                 receipt: `receipt_${Date.now()}`,
+                products : data,
+                userId: data[0].userId, 
+            
             }),
+        
         });
         
 
@@ -152,6 +154,7 @@ const Cart = () => {
                 console.log(response.razorpay_payment_id);
                 console.log(response.razorpay_order_id);
                 console.log(response.razorpay_signature);
+                
             },
             prefill: {
                 name: 'shri',
@@ -174,6 +177,7 @@ const Cart = () => {
                     order_id: response.razorpay_order_id,
                     payment_id: response.razorpay_payment_id,
                     signature: response.razorpay_signature,
+
                 }),
             });
     

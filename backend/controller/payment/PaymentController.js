@@ -8,7 +8,7 @@ const razorpay = new Razorpay({
 });
 
 const createOrder = async (req, res) => {
-    const { amount, currency, receipt, userId } = req.body; // Assuming you're sending userId from the frontend
+    const { amount, currency, receipt, userId, products } = req.body; // Assuming you're sending userId from the frontend
 
     try {
         const options = {
@@ -22,6 +22,13 @@ const createOrder = async (req, res) => {
         // Save order to the database
         const newOrder = new Order({
             order_id: order.id,
+            products: products.map(product => ({
+                productId: product.productId._id,
+                name: product.productId.productName,
+                quantity: product.quantity,
+                price: product.productId.sellingPrice,
+                image: product.productId.productImage
+            })),
             amount: order.amount,
             currency: order.currency,
             receipt: order.receipt,

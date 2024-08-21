@@ -1,18 +1,24 @@
 const userModel = require("../../models/userModel")
+const orderModel = require("../../models/order")
 
 async function userDetailsController(req,res){
     try{
-        console.log("userId",req.userId)
-        const user = await userModel.findById(req.userId)
-
+        const userId = req.userId;
+        const user = await userModel.findById(userId)
+        const order = await orderModel.find({user: userId})
+        
+        console.log('User Data:', user); // Log user data
+        console.log('Order Data:', order)
+    
         res.status(200).json({
             data : user,
+            orderDetail : order, 
             error : false,
             success : true,
             message : "User details"
         })
 
-        console.log("user",user?.name)
+   
 
     }catch(err){
         res.status(400).json({
