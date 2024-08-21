@@ -29,7 +29,7 @@ const createOrder = async (req, res) => {
                 price: product.productId.sellingPrice,
                 image: product.productId.productImage
             })),
-            amount: order.amount,
+            amount: order.amount/100,
             currency: order.currency,
             receipt: order.receipt,
             user: userId, // Store user ID associated with this order

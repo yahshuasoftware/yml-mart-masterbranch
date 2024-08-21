@@ -3,7 +3,7 @@ import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from 'react-icons/fa';
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import { MdModeEditOutline } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
 
@@ -34,8 +34,10 @@ const Profile = () => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            
 
             const data = await response.json();
+            console.log(data)
                 setUserData(data.data);
                 setOrderData(data.orderDetail);
                 
@@ -106,6 +108,7 @@ const Profile = () => {
         return (
           <div>
             <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
+
             {orderData ? (
                 <div className='w-full max-w-3xl'>
                 {orderData && orderData.length > 0 ? (
@@ -115,15 +118,19 @@ const Profile = () => {
                             <div key={order._id} className='mb-6'>
                                 <div className="order-container">
                                     {order.products.map((product) => (
-                                        <div key={product._id} className='w-full bg-white h-32 my-2 border border-slate-300 rounded grid grid-cols-[128px,1fr]'>
-                                            <div className='w-30 h-30 bg-slate-200 overflow-hidden'>
-                                                <img sizes='' src={product.image[0]} alt={product.name} className='w-full h-full object-cover' />
+                                      <div key={product._id} className='w-full pl-6 bg-slate-100 h-32 my-2 border border-slate-300 rounded grid grid-cols-[128px,1fr] items-center justify-center'>                                    
+                                             <div className='h-20 w-16 overflow-hidden'>
+                                                <div className='w-16 h-20 '>
+                                                <img  src={product.image[0]} alt={product.name} className='w-full h-full object-scale-down mix-blend-multiply' />
+
+                                                </div>
                                             </div>
-                                            <div className='px-4 py-2'>
+                                            <div className='px-4 py-2 lg:flex lg:justify-around lg:items-center'>
                                                 <h3 className='text-lg font-medium'>{product.name}</h3>
+                                                <h4>{product.category}</h4>
                                                 <p><strong>Quantity:</strong> {product.quantity}</p>
-                                                <p><strong>Price:</strong> {"₹"+(product.price)}</p>
-                                                <p><strong>Status:</strong> {order.status}</p>
+                                                <p><strong>Total Cost:</strong> {"₹"+(product.price * product.quantity)}</p>
+                                                <p><strong>Status:</strong> <span className='text-green-700 font-semibold'>{order.status}</span></p>
                                             </div>
                                         </div>
                                     ))}
@@ -162,15 +169,15 @@ const Profile = () => {
           <div>
             <h1 className="text-2xl font-bold mb-4">Address</h1>
             <div>
-      {user.address ? (
-        <p>{user.address}</p>
-      ) : (
-        <div className="flex flex-col items-center">
-          <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
-          <p>No address is saved</p>
-        </div>
-      )}
-    </div>
+                {user.address ? (
+                  <p>{user.address}</p>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
+                    <p>No address is saved</p>
+                  </div>
+                )}
+            </div>
           </div>
         );
       // case 'Coupons':
