@@ -4,12 +4,12 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import ROLE from '../common/role';
 
-const AdminPanel = () => {
+const SuperAdminPanel = () => {
     const user = useSelector(state => state?.user?.user)
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (user?.role !== ROLE.ADMIN) {
+        if (user?.role !== ROLE.SUPER_ADMIN) {
             navigate("/")
         }
     }, [user])
@@ -29,10 +29,10 @@ const AdminPanel = () => {
                     <p className='text-sm'>{user?.role}</p>
                 </div>
 
-                {/*** Admin navigation */}
+                {/*** Super Admin navigation */}
                 <div>
                     <nav className='grid p-4'>
-                        <Link to={"all-products"} className='px-2 py-1 hover:bg-slate-100'>All Products</Link>
+                        <Link to={"all-users"} className='px-2 py-1 hover:bg-slate-100'>All Users</Link>
                     </nav>
                 </div>
             </aside>
@@ -44,4 +44,4 @@ const AdminPanel = () => {
     )
 }
 
-export default AdminPanel
+export default SuperAdminPanel

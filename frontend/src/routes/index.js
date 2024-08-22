@@ -5,7 +5,7 @@ import Login from '../pages/Login'
 import ForgotPassowrd from '../pages/ForgotPassowrd'
 import SignUp from '../pages/SignUp'
 import AdminPanel from '../pages/AdminPanel'
-import AllUsers from '../pages/AllUsers'
+import SuperAdminPanel from '../pages/SupperAdminPanel' 
 import AllProducts from '../pages/AllProducts'
 import CategoryProduct from '../pages/CategoryProduct'
 import ProductDetails from '../pages/ProductDetails'
@@ -16,7 +16,7 @@ import Refer from '../pages/Refer'
 import AboutCompany from '../pages/AboutCompany' 
 import AskQuestion from '../pages/AskQuestion'
 import ContactUs from '../pages/ContactUs'
-
+import AllUsers from '../pages/AllUsers' // Import the All Users component
 
 
 const router = createBrowserRouter([
@@ -81,19 +81,23 @@ const router = createBrowserRouter([
                 element : <AdminPanel/>,
                 children : [
                     {
-                        path : "all-users",
-                        element : <AllUsers/>
-                    },
-                    {
                         path : "all-products",
                         element : <AllProducts/>
                     }
                 ]
             },
-            
+            {
+                path : "super-admin-panel", // Add the Super Admin Panel route
+                element : <SuperAdminPanel/>,
+                children : [
+                    {
+                        path : "all-users", // Move the All Users route here
+                        element : <AllUsers/>
+                    }
+                ]
+            },
         ]
     }
 ])
-
 
 export default router
