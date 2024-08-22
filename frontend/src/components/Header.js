@@ -119,6 +119,83 @@ const Header = () => {
                  
                 </div>
 
+<<<<<<< HEAD
+                  {
+                    user?._id && (
+                      <div className='text-3xl cursor-pointer relative flex justify-center' onClick={()=>setMenuDisplay(preve => !preve)}>
+                        {
+                          user?.profilePic ? (
+                            <img src={user?.profilePic} className='w-10 h-10 rounded-full' alt={user?.name}  />
+                            
+                          ) : (
+                            <FaRegCircleUser/>
+                          )
+                          
+                        }
+                      </div>
+                    )
+                  }
+                  
+                  
+                  {
+                    menuDisplay && (
+                      <div className='absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded' >
+                        <nav>
+                          {
+                            user?.role === ROLE.ADMIN && (
+                              <Link to={"/admin-panel/all-products"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={()=>setMenuDisplay(preve => !preve)}>Admin Panel</Link>
+                            ) 
+                          }
+                         
+                        </nav>
+                      </div>
+                    )
+                  }
+                   {
+                    menuDisplay && (
+                      <div className='absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded' >
+                        <nav>
+                          {
+                            user?.role === ROLE.GENERAL && (
+                              <Link to={"/user-details"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={()=>setMenuDisplay(preve => !preve)}>Profile</Link>
+                            ) 
+                          }
+                         
+                        </nav>
+                      </div>
+                    )
+                  }
+                 
+                </div>
+
+                  {
+                     user?._id && (
+                      <Link to={"/cart"} className='text-2xl relative'>
+                          <span><FaShoppingCart/></span>
+      
+                          <div className='bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3'>
+                              <p className='text-sm'>{context?.cartProductCount}</p>
+                          </div>
+                      </Link>
+                      )
+                  }
+              
+
+
+                <div>
+                  {
+                    user?._id  ? (
+                      <button onClick={handleLogout} className='px-3 py-1 rounded-full text-white bg-sky-600 hover:bg-sky-900'>Logout</button>
+                    )
+                    : (
+                    <Link to={"/login"} className='px-3 py-1 rounded-full text-white bg-sky-600 hover:bg-sky-700'>Login</Link>
+                    )
+                  }
+                    
+                </div>
+
+            </div>
+=======
           {user?._id && (
             <Link to={"/cart"} className='text-2xl relative'>
               <span><FaShoppingCart /></span>
@@ -127,6 +204,7 @@ const Header = () => {
               </div>
             </Link>
           )}
+>>>>>>> 8811d4928047c512c6324bbd96e7a0d71862e805
 
           <div>
             {user?._id ? (
