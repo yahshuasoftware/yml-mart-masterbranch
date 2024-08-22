@@ -18,7 +18,6 @@ async function updateProductController(req,res){
             success : true,
             error : false
         })
-
     }catch(err){
         res.status(400).json({
             message : err.message || err,
@@ -27,6 +26,5 @@ async function updateProductController(req,res){
         })
     }
 }
-
 
 module.exports = updateProductController
