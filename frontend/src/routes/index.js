@@ -6,6 +6,8 @@ import ForgotPassowrd from '../pages/ForgotPassowrd'
 import SignUp from '../pages/SignUp'
 import AdminPanel from '../pages/AdminPanel'
 import SuperAdminPanel from '../pages/SupperAdminPanel' 
+import AdminDashboard from '../pages/AdminDashboard'
+import OrderList from '../pages/OrderList'
 import AllProducts from '../pages/AllProducts'
 import CategoryProduct from '../pages/CategoryProduct'
 import ProductDetails from '../pages/ProductDetails'
@@ -91,8 +93,20 @@ const router = createBrowserRouter([
                 element : <SuperAdminPanel/>,
                 children : [
                     {
+                        path : "dashboard", // Move the All Users route here
+                        element : <AdminDashboard/>
+                    },
+                    {
                         path : "all-users", // Move the All Users route here
                         element : <AllUsers/>
+                    },
+                    {
+                        path : "order-list", // Move the All Users route here
+                        element : <OrderList/>
+                    },
+                    {
+                        path : "all-products",
+                        element : <AllProducts/>
                     }
                 ]
             },
