@@ -227,7 +227,7 @@ const Cart = () => {
                                 </div>
                                 <div className='px-4 py-2 relative'>
                                     {/**delete product */}
-                                    <div className='absolute right-0 text-red-600 rounded-full p-2 hover:bg-red-600 hover:text-white cursor-pointer' onClick={()=>deleteCartProduct(product?._id)}>
+                                    <div className='absolute right-0 text-sky-600 rounded-full p-2 hover:bg-sky-600 hover:text-white cursor-pointer' onClick={()=>deleteCartProduct(product?._id)}>
                                         <MdDelete/>
                                     </div>
 
@@ -238,9 +238,9 @@ const Cart = () => {
                                             <p className='text-slate-600 font-semibold text-lg'>{displayINRCurrency(product?.productId?.sellingPrice  * product?.quantity)}</p>
                                     </div>
                                     <div className='flex items-center gap-3 mt-1'>
-                                        <button className='border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={()=>decraseQty(product?._id,product?.quantity)}>-</button>
+                                        <button className='border border-sky-600 text-sky-600 hover:bg-sky-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={()=>decraseQty(product?._id,product?.quantity)}>-</button>
                                         <span>{product?.quantity}</span>
-                                        <button className='border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={()=>increaseQty(product?._id,product?.quantity)}>+</button>
+                                        <button className='border border-sky-600 text-sky-600 hover:bg-sky-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={()=>increaseQty(product?._id,product?.quantity)}>+</button>
                                     </div>
                                 </div>    
                             </div>
@@ -260,7 +260,7 @@ const Cart = () => {
                             </div>
                             ) : (
                                 <div className='h-36 bg-white'>
-                                    <h2 className='text-white bg-red-600 px-4 py-1'>Summary</h2>
+                                    <h2 className='text-white bg-sky-600 px-4 py-1'>Summary</h2>
                                     <div className='flex items-center justify-between px-4 gap-2 font-medium text-lg text-slate-600'>
                                         <p>Quantity</p>
                                         <p>{totalQty}</p>
@@ -271,7 +271,7 @@ const Cart = () => {
                                         <p>{displayINRCurrency(totalPrice)}</p>    
                                     </div>
                                     <button
-                                        className='bg-blue-600 p-2 text-white w-full mt-2'
+                                        className='bg-red-600 p-2 text-white w-full mt-2'
                                         onClick={handlePayment}
                                     >
                                     Place Order

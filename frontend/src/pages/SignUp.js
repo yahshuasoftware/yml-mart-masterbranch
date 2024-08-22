@@ -14,7 +14,7 @@ const SignUp = () => {
       email : "",
       password : "",
       name : "",
-      address : "",
+    //   address : "",
       confirmPassword : "",
       profilePic : "",
       mobileNo:""
@@ -139,7 +139,7 @@ const SignUp = () => {
                             </div>
                         </div>
 
-                        <div className='grid'>
+                        {/* <div className='grid'>
                             <label>Address : </label>
                             <div className='bg-slate-100 p-2'>
                                 <input 
@@ -151,7 +151,7 @@ const SignUp = () => {
                                     required
                                     className='w-full h-full outline-none bg-transparent'/>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div>
                             <label>Password : </label>
@@ -208,11 +208,11 @@ const SignUp = () => {
                             </div>
                         </div>
 
-                        <button className='bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>Sign Up</button>
+                        <button className='bg-sky-600 hover:bg-sky-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>Sign Up</button>
 
                     </form>
 
-                    <p className='my-5'>Already have account ? <Link to={"/login"} className=' text-red-600 hover:text-red-700 hover:underline'>Login</Link></p>
+                    <p className='my-5'>Already have account ? <Link to={"/login"} className=' text-sky-600 hover:text-sky-700 hover:underline'>Login</Link></p>
             </div>
 
 
