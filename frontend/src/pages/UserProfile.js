@@ -6,15 +6,59 @@ import { CgTrack } from "react-icons/cg";
 import { useSelector } from 'react-redux';
 import { MdModeEditOutline } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
+import SummaryApi from '../common';
+import {toast} from 'react-toastify'
 
 
 
-const Profile = () => {
+const Profile = (fetchUserData ) => {
   const [activeSection, setActiveSection] = useState('Profile Information');
   const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar visibility
   const [userData, setUserData] = useState(null)
   const [orderData, setOrderData] = useState(null)
+
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    state: '',
+    zip: ''
+  });
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setAddress((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
   
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch(SummaryApi.uploadAddress.url, {  // Update the API endpoint
+      method: SummaryApi.uploadAddress.method,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ address }),
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+      toast.success(responseData?.message);
+     
+      fetchUserData(); // Call a function to refresh the user data
+    }
+
+    if (responseData.error) {
+      toast.error(responseData?.message);
+    }
+  };
+
+
   const user = useSelector(state => state?.user?.user)
   // const token = localStorage.getItem('token');
   // alert(token)
@@ -37,9 +81,10 @@ const Profile = () => {
             
 
             const data = await response.json();
-            console.log(data)
                 setUserData(data.data);
+                
                 setOrderData(data.orderDetail);
+          
                 
 
         } catch (error) {
@@ -169,14 +214,75 @@ const Profile = () => {
           <div>
             <h1 className="text-2xl font-bold mb-4">Address</h1>
             <div>
-                {user.address ? (
-                  <p>{user.address}</p>
-                ) : (
-                  <div className="flex flex-col items-center">
+            {userData.address ? (
+              <div className='flex justify-around bg-slate-100 p-12 h-28  items-center rounded-md'>
+                <p><strong>Street:</strong> {userData.address.street}</p>
+                <p><strong>City:</strong> {userData.address.city}</p>
+                <p><strong>State:</strong> {userData.address.state}</p>
+                <p><strong>ZIP Code:</strong> {userData.address.zip}</p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
                     <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
                     <p>No address is saved</p>
                   </div>
-                )}
+            )}
+                  <>
+                  <form className='grid p-4 gap-2 overflow-y-scroll h-full pb-5' onSubmit={handleSubmit}>
+          <label htmlFor='street'>Street:</label>
+          <input 
+            type='text'
+            id='street'
+            name='street'
+            value={address.street}
+            onChange={handleOnChange}
+            className='p-2 bg-slate-100 border rounded'
+            required
+          />
+
+          <label htmlFor='city' className='mt-3'>City:</label>
+          <input 
+            type='text'
+            id='city'
+            name='city'
+            value={address.city}
+            onChange={handleOnChange}
+            className='p-2 bg-slate-100 border rounded'
+            required
+          />
+
+          <label htmlFor='state' className='mt-3'>State:</label>
+          <input 
+            type='text'
+            id='state'
+            name='state'
+            value={address.state}
+            onChange={handleOnChange}
+            className='p-2 bg-slate-100 border rounded'
+            required
+          />
+
+          <label htmlFor='zip' className='mt-3'>ZIP Code:</label>
+          <input 
+            type='text'
+            id='zip'
+            name='zip'
+            value={address.zip}
+            onChange={handleOnChange}
+            className='p-2 bg-slate-100 border rounded'
+            required
+          />
+
+          <button className='px-3 py-2 bg-sky-600 text-white mt-5 hover:bg-sky-700'>
+            Update Address
+          </button>
+        </form>
+
+                  </>
+                  
+                {/* ) : ( */}
+                  
+                {/* )} */}
             </div>
           </div>
         );

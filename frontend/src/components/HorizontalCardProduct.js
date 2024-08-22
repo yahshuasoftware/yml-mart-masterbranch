@@ -77,7 +77,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
                     <Link
                         key={product?._id}
                         to={"product/" + product?._id}
-                        className='w-full min-w-[320px] md:min-w-[360px] max-w-[320px] md:max-w-[360px] h-48 bg-white rounded-lg shadow-md flex transition-transform transform hover:scale-105 hover:shadow-lg'
+                        className='w-full min-w-[400px] lg:min-w-[400px]  md:min-w-[360px] max-w-[320px] md:max-w-[360px] h-48 bg-white rounded-lg shadow-md flex transition-transform transform hover:scale-105 hover:shadow-lg'
                     >
                         <div className='bg-slate-200 h-full p-4 min-w-[140px] md:min-w-[160px]'>
                             <img
@@ -94,7 +94,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
                                 <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
                             </div>
                             <div className='flex gap-2 mt-2'>
-                                <button className='text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-0.5 rounded-full'>
+                                <button className='text-sm bg-green-600 hover:bg-green-700 text-white px-2 py-0.5 rounded-full'>
                                     Buy Now
                                 </button>
                                 <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>
