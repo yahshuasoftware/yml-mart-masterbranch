@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userDetailsController = require('../controller/user/userDetails') ;
 const updateAddressController = require("../controller/user/uploadAddress")
+const orderController = require("../controller/user/orderController")
 // payment routes
 const paymentRoutes = require('../controller/payment/paymentRoutes');
 router.use('/payment', paymentRoutes);
@@ -12,6 +13,10 @@ router.post("/signin", require('../controller/user/userSignIn'));
 router.get("/user-details", require('../middleware/authToken'), userDetailsController);
 router.get("/userLogout", require('../controller/user/userLogout'));
 router.post('/user-details',require('../middleware/authToken'), updateAddressController);
+
+router.get('/dashboard', orderController)
+
+
 
 // Admin Panel Routes
 router.get("/all-user", require('../middleware/authToken'), require('../controller/user/allUsers'));

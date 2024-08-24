@@ -34,7 +34,7 @@ const SuperAdminPanel = () => {
                     <nav className='grid p-4'>
                         <Link to={"dashboard"} className='px-2 py-1 hover:bg-slate-100'>Dashboard</Link>
                         <Link to={"all-users"} className='px-2 py-1 hover:bg-slate-100'>User List</Link>
-                        <Link to={"order-list"} className='px-2 py-1 hover:bg-slate-100'>Order List</Link>
+                        {/* <Link to={"order-list"} className='px-2 py-1 hover:bg-slate-100'>Order List</Link> */}
                         <Link to={"all-products"} className='px-2 py-1 hover:bg-slate-100'>Product List</Link>
                     </nav>
                 </div>

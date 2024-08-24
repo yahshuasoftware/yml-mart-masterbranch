@@ -11,7 +11,7 @@ import {toast} from 'react-toastify'
 
 
 
-const Profile = (fetchUserData ) => {
+const Profile = ( ) => {
   const [activeSection, setActiveSection] = useState('Profile Information');
   const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar visibility
   const [userData, setUserData] = useState(null)
@@ -50,7 +50,11 @@ const Profile = (fetchUserData ) => {
     if (responseData.success) {
       toast.success(responseData?.message);
      
-      fetchUserData(); // Call a function to refresh the user data
+      // fetchUserData(); // Call a function to refresh the user data
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        address: address,
+    }));
     }
 
     if (responseData.error) {
@@ -84,7 +88,12 @@ const Profile = (fetchUserData ) => {
                 setUserData(data.data);
                 
                 setOrderData(data.orderDetail);
-          
+                setAddress({
+                  street: data.data.address?.street || '',
+                  city: data.data.address?.city || '',
+                  state: data.data.address?.state || '',
+                  zip: data.data.address?.zip || ''
+              });
                 
 
         } catch (error) {
@@ -215,7 +224,7 @@ const Profile = (fetchUserData ) => {
             <h1 className="text-2xl font-bold mb-4">Address</h1>
             <div>
             {userData.address ? (
-              <div className='flex justify-around bg-slate-100 p-12 h-28  items-center rounded-md'>
+              <div className='flex justify-around bg-slate-100  h-28  items-center rounded-md'>
                 <p><strong>Street:</strong> {userData.address.street}</p>
                 <p><strong>City:</strong> {userData.address.city}</p>
                 <p><strong>State:</strong> {userData.address.state}</p>
@@ -276,13 +285,10 @@ const Profile = (fetchUserData ) => {
           <button className='px-3 py-2 bg-sky-600 text-white mt-5 hover:bg-sky-700'>
             Update Address
           </button>
-        </form>
+                 </form>
 
                   </>
-                  
-                {/* ) : ( */}
-                  
-                {/* )} */}
+
             </div>
           </div>
         );
@@ -312,8 +318,8 @@ const Profile = (fetchUserData ) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="relative flex w-full max-w-5xl bg-white rounded-lg shadow-lg">
+    <div className="flex items-center justify-center mt-40 bg-gray-100">
+      <div className="relative flex w-full max-w-5xl  bg-white rounded-lg shadow-lg">
       <button className="absolute top-4 right-4 bg-sky-600 text-white p-2 rounded-md md:hidden" onClick={toggleSidebar}>
   {sidebarOpen ? <FaTimes /> : <FaBars />}
 </button>
