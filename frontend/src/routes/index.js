@@ -108,7 +108,11 @@ const router = createBrowserRouter([
                     {
                         path : "all-products",
                         element : <AllProducts/>
-                    }
+                    },
+                    {
+                        path : "order-list", // Move the All Users route here
+                        element : <OrderList/>
+                    },
                 ]
             },
         ]
