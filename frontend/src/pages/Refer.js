@@ -1,69 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWhatsapp, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import React from 'react';
 
-const Refer = () => {
-  const [randomValue, setRandomValue] = useState(0);
-
-  useEffect(() => {
-    // Generate a random value between 1000 and 9999 when the component mounts
-    const value = Math.floor(1000 + Math.random() * 9000);
-    setRandomValue(value);
-  }, []);
-
-  const handleCopy = () => {
-    // Copy the referral link to the clipboard
-    navigator.clipboard.writeText(`https://example.com/refer?code=${randomValue}`);
-    alert('Referral link copied to clipboard!');
-  };
-
-  const shareOnWhatsApp = () => {
-    const message = `Hey! Use my referral code ${randomValue} to get a bonus. Check it out here: https://example.com/refer?code=${randomValue}`;
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const shareOnInstagram = () => {
-    // Instagram sharing logic (usually requires an API or a direct share link, but for simplicity, let's just open Instagram)
-    window.open('https://www.instagram.com/', '_blank');
-  };
-
+const ReferCard = () => {
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Refer a Friend</h2>
-        <p className="text-gray-700 mb-4">Hey Piyush Singanjude,</p>
-        <p className="text-gray-700 mb-4">Your unique referral code is:</p>
-        <div className="text-3xl font-bold text-blue-600 text-center mb-6">{randomValue}</div>
-        <p className="text-gray-600 mb-6">Copy the link below and forward it to your friends to earn referral rewards.</p>
-        <div className="bg-gray-100 p-4 rounded-lg mb-4 text-center">
-          <p className="text-sm">https://example.com/refer?code={randomValue}</p>
+    <div 
+      className="flex items-center justify-center min-h-screen bg-cover bg-center" 
+      style={{ backgroundImage: "url('https://img.freepik.com/free-vector/colorful-dating-app-concept_23-2148523515.jpg?size=626&ext=jpg&ga=GA1.1.745416819.1724534193&semt=ais_hybrid')" }}
+    >
+      <div className="relative bg-white rounded-lg shadow-lg overflow-hidden w-96">
+        {/* Background Image for the Card */}
+        <div className="absolute inset-0">
+          <img
+            src="https://imgs.search.brave.com/nBKohrYU0UeocTtfRvWa4VP3M58E3wEx5qPZ6V0yTE8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzgzLzU1Lzgx/LzM2MF9GXzI4MzU1/ODEyMl91TjZ6aXhR/VTFIMVdZTzZabWN2/NWQ4RnZ4U2x3ODZm/dC5qcGc" // Ensure this path is correct
+            alt="Referral Background"
+            className="object-cover w-full h-full opacity-20"
+          />
         </div>
-        <button
-          onClick={handleCopy}
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors mb-4"
-        >
-          Copy Referral Link
-        </button>
-        <div className="flex justify-center space-x-4">
-          <button
-            onClick={shareOnWhatsApp}
-            className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center"
-          >
-            <FontAwesomeIcon icon={faWhatsapp} className="mr-2" />
-            Share on WhatsApp
+
+        {/* Content */}
+        <div className="relative z-10 p-8 text-center">
+          <h1 className="text-lg font-semibold text-gray-900 mb-4">Welcome message</h1>
+          
+          <div className="mb-4">
+            <div className="text-2xl font-bold text-black">$00</div>
+            <div className="text-sm text-gray-600">NO of refer</div>
+          </div>
+
+          <button className="bg-white border border-gray-300 w-full py-3 rounded-full shadow-md text-black font-semibold mb-4">
+            Refer Link/ Button
           </button>
-          <button
-            onClick={shareOnInstagram}
-            className="bg-pink-500 text-white py-2 px-4 rounded-lg hover:bg-pink-600 transition-colors flex items-center"
-          >
-            <FontAwesomeIcon icon={faInstagram} className="mr-2" />
-            Share on Instagram
-          </button>
+
+          <div className="mb-4">
+            <div className="text-sm font-bold text-gray-900 mb-2">REDEEM NOW</div>
+            <button className="bg-white border border-gray-300 w-full py-3 rounded-full shadow-md text-red-600 font-semibold">
+              UPI CASH
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Refer;
+export default ReferCard;
