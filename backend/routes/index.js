@@ -3,11 +3,15 @@ const router = express.Router();
 const userDetailsController = require('../controller/user/userDetails') ;
 const updateAddressController = require("../controller/user/uploadAddress")
 const orderController = require("../controller/user/orderController")
+const updateDeliveryController = require("../controller/user/updateDeliveryController")
 // payment routes
 const paymentRoutes = require('../controller/payment/paymentRoutes');
 router.use('/payment', paymentRoutes);
 
 // User and Product routes
+router.put('/orders/:orderId', updateDeliveryController);
+
+
 router.post("/signup", require("../controller/user/userSignUp"));
 router.post("/signin", require('../controller/user/userSignIn'));
 router.get("/user-details", require('../middleware/authToken'), userDetailsController);

@@ -94,6 +94,8 @@ const Profile = ( ) => {
                   state: data.data.address?.state || '',
                   zip: data.data.address?.zip || ''
               });
+              // console.log(orderData[0].deliveryStatus)
+              
                 
 
         } catch (error) {
@@ -109,6 +111,10 @@ const Profile = ( ) => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  // const trackOrder=()=>{
+    
+  // }
 
   
   
@@ -169,28 +175,39 @@ const Profile = ( ) => {
                     <div>
                         <h2 className='text-xl font-semibold mb-4'>Order Details</h2>
                         {orderData.map((order) => (
-                            <div key={order._id} className='mb-6'>
-                                <div className="order-container">
-                                    {order.products.map((product) => (
-                                      <div key={product._id} className='w-full pl-6 bg-slate-100 h-32 my-2 border border-slate-300 rounded grid grid-cols-[128px,1fr] items-center justify-center'>                                    
-                                             <div className='h-20 w-16 overflow-hidden'>
-                                                <div className='w-16 h-20 '>
-                                                <img  src={product.image[0]} alt={product.name} className='w-full h-full object-scale-down mix-blend-multiply' />
+    <div key={order._id} className='mb-6 relative'>
+        <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
+    {order.products.map((product) => (
+        <div 
+            key={product._id} 
+            className='w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm'
+        >                                    
+            <div className='h-24 w-24 overflow-hidden rounded-lg shadow-md'>
+                <img  
+                    src={product.image[0]} 
+                    alt={product.name} 
+                    className='w-full h-full object-cover' 
+                />
+            </div>
+            <div className='ml-4 flex flex-col justify-between'>
+                <h3 className='text-lg font-semibold text-gray-800'>{product.name}</h3>
+                <h4 className='text-sm text-gray-600'>{product.category}</h4>
+                <p className='text-sm text-gray-700'><strong>Quantity:</strong> {product.quantity}</p>
+                <p className='text-sm text-gray-700'><strong>Total Cost:</strong> <span className="font-bold text-gray-800">{"₹" + (product.price * product.quantity)}</span></p>
+                <p className='text-sm'><strong>Status:</strong> <span className='text-green-700 font-semibold'>{order.status}</span></p>
+            </div>
+        </div>
+    ))}
+    {/* Order ID and Tracking Status */}
+    <div className='absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg'>
+        {/* <p className='text-sm text-gray-700 font-semibold'>Order ID: {order._id}</p> */}
+        <p className='text-sm text-blue-600 font-semibold'>Tracking Status: {order.deliveryStatus}</p>
+    </div>
+</div>
 
-                                                </div>
-                                            </div>
-                                            <div className='px-4 py-2 lg:flex lg:justify-around lg:items-center'>
-                                                <h3 className='text-lg font-medium'>{product.name}</h3>
-                                                <h4>{product.category}</h4>
-                                                <p><strong>Quantity:</strong> {product.quantity}</p>
-                                                <p><strong>Total Cost:</strong> {"₹"+(product.price * product.quantity)}</p>
-                                                <p><strong>Status:</strong> <span className='text-green-700 font-semibold'>{order.status}</span></p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+    </div>
+))}
+
                     </div>
                 ) : (
                     <div className="flex flex-col items-center">
@@ -222,74 +239,84 @@ const Profile = ( ) => {
         return (
           <div>
             <h1 className="text-2xl font-bold mb-4">Address</h1>
-            <div>
-            {userData.address ? (
-              <div className='flex justify-around bg-slate-100  h-28  items-center rounded-md'>
-                <p><strong>Street:</strong> {userData.address.street}</p>
-                <p><strong>City:</strong> {userData.address.city}</p>
-                <p><strong>State:</strong> {userData.address.state}</p>
-                <p><strong>ZIP Code:</strong> {userData.address.zip}</p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center">
-                    <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
-                    <p>No address is saved</p>
-                  </div>
-            )}
-                  <>
-                  <form className='grid p-4 gap-2 overflow-y-scroll h-full pb-5' onSubmit={handleSubmit}>
-          <label htmlFor='street'>Street:</label>
-          <input 
-            type='text'
-            id='street'
-            name='street'
-            value={address.street}
-            onChange={handleOnChange}
-            className='p-2 bg-slate-100 border rounded'
-            required
-          />
-
-          <label htmlFor='city' className='mt-3'>City:</label>
-          <input 
-            type='text'
-            id='city'
-            name='city'
-            value={address.city}
-            onChange={handleOnChange}
-            className='p-2 bg-slate-100 border rounded'
-            required
-          />
-
-          <label htmlFor='state' className='mt-3'>State:</label>
-          <input 
-            type='text'
-            id='state'
-            name='state'
-            value={address.state}
-            onChange={handleOnChange}
-            className='p-2 bg-slate-100 border rounded'
-            required
-          />
-
-          <label htmlFor='zip' className='mt-3'>ZIP Code:</label>
-          <input 
-            type='text'
-            id='zip'
-            name='zip'
-            value={address.zip}
-            onChange={handleOnChange}
-            className='p-2 bg-slate-100 border rounded'
-            required
-          />
-
-          <button className='px-3 py-2 bg-sky-600 text-white mt-5 hover:bg-sky-700'>
-            Update Address
-          </button>
-                 </form>
-
-                  </>
-
+            <div className="bg-white p-6 rounded-lg shadow-md">
+    {userData.address ? (
+        <div className="flex flex-col lg:flex-row justify-between items-center bg-slate-50 p-4 rounded-md mb-6 shadow-sm">
+            <div className="text-lg">
+                <p className="mb-2"><strong>Street:</strong> {userData.address.street}</p>
+                <p className="mb-2"><strong>City:</strong> {userData.address.city}</p>
             </div>
+            <div className="text-lg">
+                <p className="mb-2"><strong>State:</strong> {userData.address.state}</p>
+                <p><strong>ZIP Code:</strong> {userData.address.zip}</p>
+            </div>
+        </div>
+    ) : (
+        <div className="flex flex-col items-center text-center bg-slate-50 p-6 rounded-md shadow-sm">
+            <MdLocationOff style={{ fontSize: '6rem' }} className="text-sky-600 mb-3" />
+            <p className="text-gray-600">No address is saved</p>
+        </div>
+    )}
+
+    <form className="grid gap-4" onSubmit={handleSubmit}>
+        <div>
+            <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-1">Street:</label>
+            <input 
+                type="text"
+                id="street"
+                name="street"
+                value={address.street}
+                onChange={handleOnChange}
+                className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                required
+            />
+        </div>
+
+        <div>
+            <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">City:</label>
+            <input 
+                type="text"
+                id="city"
+                name="city"
+                value={address.city}
+                onChange={handleOnChange}
+                className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                required
+            />
+        </div>
+
+        <div>
+            <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">State:</label>
+            <input 
+                type="text"
+                id="state"
+                name="state"
+                value={address.state}
+                onChange={handleOnChange}
+                className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                required
+            />
+        </div>
+
+        <div>
+            <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-1">ZIP Code:</label>
+            <input 
+                type="text"
+                id="zip"
+                name="zip"
+                value={address.zip}
+                onChange={handleOnChange}
+                className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                required
+            />
+        </div>
+
+        <button className="mt-4 py-3 bg-sky-600 text-white font-medium rounded-md hover:bg-sky-600 transition duration-200">
+            Update Address
+        </button>
+    </form>
+</div>
+
           </div>
         );
       // case 'Coupons':
@@ -308,6 +335,10 @@ const Profile = ( ) => {
             <h1 className="text-2xl font-bold mb-4">Track Your Order</h1>
             <div className="flex flex-col items-center">
               <CgTrack style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
+              {/* <form action="" onSubmit={trackOrder}>
+                <input type="text" name="" placeholder='Enter Tracking Id' id="" />
+                <button className='bg-slate-400' type="submit">Track Your Order</button>
+              </form> */}
               <p>Order not found!</p>
             </div>
           </div>
