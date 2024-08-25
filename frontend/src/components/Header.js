@@ -5,13 +5,12 @@ import { FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import SummaryApi from '../common';
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'
 import { setUserDetails } from '../store/userSlice';
 import ROLE from '../common/role';
 import Context from '../context';
 
 const Header = () => {
-<<<<<<< HEAD
   const user = useSelector(state => state?.user?.user)
   const dispatch = useDispatch()
   const [menuDisplay, setMenuDisplay] = useState(false)
@@ -27,28 +26,10 @@ const Header = () => {
       method: SummaryApi.logout_user.method,
       credentials: 'include'
     })
-=======
-  const user = useSelector(state => state?.user?.user);
-  const dispatch = useDispatch();
-  const [menuDisplay, setMenuDisplay] = useState(false);
-  const context = useContext(Context);
-  const navigate = useNavigate();
-  const searchInput = useLocation();
-  const URLSearch = new URLSearchParams(searchInput?.search);
-  const searchQuery = URLSearch.getAll("q");
-  const [search, setSearch] = useState(searchQuery);
 
-  const handleLogout = async() => {
-    const fetchData = await fetch(SummaryApi.logout_user.url, {
-      method: SummaryApi.logout_user.method,
-      credentials: 'include'
-    });
->>>>>>> piyush
-
-    const data = await fetchData.json();
+    const data = await fetchData.json()
 
     if (data.success) {
-<<<<<<< HEAD
       toast.success(data.message)
       dispatch(setUserDetails(null))
       navigate("/")
@@ -69,37 +50,11 @@ const Header = () => {
       navigate("/search")
     }
   }
-=======
-      toast.success(data.message);
-      dispatch(setUserDetails(null));
-      navigate("/");
-    }
-
-    if (data.error) {
-      toast.error(data.message);
-    }
-  };
-
-  const handleSearch = (e) => {
-    const { value } = e.target;
-    setSearch(value);
-
-    if (value) {
-      navigate(`/search?q=${value}`);
-    } else {
-      navigate("/search");
-    }
-  };
->>>>>>> piyush
 
   return (
     <header className='h-16 shadow-md bg-white fixed w-full z-40'>
       <div className='h-full container mx-auto flex items-center px-4 justify-between'>
-<<<<<<< HEAD
         <div className=''>
-=======
-        <div>
->>>>>>> piyush
           <Link to={"/"}>
             <img src="logo.png" alt="Logo" className="w-36" />
           </Link>
@@ -113,7 +68,6 @@ const Header = () => {
         </div>
 
         <div className='flex items-center gap-7'>
-<<<<<<< HEAD
           <div className='relative flex justify-center'>
             {user?._id && (
               <div className='text-3xl cursor-pointer relative flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
@@ -142,47 +96,6 @@ const Header = () => {
             )}
           </div>
 
-=======
-          <Link
-            to={"/refer"}
-            className="bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-green-500 hover:animate-blink"
-          >
-            Refer
-          </Link>
-
-          <div className='relative flex justify-center'>
-            {user?._id && (
-              <div className='text-3xl cursor-pointer relative flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
-                {user?.profilePic ? (
-                  <img src={user?.profilePic} className='w-10 h-10 rounded-full' alt={user?.name} />
-                ) : (
-                  <FaRegCircleUser />
-                )}
-              </div>
-            )}
-
-            {menuDisplay && (
-              <div className='absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded'>
-                <nav>
-                  {user?.role === ROLE.ADMIN && (
-                    <Link to={"/admin-panel/all-products"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={() => setMenuDisplay(prev => !prev)}>Admin Panel</Link>
-                  )}
-                </nav>
-              </div>
-            )}
-
-            {menuDisplay && (
-              <div className='absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded'>
-                <nav>
-                  {user?.role === ROLE.GENERAL && (
-                    <Link to={"/user-details"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={() => setMenuDisplay(prev => !prev)}>Profile</Link>
-                  )}
-                </nav>
-              </div>
-            )}
-          </div>
-
->>>>>>> piyush
           {user?._id && (
             <Link to={"/cart"} className='text-2xl relative'>
               <span><FaShoppingCart /></span>
@@ -202,7 +115,7 @@ const Header = () => {
         </div>
       </div>
     </header>
-  );
+  )
 }
 
 export default Header

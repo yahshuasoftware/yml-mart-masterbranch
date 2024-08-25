@@ -34,10 +34,6 @@ const router = createBrowserRouter([
                 path : "login",
                 element : <Login/>
             },
-              {
-                path : "refer",
-                element : <Refer/>
-              },
             {
                 path : "about",
                 element : <AboutCompany/>
@@ -54,7 +50,6 @@ const router = createBrowserRouter([
                 path : "sign-up",
                 element : <SignUp/>
             },
-            
             {
                 path : "product-category",
                 element : <CategoryProduct/>
@@ -72,7 +67,6 @@ const router = createBrowserRouter([
                 element : <SearchProduct/>
             },
             {
-<<<<<<< HEAD
               path : "refer",
               element : <Refer/>
             },
@@ -81,8 +75,6 @@ const router = createBrowserRouter([
                 element : <AskQuestion/>
             },
             {
-=======
->>>>>>> piyush
                 path : "user-details",
                 element : <UserProfile/>
             },
