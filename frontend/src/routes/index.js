@@ -72,7 +72,6 @@ const router = createBrowserRouter([
                 element : <SearchProduct/>
             },
             {
-<<<<<<< HEAD
               path : "refer",
               element : <Refer/>
             },
@@ -81,8 +80,6 @@ const router = createBrowserRouter([
                 element : <AskQuestion/>
             },
             {
-=======
->>>>>>> piyush
                 path : "user-details",
                 element : <UserProfile/>
             },
