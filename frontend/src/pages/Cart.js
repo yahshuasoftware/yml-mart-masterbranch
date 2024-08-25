@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import displayINRCurrency from '../helpers/displayCurrency';
-import { MdCheckCircle} from "react-icons/md";
+import { MdCheckCircle, MdDelete} from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from 'react-router-dom';
+import Context from '../context'
+
 const Cart = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [hasAddress, setHasAddress] = useState(false);
+    const context = useContext(Context)
 
     const fetchUserDetails = async () => {
         try {
@@ -65,6 +68,77 @@ const Cart = () => {
     const totalQty = data.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
     const totalPrice = data.reduce((prev, curr) => prev + (curr.quantity * curr?.productId?.sellingPrice), 0);
 
+    const increaseQty = async(id,qty) =>{
+        const response = await fetch(SummaryApi.updateCartProduct.url,{
+            method : SummaryApi.updateCartProduct.method,
+            credentials : 'include',
+            headers : {
+                "content-type" : 'application/json'
+            },
+            body : JSON.stringify(
+                {   
+                    _id : id,
+                    quantity : qty + 1
+                }
+            )
+        })
+
+        const responseData = await response.json()
+
+
+        if(responseData.success){
+            fetchData()
+        }
+    }
+
+
+    const decraseQty = async(id,qty) =>{
+       if(qty >= 2){
+            const response = await fetch(SummaryApi.updateCartProduct.url,{
+                method : SummaryApi.updateCartProduct.method,
+                credentials : 'include',
+                headers : {
+                    "content-type" : 'application/json'
+                },
+                body : JSON.stringify(
+                    {   
+                        _id : id,
+                        quantity : qty - 1
+                    }
+                )
+            })
+
+            const responseData = await response.json()
+
+
+            if(responseData.success){
+                fetchData()
+            }
+        }
+    }
+
+    const deleteCartProduct = async(id)=>{
+        const response = await fetch(SummaryApi.deleteCartProduct.url,{
+            method : SummaryApi.deleteCartProduct.method,
+            credentials : 'include',
+            headers : {
+                "content-type" : 'application/json'
+            },
+            body : JSON.stringify(
+                {   
+                    _id : id,
+                }
+            )
+        })
+
+        const responseData = await response.json()
+
+        if(responseData.success){
+            fetchData()
+            context.fetchUserAddToCart()
+        }
+    }
+    // razorepay
     const handlePayment = async () => {
         try {
             // Create an order on the backend
@@ -174,7 +248,7 @@ const Cart = () => {
                     </div>
                 {/* Payment Section */}
                 <div className="mb-4 p-4">
-                    <h3 className="text-xl font-semibold mb-2">Payment</h3>
+                    <h3 className="text-xl font-semibold mb-5">Payment</h3>
                     <button
                         className="bg-green-600 text-white p-2 rounded w-80"
                         onClick={handlePayment}
@@ -196,21 +270,57 @@ const Cart = () => {
                             <p>Loading...</p>
                         ) : (
                             data.map((product) => (
-                                <div key={product._id} className="flex justify-between mb-2">
-                                    {/* Product Image */}
-                                    <div>
-                                    <img
-                                        src={product.productId.productImage[0]}
-                                        alt={product.productId.productName}
-                                        className="w-f h-16 object-cover"
-                                    />
+                                <div key={product._id} className="flex justify-between mb-4 p-2 ">
+                                {/* Product Image and Quantity */}
+                                <div className="flex flex-col items-center w-24">
+                                    <div className="w-16 h-16 bg-white flex items-center justify-center">
+                                        <img
+                                            src={product.productId.productImage[0]}
+                                            alt={product.productId.productName}
+                                            className="max-w-full max-h-full object-contain"
+                                        />
                                     </div>
-                                    {/* Product Price */}
-                                    <div className='flex-col'>
-                                    <p>{product.productId.productName}</p>
-                                    <p>{displayINRCurrency(product.quantity * product.productId.sellingPrice)}</p>
+                                    {/* Quantity Controls */}
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <button
+                                            className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded"
+                                            onClick={() => decraseQty(product?._id, product?.quantity)}
+                                        >
+                                            -
+                                        </button>
+                                        <span>{product?.quantity}</span>
+                                        <button
+                                            className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-6 h-6 flex justify-center items-center rounded"
+                                            onClick={() => increaseQty(product?._id, product?.quantity)}
+                                        >
+                                            +
+                                        </button>
                                     </div>
                                 </div>
+                            
+                                {/* Product Details and Delete Button */}
+                                <div className="flex flex-col flex-1 ml-4">
+                                    <div>
+                                        <p className="text-sm font-medium">{product.productId.productName}</p>
+                                        <p className=" font-semibold text-slate-500 line-through">
+                                            {displayINRCurrency(product.quantity * product.productId.price)}
+                                        </p>
+                                        <p className=" font-semibold">
+                                            {displayINRCurrency(product.quantity * product.productId.sellingPrice)}
+                                        </p>
+                                    </div>
+                                    {/* Delete Button */}
+                                    <div className="flex justify-end">
+                                        <div
+                                            className="text-red-600 hover:bg-red-600 hover:text-white p-2 rounded-full cursor-pointer"
+                                            onClick={() => deleteCartProduct(product?._id)}
+                                        >
+                                            <MdDelete />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             ))
                         )}
                     </div>
