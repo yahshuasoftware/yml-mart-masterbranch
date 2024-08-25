@@ -94,18 +94,20 @@ const HorizontalCardProduct = ({ category, heading }) => {
                                     <p className='text-red-600 font-medium'>{displayINRCurrency(product?.sellingPrice)}</p>
                                     <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
                                 </div>
-                                <div className='flex items-center gap-2'>
-                                    <StarRatings
-                                        rating={4.5} // Fixed rating
-                                        starRatedColor="gold"
-                                        starDimension="15px"
-                                        starSpacing="2px"
-                                        numberOfStars={1} // Display only one star
-                                        name='rating'
-                                    />
-                                    <span className='text-slate-500 ml-2'>4.5</span>
-                                    <span className='text-slate-500 ml-2'>(10)</span>
-                                </div>
+                                <div className='flex items-center'>
+    <StarRatings
+        rating={4.5} // Fixed rating
+        starRatedColor="gold"
+        starDimension="15px"
+        starSpacing="0px" // No space between the star and the text
+        numberOfStars={1} // Display only one star
+        name='rating'
+    />
+    <span className='text-slate-500 ml-1 flex items-center'>4.5</span> {/* Flexbox alignment for consistent spacing */}
+    <span className='text-slate-500 ml-1 flex items-center'>(10)</span> {/* Flexbox alignment for consistent spacing */}
+</div>
+
+   
                                 <div className='flex flex-col md:flex-row gap-2 mt-2'>
                                     <button
                                         className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'

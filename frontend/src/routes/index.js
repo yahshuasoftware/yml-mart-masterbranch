@@ -27,6 +27,10 @@ const router = createBrowserRouter([
                 path : "login",
                 element : <Login/>
             },
+              {
+                path : "refer",
+                element : <Refer/>
+              },
             {
                 path : "forgot-password",
                 element : <ForgotPassowrd/>
@@ -35,6 +39,7 @@ const router = createBrowserRouter([
                 path : "sign-up",
                 element : <SignUp/>
             },
+            
             {
                 path : "product-category",
                 element : <CategoryProduct/>
@@ -50,10 +55,6 @@ const router = createBrowserRouter([
             {
                 path : "search",
                 element : <SearchProduct/>
-            },
-            {
-              path : "refer",
-              element : <Refer/>
             },
             {
                 path : "user-details",

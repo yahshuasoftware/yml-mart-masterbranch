@@ -5,9 +5,10 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
+import StarRatings from 'react-star-ratings';
 
 const VerticalCardProduct = ({ category, heading }) => {
-    const [data, setData] = useState([]); // CHANGE 1: Initialize as an empty array
+    const [data, setData] = useState([]); 
     const [loading, setLoading] = useState(true);
     const loadingList = new Array(13).fill(null);
 
@@ -24,10 +25,10 @@ const VerticalCardProduct = ({ category, heading }) => {
         setLoading(true);
         try {
             const categoryProduct = await fetchCategoryWiseProduct(category);
-            setData(Array.isArray(categoryProduct?.data) ? categoryProduct.data : []); // CHANGE 2: Ensure data is an array
+            setData(Array.isArray(categoryProduct?.data) ? categoryProduct.data : []); 
         } catch (error) {
-            console.error("Failed to fetch category-wise products:", error); // CHANGE 3: Added error handling
-            setData([]); // CHANGE 4: Set to an empty array on error
+            console.error("Failed to fetch category-wise products:", error); 
+            setData([]); 
         } finally {
             setLoading(false);
         }
@@ -35,7 +36,7 @@ const VerticalCardProduct = ({ category, heading }) => {
 
     useEffect(() => {
         fetchData();
-    }, [category]); // CHANGE 5: Added dependency on category to refetch data if category changes
+    }, [category]); 
 
     const scrollRight = () => {
         scrollElement.current.scrollLeft += 300;
@@ -58,7 +59,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                 </button>
 
                 {loading ? (
-                    loadingList.map((_, index) => ( // CHANGE 6: Fix map usage with underscore
+                    loadingList.map((_, index) => ( 
                         <div key={index} className='w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-sm shadow'>
                             <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse'></div>
                             <div className='p-4 grid gap-3'>
@@ -73,7 +74,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                         </div>
                     ))
                 ) : (
-                    data.map((product) => ( // CHANGE 7: Ensure .map() only runs on a valid array
+                    data.map((product) => ( 
                         <Link key={product?._id} to={"product/" + product?._id} className='w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-sm shadow'>
                             <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
                                 <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' alt={product?.productName} />
@@ -85,6 +86,22 @@ const VerticalCardProduct = ({ category, heading }) => {
                                     <p className='text-red-600 font-medium'>{displayINRCurrency(product?.sellingPrice)}</p>
                                     <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
                                 </div>
+                                <div className='flex items-center'>
+                                <StarRatings
+                                        rating={4.5} // Fixed rating
+                                        starRatedColor="gold"
+                                        starDimension="15px"
+                                        starSpacing="0px" // No space between the star and the text
+                                        numberOfStars={1} // Display only one star
+                                        name='rating'
+                                    />
+                                    <span className='text-slate-500 ml-1 flex items-center'>4.5</span> {/* Flexbox alignment for consistent spacing */}
+                                    <span className='text-slate-500 ml-1 flex items-center'>(10)</span> {/* Flexbox alignment for consistent spacing */}
+                                </div>
+
+
+                                
+
                                 <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>
                                     Add to Cart
                                 </button>
