@@ -10,8 +10,6 @@ router.use('/payment', paymentRoutes);
 
 // User and Product routes
 router.put('/orders/:orderId', updateDeliveryController);
-
-
 router.post("/signup", require("../controller/user/userSignUp"));
 router.post("/signin", require('../controller/user/userSignIn'));
 router.get("/user-details", require('../middleware/authToken'), userDetailsController);

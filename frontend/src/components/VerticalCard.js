@@ -53,7 +53,7 @@ const VerticalCard = ({loading,data = []}) => {
                              <button className='text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-0.5 rounded-full'>
                                     Buy Now
                                 </button>
-                             <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e)=>handleAddToCart(e,product?._id)}>Add to Cart</button>
+                                <button className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>Add to Cart</button>
                          </div>
                      </Link>
                  )

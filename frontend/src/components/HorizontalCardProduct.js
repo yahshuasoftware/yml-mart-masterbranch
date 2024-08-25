@@ -114,12 +114,9 @@ const HorizontalCardProduct = ({ category, heading }) => {
                                     >
                                         Buy Now
                                     </button>
-                                    <button
-                                        className='text-xs md:text-sm bg-red-600 hover:bg-red-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'
-                                        onClick={(e) => handleAddToCart(e, product?._id)}
-                                    >
-                                        Add to Cart
-                                    </button>
+                                    <button className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>
+                                    Add to Cart
+                                </button>
                                 </div>
                             </div>
                         </Link>
