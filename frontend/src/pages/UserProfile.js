@@ -15,17 +15,18 @@ import { uploadAddress } from '../helpers/uploadAddress';
 
 const Profile = ( ) => {
   const [activeSection, setActiveSection] = useState('Profile Information');
-  const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar visibility
+  const [sidebarOpen, setSidebarOpen] = useState(false); 
+
   const [userData, setUserData] = useState(null)
   const [orderData, setOrderData] = useState(null)
   const [address, setAddress] = useState({});
 
-  // const [address, setAddress] = useState({
-  //   street: '',
-  //   city: '',
-  //   state: '',
-  //   zip: ''
-  // });
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    state: '',
+    zip: ''
+  });
 
   // const handleOnChange = (e) => {
   //   const { name, value } = e.target;
@@ -106,9 +107,14 @@ const Profile = ( ) => {
                   zip: data.data.address?.zip || ''
               });
               // console.log(orderData[0].deliveryStatus)
-              
-                
+            
+              // total purchasing
+              const totalAmount = data.orderDetail
+              .filter(order => order.status === 'paid') // Consider only orders with status 'paid'
+              .reduce((acc, order) => acc + order.products.reduce((acc, product) => acc + (product.price * product.quantity), 0), 0);
 
+          setTotalPurchasing(totalAmount);
+              
         } catch (error) {
             console.error('Error:', error);
         }
@@ -122,20 +128,15 @@ const Profile = ( ) => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
-  // const trackOrder=()=>{
-    
-  // }
-
-  
-  
-
   const renderContent = () => {
     switch (activeSection) {
       case 'Profile Information':
         return (
             <div>
+              <div className='flex  justify-between'>
             <h1 className="text-2xl font-bold mb-4">Profile Information</h1>
+            <h3>Total Purchasing:₹{totalPurchasing} </h3>
+            </div>
             <div className="flex flex-col items-center mb-6">
             <div className="relative inline-block">
             {userData?.profilePic ? (
@@ -236,16 +237,6 @@ const Profile = ( ) => {
             
           </div>
         );
-      // case 'Wishlist':
-      //   return (
-      //     <div>
-      //       <h1 className="text-2xl font-bold mb-4">Wishlist</h1>
-      //       <div className="flex flex-col items-center">
-      //         <MdSpeakerNotesOff style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
-      //         <p>No product found in wishlist</p>
-      //       </div>
-      //     </div>
-      //   );
       case 'Address':
         return (
           <div>
@@ -335,27 +326,13 @@ const Profile = ( ) => {
 </div>
 
           </div>
-        );
-      // case 'Coupons':
-      //   return (
-      //     <div>
-      //       <h1 className="text-2xl font-bold mb-4">Your Coupons</h1>
-      //       <div className="flex flex-col items-center">
-      //       <RiDiscountPercentFill style={{ fontSize: '6rem' }} className="text-sky-600 mb-2" />
-      //       <p>No coupon found!</p>
-      //       </div>
-      //     </div>
-      //   );
+        )
       case 'Track Order':
         return (
           <div>
             <h1 className="text-2xl font-bold mb-4">Track Your Order</h1>
             <div className="flex flex-col items-center">
               <CgTrack style={{ fontSize: '6rem' }} className="text-sky-600 text-6xl mb-2" />
-              {/* <form action="" onSubmit={trackOrder}>
-                <input type="text" name="" placeholder='Enter Tracking Id' id="" />
-                <button className='bg-slate-400' type="submit">Track Your Order</button>
-              </form> */}
               <p>Order not found!</p>
             </div>
           </div>
@@ -380,15 +357,9 @@ const Profile = ( ) => {
             <li className={activeSection === 'My Orders' ? 'font-bold text-sky-600' : ''}>
               <button onClick={() => { setActiveSection('My Orders'); toggleSidebar(); }} className="text-lg">My Orders</button>
             </li>
-            {/* <li className={activeSection === 'Wishlist' ? 'font-bold text-sky-600' : ''}>
-              <button onClick={() => { setActiveSection('Wishlist'); toggleSidebar(); }} className="text-lg">Wishlist</button>
-            </li> */}
             <li className={activeSection === 'Address' ? 'font-bold text-sky-600' : ''}>
               <button onClick={() => { setActiveSection('Address'); toggleSidebar(); }} className="text-lg">Address</button>
             </li>
-            {/* <li className={activeSection === 'Coupons' ? 'font-bold text-sky-600' : ''}>
-              <button onClick={() => { setActiveSection('Coupons'); toggleSidebar(); }} className="text-lg">Coupons</button>
-            </li> */}
             <li className={activeSection === 'Track Order' ? 'font-bold text-sky-600' : ''}>
               <button onClick={() => { setActiveSection('Track Order'); toggleSidebar(); }} className="text-lg">Track Order</button>
             </li>
