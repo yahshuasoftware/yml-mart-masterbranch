@@ -19,7 +19,6 @@ const Profile = ( ) => {
 
   const [userData, setUserData] = useState(null)
   const [orderData, setOrderData] = useState(null)
-  const [address, setAddress] = useState({});
 
   const [address, setAddress] = useState({
     street: '',
@@ -27,6 +26,8 @@ const Profile = ( ) => {
     state: '',
     zip: ''
   });
+
+  const [totalPurchasing, setTotalPurchasing] = useState(0);
 
   // const handleOnChange = (e) => {
   //   const { name, value } = e.target;
