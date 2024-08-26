@@ -21,6 +21,7 @@ const OrderList = () => {
 
             const data = await response.json();
             setOrderData(data.orders);
+            // alert(orderData)
         } catch (error) {
             console.error('Error fetching orders:', error);
         }

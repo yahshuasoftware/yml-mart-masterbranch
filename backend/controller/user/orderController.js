@@ -2,6 +2,7 @@ const orderModel = require("../../models/order");
 
 const orderController = async (req, res) => {
     try {
+        const result = await orderModel.deleteMany({ status: 'created' });
         const orders = await orderModel.find(); // Fetch all orders from the database
         res.json({ success: true, orders });
     } catch (error) {

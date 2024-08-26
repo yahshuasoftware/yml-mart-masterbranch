@@ -20,11 +20,13 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, default: 'created' }, // 'created', 'paid', 'failed'
     createdAt: { type: Date, default: Date.now },
     user: { type: String }, // Assuming you have a User model
-    name:{type:String},
+    // name:{type:String},
     deliveryStatus:{type: String, default:'Ordered'}
+    
 });
 
 const Order = mongoose.model('Order', orderSchema);
+
 
 module.exports = Order;
 
