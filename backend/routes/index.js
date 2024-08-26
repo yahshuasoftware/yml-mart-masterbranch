@@ -23,6 +23,8 @@ router.get('/dashboard', orderController)
 // Admin Panel Routes
 router.get("/all-user", require('../middleware/authToken'), require('../controller/user/allUsers'));
 router.post("/update-user", require('../middleware/authToken'), require('../controller/user/updateUser'));
+router.delete("/delete-user/:userId", require('../middleware/authToken'), require('../controller/user/deleteUser'));
+
 
 // Product Routes
 router.post("/upload-product", require('../middleware/authToken'), require('../controller/product/uploadProduct'));
