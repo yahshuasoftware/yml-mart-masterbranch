@@ -8,6 +8,8 @@ import { MdModeEditOutline } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
 import SummaryApi from '../common';
 import {toast} from 'react-toastify'
+import AddressForm from '../components/AddressForm';
+import { uploadAddress } from '../helpers/uploadAddress';
 
 
 
@@ -16,51 +18,60 @@ const Profile = ( ) => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar visibility
   const [userData, setUserData] = useState(null)
   const [orderData, setOrderData] = useState(null)
+  const [address, setAddress] = useState({});
 
-  const [address, setAddress] = useState({
-    street: '',
-    city: '',
-    state: '',
-    zip: ''
-  });
+  // const [address, setAddress] = useState({
+  //   street: '',
+  //   city: '',
+  //   state: '',
+  //   zip: ''
+  // });
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setAddress((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const handleOnChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setAddress((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
   
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    const response = await fetch(SummaryApi.uploadAddress.url, {  // Update the API endpoint
-      method: SummaryApi.uploadAddress.method,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ address }),
-    });
+  //   const response = await fetch(SummaryApi.uploadAddress.url, {  // Update the API endpoint
+  //     method: SummaryApi.uploadAddress.method,
+  //     credentials: 'include',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ address }),
+  //   });
 
-    const responseData = await response.json();
+  //   const responseData = await response.json();
 
-    if (responseData.success) {
-      toast.success(responseData?.message);
+  //   if (responseData.success) {
+  //     toast.success(responseData?.message);
      
-      // fetchUserData(); // Call a function to refresh the user data
-      setUserData((prevUserData) => ({
-        ...prevUserData,
-        address: address,
-    }));
-    }
+  //     // fetchUserData(); // Call a function to refresh the user data
+  //     setUserData((prevUserData) => ({
+  //       ...prevUserData,
+  //       address: address,
+  //   }));
+  //   }
 
-    if (responseData.error) {
-      toast.error(responseData?.message);
-    }
+  //   if (responseData.error) {
+  //     toast.error(responseData?.message);
+  //   }
+  // };
+
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    uploadAddress(address, setUserData);
   };
+
 
 
   const user = useSelector(state => state?.user?.user)
@@ -258,7 +269,13 @@ const Profile = ( ) => {
         </div>
     )}
 
-    <form className="grid gap-4" onSubmit={handleSubmit}>
+<form className="grid gap-4" onSubmit={handleSubmit}>
+        <AddressForm address={address} setAddress={setAddress} />
+        <button className="mt-4 py-3 bg-sky-600 text-white font-medium rounded-md hover:bg-sky-600 transition duration-200">
+          Update Address
+        </button>
+      </form>
+    {/* <form className="grid gap-4" onSubmit={handleSubmit}>
         <div>
             <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-1">Street:</label>
             <input 
@@ -314,7 +331,7 @@ const Profile = ( ) => {
         <button className="mt-4 py-3 bg-sky-600 text-white font-medium rounded-md hover:bg-sky-600 transition duration-200">
             Update Address
         </button>
-    </form>
+    </form> */}
 </div>
 
           </div>
@@ -377,7 +394,7 @@ const Profile = ( ) => {
             </li>
           </ul>
         </aside>
-        <main className="flex-1 p-4 md:ml-10">
+        <main className="flex-1 p-4 ">
           {renderContent()}
         </main>
       </div>

@@ -73,7 +73,7 @@ const Footer = () => {
             <p>Subscribe to our new channel to receive the latest updates.</p>
             <form action="">
               <input
-                className="email"
+                className="email text-black"
                 type="email"
                 placeholder="Enter Your Email"
                 name=""

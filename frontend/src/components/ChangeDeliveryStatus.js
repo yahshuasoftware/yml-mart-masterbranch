@@ -46,6 +46,8 @@ const ChangeDeliveryStatus = ({ _id, deliveryStatus, onClose, callFunc }) => {
                         <option value="Ordered">Ordered</option>
                         <option value="Processing">Processing</option>
                         <option value="Shipped">Shipped</option>
+                        <option value="In-transit">In-Transit</option>
+                        <option value="Out Of Delivery">Out Of Delivery</option>
                         <option value="Delivered">Delivered</option>
                         <option value="Cancelled">Cancelled</option>
                     </select>

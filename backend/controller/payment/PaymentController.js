@@ -1,4 +1,3 @@
-// BackendFolder > controller > payment > paymentController.js
 const Razorpay = require('razorpay');
 const Order = require('../../models/order'); // Import the Order model
 
@@ -8,7 +7,7 @@ const razorpay = new Razorpay({
 });
 
 const createOrder = async (req, res) => {
-    const { amount, currency, receipt, userId, products, userName } = req.body; // Assuming you're sending userId from the frontend
+    const { amount, currency, receipt } = req.body;
 
     try {
         const options = {
@@ -17,27 +16,10 @@ const createOrder = async (req, res) => {
             receipt: receipt || `receipt_${Date.now()}`,
         };
 
+        // Create order with Razorpay
         const order = await razorpay.orders.create(options);
 
-        // Save order to the database
-        const newOrder = new Order({
-            order_id: order.id,
-            products: products.map(product => ({
-                productId: product.productId._id,
-                name: product.productId.productName,
-                quantity: product.quantity,
-                price: product.productId.sellingPrice,
-                image: product.productId.productImage
-            })),
-            amount: order.amount/100,
-            currency: order.currency,
-            receipt: order.receipt,
-            user: userId, // Store user ID associated with this order
-            // name: userName
-        });
-
-        await newOrder.save();
-
+        // Return the order details to the frontend
         res.status(200).json({ success: true, order });
     } catch (error) {
         console.error("Error creating Razorpay order", error);
@@ -46,27 +28,34 @@ const createOrder = async (req, res) => {
 };
 
 const handlePaymentSuccess = async (req, res) => {
-    const { order_id, payment_id, signature } = req.body;
+    const { order_id, payment_id, signature, userId, products, amount, currency } = req.body;
 
     try {
-        const order = await Order.findOne({ order_id });
+        // Create a new order in your database after a successful payment
+        const newOrder = new Order({
+            order_id: order_id,
+            payment_id: payment_id,
+            signature: signature,
+            products: products.map(product => ({
+                productId: product.productId._id,
+                name: product.productId.productName,
+                quantity: product.quantity,
+                price: product.productId.sellingPrice,
+                image: product.productId.productImage
+            })),
+            amount: amount / 100,
+            currency: currency || "INR",
+            user: userId,
+            status: 'paid', 
+        });
 
-        if (!order) {
-            return res.status(404).json({ success: false, message: "Order not found" });
-        }
+        await newOrder.save();
 
-        order.payment_id = payment_id;
-        order.signature = signature;
-        order.status = 'paid';
-
-        await order.save();
-
-        res.status(200).json({ success: true, message: "Payment successful, order updated" });
+        res.status(200).json({ success: true, message: "Payment successful, order stored in the database." });
     } catch (error) {
-        console.error("Error updating order after payment", error);
+        console.error("Error saving order after payment", error);
         res.status(500).json({ success: false, message: "Server Error", error });
     }
-    
 };
 
 module.exports = { createOrder, handlePaymentSuccess };
