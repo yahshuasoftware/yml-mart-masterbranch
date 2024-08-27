@@ -14,7 +14,7 @@ const SignUp = () => {
       email : "",
       password : "",
       name : "",
-    //   address : "",
+      refferredbycode:"",
       confirmPassword : "",
       profilePic : "",
       mobileNo:""
@@ -139,19 +139,19 @@ const SignUp = () => {
                             </div>
                         </div>
 
-                        {/* <div className='grid'>
-                            <label>Address : </label>
+                        <div className='grid'>
+                            <label>Refferal Code : </label>
                             <div className='bg-slate-100 p-2'>
                                 <input 
                                     type='text' 
-                                    placeholder='Enter Address' 
-                                    name='address'
-                                    value={data.address}
+                                    placeholder='Enter Refferal Code' 
+                                    name='refferredbycode'
+                                    value={data.refferredbycode}
                                     onChange={handleOnChange}
-                                    required
+                                    
                                     className='w-full h-full outline-none bg-transparent'/>
                             </div>
-                        </div> */}
+                        </div>
 
                         <div>
                             <label>Password : </label>

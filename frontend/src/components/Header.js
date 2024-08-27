@@ -105,10 +105,12 @@ const Header = () => {
             </Link>
           )}
 
-<Link to={"/refer"} className='px-3 py-1 rounded-full text-white bg-blue-600 hover:bg-green-600 text-center'>
+<Link to={"/refer"} className='blink px-3 py-1 rounded-full text-white bg-red-600 hover:bg-green-600 text-center'>
   Refer
 </Link>
-
+<Link to={"/businessprofile"} className='px-3 py-1 rounded-full text-white bg-slate-800 hover:bg-slate-600 text-center'>
+  B Profile
+</Link>
           <div>
             {user?._id ? (
               <button onClick={handleLogout} className='px-3 py-1 rounded-full text-white bg-sky-600 hover:bg-sky-900'>Logout</button>

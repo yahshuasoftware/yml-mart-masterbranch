@@ -19,6 +19,7 @@ import AboutCompany from '../pages/AboutCompany'
 import AskQuestion from '../pages/AskQuestion'
 import ContactUs from '../pages/ContactUs'
 import AllUsers from '../pages/AllUsers' // Import the All Users component
+import BusinessProfile from '../pages/businessProfile/BusinessProfile'
 
 
 
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
             {
                 path : "contact",
                 element : <ContactUs/>
+            },
+            {
+                path : "businessprofile",
+                element : <BusinessProfile/>
             },
             {
                 path : "forgot-password",
@@ -79,6 +84,7 @@ const router = createBrowserRouter([
                 path : "user-details",
                 element : <UserProfile/>
             },
+            
             {
                 path : "admin-panel",
                 element : <AdminPanel/>,

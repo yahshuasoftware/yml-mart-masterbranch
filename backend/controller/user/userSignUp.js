@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 async function userSignUpController(req,res){
     try{
-        const { email, password, name} = req.body
+        const { email, password, name,refferredbycode} = req.body
 
         const user = await userModel.findOne({email})
 
@@ -31,10 +31,29 @@ async function userSignUpController(req,res){
             throw new Error("Something is wrong")
         }
 
+        function generateReferralCode() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            let code = '';
+          
+            for (let i = 0; i < 3; i++) {
+              code += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+            for (let i = 0; i < 3; i++) {
+              code += numbers.charAt(Math.floor(Math.random() * numbers.length));
+            }
+          
+            return code;
+          }
+        const referralCode = generateReferralCode();
         const payload = {
             ...req.body,
             role : "GENERAL",
-            password : hashPassword
+            password : hashPassword,
+            refferal: {
+                refferalcode: referralCode,   // Generate or set a referral code
+                refferredbycode  // Include the referredbycode from the request
+            }
         }
 
         const userData = new userModel(payload)

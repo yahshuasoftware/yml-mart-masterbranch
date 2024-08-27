@@ -7,6 +7,13 @@ const addressSchema = new mongoose.Schema({
     zip: String
 });
 
+const refferalSchema = new mongoose.Schema({
+    refferalcode: String,
+    refferredbycode: String,
+    myrefferals: [{}],
+   
+});
+
 const userSchema = new mongoose.Schema({
     name : String,
     email : {
@@ -19,6 +26,7 @@ const userSchema = new mongoose.Schema({
     password : String,
     profilePic : String,
     role : String,
+    refferal:refferalSchema
 },{
     timestamps : true
 })
