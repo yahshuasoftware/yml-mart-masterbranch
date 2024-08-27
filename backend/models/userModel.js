@@ -1,25 +1,28 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+
+const addressSchema = new mongoose.Schema({
+    street: String,
+    city: String,
+    state: String,
+    zip: String
+});
 
 const userSchema = new mongoose.Schema({
-  // existing fields
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  mobileNo: { type: String, required: true },
-  password: { type: String, required: true },
-  profilePic: { type: String },
-  role: { type: String, default: 'user' },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-  address: {
-    street: { type: String },
-    city: { type: String },
-    state: { type: String },
-    zip: { type: String },
-    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Address' },
-  },
-  referralCode: { type: String, unique: true },
-  referredUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-});
+    name : String,
+    email : {
+        type : String,
+        unique : true,
+        required : true
+    },
+    mobileNo: Number,
+    address: addressSchema,
+    password : String,
+    profilePic : String,
+    role : String,
+},{
+    timestamps : true
+})
+
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

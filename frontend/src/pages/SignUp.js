@@ -7,39 +7,29 @@ import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-    name: '',
-    confirmPassword: '',
-    profilePic: '',
-    mobileNo: '',
-    referralCode: '' // Referral code field
-  });
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [showPassword,setShowPassword] = useState(false)
+  const [showConfirmPassword,setShowConfirmPassword] = useState(false)
+  const [data,setData] = useState({
+      email : "",
+      password : "",
+      name : "",
+    //   address : "",
+      confirmPassword : "",
+      profilePic : "",
+      mobileNo:""
+  })
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    // Parse referral code from URL query params
-    const queryParams = new URLSearchParams(location.search);
-    const referralCode = queryParams.get('referralCode');
-    if (referralCode) {
-      setData((prev) => ({
-        ...prev,
-        referralCode
-      }));
-    }
-  }, [location.search]);
+  const handleOnChange = (e) =>{
+      const { name , value } = e.target
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+      setData((preve)=>{
+          return{
+              ...preve,
+              [name] : value
+          }
+      })
+  }
 
   const handleUploadPic = async (e) => {
     const file = e.target.files[0];
@@ -97,109 +87,120 @@ const SignUp = () => {
             </form>
           </div>
 
-          <form className='pt-6 flex flex-col gap-4' onSubmit={handleSubmit}>
-            <div className='grid'>
-              <label htmlFor='name'>Name: </label>
-              <div className='bg-slate-100 p-2'>
-                <input
-                  type='text'
-                  id='name'
-                  placeholder='Enter Your Name'
-                  name='name'
-                  value={data.name}
-                  onChange={handleOnChange}
-                  required
-                  className='w-full h-full outline-none bg-transparent'
-                />
-              </div>
-            </div>
-            <div className='grid'>
-              <label htmlFor='email'>Email: </label>
-              <div className='bg-slate-100 p-2'>
-                <input
-                  type='email'
-                  id='email'
-                  placeholder='Enter Email'
-                  name='email'
-                  value={data.email}
-                  onChange={handleOnChange}
-                  required
-                  className='w-full h-full outline-none bg-transparent'
-                />
-              </div>
-            </div>
-            <div className='grid'>
-              <label htmlFor='mobileNo'>Mobile No: </label>
-              <div className='bg-slate-100 p-2'>
-                <input
-                  type='number'
-                  id='mobileNo'
-                  placeholder='Enter Mobile No'
-                  name='mobileNo'
-                  value={data.mobileNo}
-                  onChange={handleOnChange}
-                  required
-                  className='w-full h-full outline-none bg-transparent'
-                />
-              </div>
-            </div>
-            <div className='grid'>
-              <label htmlFor='referralCode'>Referral Code (optional): </label>
-              <div className='bg-slate-100 p-2'>
-                <input
-                  type='text'
-                  id='referralCode'
-                  placeholder='Referral Code'
-                  name='referralCode'
-                  value={data.referralCode}
-                  onChange={handleOnChange}
-                  className='w-full h-full outline-none bg-transparent'
-                />
-              </div>
-            </div>
-            <div className='grid'>
-              <label htmlFor='password'>Password: </label>
-              <div className='bg-slate-100 p-2 flex items-center'>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id='password'
-                  placeholder='Enter Password'
-                  value={data.password}
-                  name='password'
-                  onChange={handleOnChange}
-                  required
-                  className='w-full h-full outline-none bg-transparent'
-                />
-                <div className='cursor-pointer text-xl ml-2' onClick={() => setShowPassword((prev) => !prev)}>
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </div>
-              </div>
-            </div>
-            <div className='grid'>
-              <label htmlFor='confirmPassword'>Confirm Password: </label>
-              <div className='bg-slate-100 p-2 flex items-center'>
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  id='confirmPassword'
-                  placeholder='Confirm Password'
-                  value={data.confirmPassword}
-                  name='confirmPassword'
-                  onChange={handleOnChange}
-                  required
-                  className='w-full h-full outline-none bg-transparent'
-                />
-                <div className='cursor-pointer text-xl ml-2' onClick={() => setShowConfirmPassword((prev) => !prev)}>
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                </div>
-              </div>
-            </div>
-            <button
-              type='submit'
-              className='bg-sky-600 hover:bg-sky-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'
-            >
-              Sign Up
-            </button>
-          </form>
+                    <form className='pt-6 flex flex-col gap-2' onSubmit={handleSubmit}>
+                      <div className='grid'>
+                              <label>Name : </label>
+                              <div className='bg-slate-100 p-2'>
+                                  <input 
+                                      type='text' 
+                                      placeholder='Enter Your Name' 
+                                      name='name'
+                                      value={data.name}
+                                      onChange={handleOnChange}
+                                      required
+                                      className='w-full h-full outline-none bg-transparent'/>
+                              </div>
+                          </div>
+                        <div className='grid'>
+                            <label>Email : </label>
+                            <div className='bg-slate-100 p-2'>
+                                <input 
+                                    type='email' 
+                                    placeholder='Enter Email' 
+                                    name='email'
+                                    value={data.email}
+                                    onChange={handleOnChange}
+                                    required
+                                    className='w-full h-full outline-none bg-transparent'/>
+                            </div>
+                        </div>
+
+                        <div className='grid'>
+                            <label>Mobile No : </label>
+                            <div className='bg-slate-100 p-2'>
+                                <input 
+                                    type='number' 
+                                    placeholder='Enter Mobile No' 
+                                    name='mobileNo'
+                                    value={data.mobileNo}
+                                    onChange={handleOnChange}
+                                    required
+                                    className='w-full h-full outline-none bg-transparent'/>
+                            </div>
+                        </div>
+
+                        {/* <div className='grid'>
+                            <label>Address : </label>
+                            <div className='bg-slate-100 p-2'>
+                                <input 
+                                    type='text' 
+                                    placeholder='Enter Address' 
+                                    name='address'
+                                    value={data.address}
+                                    onChange={handleOnChange}
+                                    required
+                                    className='w-full h-full outline-none bg-transparent'/>
+                            </div>
+                        </div> */}
+
+                        <div>
+                            <label>Password : </label>
+                            <div className='bg-slate-100 p-2 flex'>
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    placeholder='Enter Password'
+                                    value={data.password}
+                                    name='password' 
+                                    onChange={handleOnChange}
+                                    required
+                                    className='w-full h-full outline-none bg-transparent'/>
+                                <div className='cursor-pointer text-xl' onClick={()=>setShowPassword((preve)=>!preve)}>
+                                    <span>
+                                        {
+                                            showPassword ? (
+                                                <FaEyeSlash/>
+                                            )
+                                            :
+                                            (
+                                                <FaEye/>
+                                            )
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Confirm Password : </label>
+                            <div className='bg-slate-100 p-2 flex'>
+                                <input 
+                                    type={showConfirmPassword ? "text" : "password"} 
+                                    placeholder='Enter Confirm password'
+                                    value={data.confirmPassword}
+                                    name='confirmPassword' x
+                                    onChange={handleOnChange}
+                                    required
+                                    className='w-full h-full outline-none bg-transparent'/>
+
+                                <div className='cursor-pointer text-xl' onClick={()=>setShowConfirmPassword((preve)=>!preve)}>
+                                    <span>
+                                        {
+                                            showConfirmPassword ? (
+                                                <FaEyeSlash/>
+                                            )
+                                            :
+                                            (
+                                                <FaEye/>
+                                            )
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button className='bg-sky-600 hover:bg-sky-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>Sign Up</button>
+
+                    </form>
 
           <p className='my-5 text-center'>
             Already have an account?{' '}

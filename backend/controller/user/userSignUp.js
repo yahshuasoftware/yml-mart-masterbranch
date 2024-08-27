@@ -15,9 +15,9 @@ function generateReferralCode() {
     return result;
 }
 
-async function userSignUpController(req, res) {
-    try {
-        const { email, password, name, referralCode } = req.body;
+async function userSignUpController(req,res){
+    try{
+        const { email, password, name} = req.body
 
         // Check for existing user
         const existingUser = await userModel.findOne({ email });
@@ -43,14 +43,11 @@ async function userSignUpController(req, res) {
         // Generate referral code
         const generatedReferralCode = generateReferralCode();
 
-        // Prepare user data
         const payload = {
-            name,
-            email,
-            password: hashPassword,
-            role: "GENERAL",
-            referralCode: generatedReferralCode
-        };
+            ...req.body,
+            role : "GENERAL",
+            password : hashPassword
+        }
 
         // Create and save the new user
         const newUser = new userModel(payload);

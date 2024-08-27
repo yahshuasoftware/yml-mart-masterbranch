@@ -297,7 +297,7 @@ const Cart = () => {
           {showAddressForm && (
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <AddressForm address={address} setAddress={setAddress} />
-              <button className="mt-4 py-3 bg-sky-600 text-white font-medium rounded-md hover:bg-sky-600 transition duration-200">
+              <button className="bg-green-600 text-white p-2 rounded w-80">
                 Update Address
               </button>
             </form>

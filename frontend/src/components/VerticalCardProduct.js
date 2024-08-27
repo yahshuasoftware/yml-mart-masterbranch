@@ -16,6 +16,8 @@ const VerticalCardProduct = ({ category, heading }) => {
 
     const { fetchUserAddToCart } = useContext(Context);
 
+
+
     const handleAddToCart = async (e, id) => {
         await addToCart(e, id);
         fetchUserAddToCart();
