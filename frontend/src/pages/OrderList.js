@@ -45,6 +45,7 @@ const OrderList = () => {
             <th className="py-2">Sr. No.</th>
             <th className="py-2">Customer Name</th>
             <th className="py-2">Items</th>
+            <th className="py-2">Amount</th>
             <th className="py-2">Payment Status</th>
             <th className="py-2">Delivery Status</th>
             <th className="py-2">Actions</th>
@@ -75,6 +76,9 @@ const OrderList = () => {
                     </td>
                     {productIndex === 0 && (
                         <>
+                        <td  rowSpan={order.products.length} className=" text-center align-middle border-gray-400 font-medium text-black">
+                        {order.amount+"₹"}
+                    </td> 
                             <td
                                 rowSpan={order.products.length}
                                 className="py-4 text-center align-middle border-gray-400 font-medium text-black"

@@ -1,4 +1,4 @@
-const User = require('../../models/User'); // Adjust the path as needed
+const User = require('../../models/userModel'); // Adjust the path as needed
 
 const deleteUser = async (req, res) => {
     const { userId } = req.params;
