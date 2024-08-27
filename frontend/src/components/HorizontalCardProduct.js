@@ -2,10 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import fetchCategoryWiseProduct from '../helpers/fetchCategoryWiseProduct';
 import displayINRCurrency from '../helpers/displayCurrency';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
-import StarRatings from 'react-star-ratings';
 
 const HorizontalCardProduct = ({ category, heading }) => {
     const [data, setData] = useState([]);
@@ -13,13 +12,24 @@ const HorizontalCardProduct = ({ category, heading }) => {
     const loadingList = new Array(13).fill(null);
 
     const scrollElement = useRef();
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const { fetchUserAddToCart } = useContext(Context);
 
-    const handleAddToCart = async (e, id) => {
-        await addToCart(e, id);
-        fetchUserAddToCart();
-    };
+    // In HorizontalCardProduct component
+const handleAddToCart = async (e, id) => {
+    try {
+        const response = await addToCart(e, id);
+        if (response?.redirectToLogin) {
+            navigate('/login'); // Redirect to login page
+        } else {
+            fetchUserAddToCart(); // Otherwise, fetch the updated cart
+        }
+    } catch (error) {
+        console.error("Error adding to cart:", error);
+    }
+};
+
 
     const fetchData = async () => {
         setLoading(true);
@@ -74,7 +84,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
                         </div>
                     ))
                 ) : (
-                    data.map((product, index) => (
+                    data.map((product) => (
                         <Link
                             key={product?._id}
                             to={"product/" + product?._id}
@@ -95,28 +105,24 @@ const HorizontalCardProduct = ({ category, heading }) => {
                                     <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
                                 </div>
                                 <div className='flex items-center'>
-    <StarRatings
-        rating={4.5} // Fixed rating
-        starRatedColor="gold"
-        starDimension="15px"
-        starSpacing="0px" // No space between the star and the text
-        numberOfStars={1} // Display only one star
-        name='rating'
-    />
-    <span className='text-slate-500 ml-1 flex items-center'>4.5</span> {/* Flexbox alignment for consistent spacing */}
-    <span className='text-slate-500 ml-1 flex items-center'>(10)</span> {/* Flexbox alignment for consistent spacing */}
-</div>
-
-   
+                                    <div className='bg-yellow-400 text-white px-2 py-0.5 rounded-md flex items-center'>
+                                        <span className='text-sm font-semibold'>{4.5}</span>
+                                        <svg className='w-4 h-4 fill-current ml-1' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                                            <path d="M12 17.3l6.2 3.7-1.7-7.1L22 9.2l-7.3-.6L12 2 9.3 8.6 2 9.2l5.5 4.7L5.8 21z" />
+                                        </svg>
+                                    </div>
+                                    <span className='text-slate-500 ml-2 text-sm'>(10)</span>
+                                </div>
                                 <div className='flex flex-col md:flex-row gap-2 mt-2'>
-                                    <button
-                                        className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'
-                                    >
+                                    <button className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'>
                                         Buy Now
                                     </button>
-                                    <button className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>
-                                    Add to Cart
-                                </button>
+                                    <button
+                                        className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full'
+                                        onClick={(e) => handleAddToCart(e, product?._id)}
+                                    >
+                                        Add to Cart
+                                    </button>
                                 </div>
                             </div>
                         </Link>

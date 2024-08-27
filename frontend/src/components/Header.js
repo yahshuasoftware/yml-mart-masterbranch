@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react';
 import { GrSearch } from "react-icons/gr";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
@@ -11,50 +11,50 @@ import ROLE from '../common/role';
 import Context from '../context';
 
 const Header = () => {
-  const user = useSelector(state => state?.user?.user)
-  const dispatch = useDispatch()
-  const [menuDisplay, setMenuDisplay] = useState(false)
-  const context = useContext(Context)
-  const navigate = useNavigate()
-  const searchInput = useLocation()
-  const URLSearch = new URLSearchParams(searchInput?.search)
-  const searchQuery = URLSearch.getAll("q")
-  const [search, setSearch] = useState(searchQuery)
+  const user = useSelector(state => state?.user?.user);
+  const dispatch = useDispatch();
+  const [menuDisplay, setMenuDisplay] = useState(false);
+  const context = useContext(Context);
+  const navigate = useNavigate();
+  const searchInput = useLocation();
+  const URLSearch = new URLSearchParams(searchInput?.search);
+  const searchQuery = URLSearch.getAll("q");
+  const [search, setSearch] = useState(searchQuery);
 
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
       method: SummaryApi.logout_user.method,
-      credentials: 'include'
-    })
+      credentials: 'include',
+    });
 
     const data = await fetchData.json();
 
     if (data.success) {
-      toast.success(data.message)
-      dispatch(setUserDetails(null))
-      navigate("/")
+      toast.success(data.message);
+      dispatch(setUserDetails(null));
+      navigate("/");
     }
 
     if (data.error) {
-      toast.error(data.message)
+      toast.error(data.message);
     }
-  }
+  };
 
   const handleSearch = (e) => {
-    const { value } = e.target
-    setSearch(value)
+    const { value } = e.target;
+    setSearch(value);
 
     if (value) {
-      navigate(`/search?q=${value}`)
+      navigate(`/search?q=${value}`);
     } else {
-      navigate("/search")
+      navigate("/search");
     }
-  }
+  };
 
   return (
     <header className='h-16 shadow-md bg-white fixed w-full z-40'>
       <div className='h-full container mx-auto flex items-center px-4 justify-between'>
-        <div className=''>
+        <div>
           <Link to={"/"}>
             <img src="logo.png" alt="Logo" className="w-36" />
           </Link>
@@ -105,6 +105,10 @@ const Header = () => {
             </Link>
           )}
 
+<Link to={"/refer"} className='px-3 py-1 rounded-full text-white bg-blue-600 hover:bg-green-600 text-center'>
+  Refer
+</Link>
+
           <div>
             {user?._id ? (
               <button onClick={handleLogout} className='px-3 py-1 rounded-full text-white bg-sky-600 hover:bg-sky-900'>Logout</button>
@@ -118,4 +122,4 @@ const Header = () => {
   );
 }
 
-export default Header
+export default Header;

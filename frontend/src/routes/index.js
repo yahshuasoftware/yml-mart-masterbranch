@@ -21,6 +21,7 @@ import ContactUs from '../pages/ContactUs'
 import AllUsers from '../pages/AllUsers' // Import the All Users component
 
 
+
 const router = createBrowserRouter([
     {
         path : "/",
@@ -54,7 +55,6 @@ const router = createBrowserRouter([
                 path : "sign-up",
                 element : <SignUp/>
             },
-            
             {
                 path : "product-category",
                 element : <CategoryProduct/>

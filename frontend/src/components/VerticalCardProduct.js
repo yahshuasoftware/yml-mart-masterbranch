@@ -5,7 +5,6 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
-import StarRatings from 'react-star-ratings';
 
 const VerticalCardProduct = ({ category, heading }) => {
     const [data, setData] = useState([]); 
@@ -60,26 +59,26 @@ const VerticalCardProduct = ({ category, heading }) => {
 
                 {loading ? (
                     loadingList.map((_, index) => ( 
-                        <div key={index} className='w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-sm shadow'>
-                            <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse'></div>
-                            <div className='p-4 grid gap-3'>
-                                <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 py-2 animate-pulse rounded-full bg-slate-200'></h2>
-                                <p className='capitalize text-slate-500 p-1 animate-pulse rounded-full bg-slate-200 py-2'></p>
-                                <div className='flex gap-3'>
-                                    <p className='text-sky-600 font-medium p-1 animate-pulse rounded-full bg-slate-200 w-full py-2'></p>
-                                    <p className='text-slate-500 line-through p-1 animate-pulse rounded-full bg-slate-200 w-full py-2'></p>
+                        <div key={index} className='w-full min-w-[320px] md:min-w-[360px] max-w-[320px] md:max-w-[360px] h-48 bg-white rounded-lg shadow-md flex animate-pulse'>
+                            <div className='bg-slate-200 h-full p-4 min-w-[140px] md:min-w-[160px]'></div>
+                            <div className='p-4 grid w-full gap-2'>
+                                <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black bg-slate-200 p-1 rounded-full'></h2>
+                                <p className='capitalize text-slate-500 p-1 bg-slate-200 rounded-full'></p>
+                                <div className='flex gap-3 w-full'>
+                                    <p className='text-red-600 font-medium p-1 bg-slate-200 w-full rounded-full'></p>
+                                    <p className='text-slate-500 line-through p-1 bg-slate-200 w-full rounded-full'></p>
                                 </div>
-                                <button className='text-sm text-white px-3 rounded-full bg-slate-200 py-2 animate-pulse'></button>
+                                <button className='text-sm text-white px-3 py-0.5 rounded-full w-full bg-slate-200'></button>
                             </div>
                         </div>
                     ))
                 ) : (
                     data.map((product) => ( 
-                        <Link key={product?._id} to={"product/" + product?._id} className='w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-sm shadow'>
-                            <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
-                                <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' alt={product?.productName} />
+                        <Link key={product?._id} to={"product/" + product?._id} className='w-full min-w-[320px] md:min-w-[360px] max-w-[320px] md:max-w-[360px] h-48 bg-white rounded-lg shadow-md flex transition-transform transform hover:scale-105 hover:shadow-lg'>
+                            <div className='bg-slate-200 h-full p-4 min-w-[140px] md:min-w-[160px]'>
+                                <img src={product?.productImage[0]} className='object-scale-down h-full w-full transition-transform transform hover:scale-110' alt={product?.productName} />
                             </div>
-                            <div className='p-4 grid gap-3'>
+                            <div className='p-4 grid'>
                                 <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
                                 <p className='capitalize text-slate-500'>{product?.category}</p>
                                 <div className='flex gap-3'>
@@ -87,24 +86,22 @@ const VerticalCardProduct = ({ category, heading }) => {
                                     <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
                                 </div>
                                 <div className='flex items-center'>
-    <StarRatings
-        rating={4.5} // Fixed rating
-        starRatedColor="gold"
-        starDimension="15px"
-        starSpacing="0px" // No space between the star and the text
-        numberOfStars={1} // Display only one star
-        name='rating'
-    />
-    <span className='text-slate-500 ml-1 flex items-center'>4.5</span> {/* Flexbox alignment for consistent spacing */}
-    <span className='text-slate-500 ml-1 flex items-center'>(10)</span> {/* Flexbox alignment for consistent spacing */}
-</div>
-                                 <button className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'
-                                    >
+                                        <div className='bg-yellow-400 text-white px-2 py-0.5 rounded-md flex items-center'>
+                                            <span className='text-sm font-semibold'>{4.5}</span>
+                                            <svg className='w-4 h-4 fill-current ml-1' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                                                <path d="M12 17.3l6.2 3.7-1.7-7.1L22 9.2l-7.3-.6L12 2 9.3 8.6 2 9.2l5.5 4.7L5.8 21z" />
+                                            </svg>
+                                        </div>
+                                        <span className='text-slate-500 ml-2 text-sm'>(10)</span>
+                                    </div>
+                                 <div className='flex flex-col md:flex-row gap-2 mt-2'>
+                                    <button className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'>
                                         Buy Now
                                     </button>
-                                <button className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>
-                                    Add to Cart
-                                </button>
+                                    <button className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>
+                                        Add to Cart
+                                    </button>
+                                </div>
                             </div>
                         </Link>
                     ))
