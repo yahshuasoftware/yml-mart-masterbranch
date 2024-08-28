@@ -39,8 +39,6 @@ router.post("/popularity", require('../controller/product/popularity'));
 router.post("/upload-banner", require('../middleware/authToken'), require('../controller/banner/uploadBanner'));
 router.get("/get-banners", require('../controller/banner/getBanner')); 
 
-
-
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));
 router.get("/countAddToCartProduct", require('../middleware/authToken'), require('../controller/user/countAddToCartProduct'));
