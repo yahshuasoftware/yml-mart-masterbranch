@@ -14,6 +14,7 @@ const SignUp = () => {
       email : "",
       password : "",
       name : "",
+      //Hello
       refferredbycode:"",
       confirmPassword : "",
       profilePic : "",

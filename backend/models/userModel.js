@@ -13,11 +13,18 @@ const refferalSchema = new mongoose.Schema({
     myrefferals: [
         {
             userId:{type:mongoose.Schema.Types.ObjectId, ref: 'user'},
-            order_id: { type:mongoose.Schema.Types.ObjectId, ref: 'Order' },
-            // name:{type:String}
-            
+            name:{type:String}
+            // order_id: { type:mongoose.Schema.Types.ObjectId, ref: 'Order' },
         }
     ],
+    myrefferalorders:[
+        {
+            userId:{type:mongoose.Schema.Types.ObjectId, ref: 'user'},
+            order_id: { type:mongoose.Schema.Types.ObjectId, ref: 'Order' },
+        }
+        
+
+    ]
    
 },{_id:false});
 
