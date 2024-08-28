@@ -14,6 +14,7 @@ const SignUp = () => {
       email : "",
       password : "",
       name : "",
+      //Hello
       refferredbycode:"",
       confirmPassword : "",
       profilePic : "",
@@ -45,7 +46,7 @@ const SignUp = () => {
     })
 
   }
-
+// handelsubmit
 
   const handleSubmit = async(e) =>{
       e.preventDefault()
@@ -61,10 +62,10 @@ const SignUp = () => {
           })
     
           const dataApi = await dataResponse.json()
-          console.log(dataApi)
+          console.log(dataApi.message)
 
           if(dataApi.success){
-            toast.success(dataApi.referrerData)
+            toast.success(dataApi)
             navigate("/login")
           }
 
