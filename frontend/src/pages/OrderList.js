@@ -21,7 +21,7 @@ const OrderList = () => {
 
             const data = await response.json();
             setOrderData(data.orders);
-            // alert(orderData)
+            console.log(orderData[2].userId.name)
         } catch (error) {
             console.error('Error fetching orders:', error);
         }
@@ -67,7 +67,7 @@ const OrderList = () => {
                                 rowSpan={order.products.length}
                                 className="py-4 align-middle text-center border-gray-400 font-semibold text-black"
                             >
-                                {order.user}
+                            {order.userId?.name || 'No name available'} {/* Handle undefined user */}
                             </td>
                         </>
                     )}

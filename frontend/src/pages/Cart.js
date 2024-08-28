@@ -160,6 +160,7 @@ const Cart = () => {
   };
   // razorepay
   const handlePayment = async () => {
+   
     try {
       // Step 1: Create an order on the backend
       const response = await fetch(

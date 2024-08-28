@@ -5,7 +5,7 @@ async function userDetailsController(req,res){
     try{
         const userId = req.userId;
         const user = await userModel.findById(userId)
-        const order = await orderModel.find({user: userId})
+        const order = await orderModel.find({userId: userId})
         
         console.log('User Data:', user); // Log user data
         console.log('Order Data:', order)

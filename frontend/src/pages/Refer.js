@@ -47,7 +47,7 @@ const ReferCard = () => {
           <h1 className="text-lg font-semibold text-gray-900 mb-4">Welcome Message</h1>
           
           <div className="mb-4">
-            <div className="text-2xl font-bold text-black">$00</div>
+            <div className="text-2xl font-bold text-black">₹00</div>
             <div className="text-sm text-gray-600"></div>
           </div>
 
