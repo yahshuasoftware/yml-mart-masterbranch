@@ -29,6 +29,10 @@ const SummaryApi = {
         url : `${backendDomin}/api/upload-product`,
         method : 'post'
     },
+    uploadBanner : {
+        url : `${backendDomin}/api/upload-banner`,
+        method : 'POST'
+    },
     uploadAddress : {
         url : `${backendDomin}/api/user-details`,
         method : 'post'
@@ -39,6 +43,10 @@ const SummaryApi = {
     },
     allProduct : {
         url : `${backendDomin}/api/get-product`,
+        method : 'get'
+    },
+    allBanner : {
+        url : `${backendDomin}/api/get-banners`,
         method : 'get'
     },
     updateProduct : {
