@@ -1,84 +1,79 @@
-const userModel = require("../../models/userModel");
+const userModel = require("../../models/userModel")
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
 
-function generateReferralCode() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numbers = '0123456789';
-    let result = '';
-    for (let i = 0; i < 3; i++) {
-        result += letters.charAt(Math.floor(Math.random() * letters.length));
-    }
-    for (let i = 0; i < 3; i++) {
-        result += numbers.charAt(Math.floor(Math.random() * numbers.length));
-    }
-    return result;
-}
 
 async function userSignUpController(req,res){
     try{
-        const { email, password, name} = req.body
+        const { email, password, name,refferredbycode} = req.body
 
-        // Check for existing user
-        const existingUser = await userModel.findOne({ email });
-        if (existingUser) {
-            throw new Error("User already exists.");
-        }
+        const user = await userModel.findOne({email})
 
-        // Validate required fields
-        if (!email) {
-            throw new Error("Please provide an email.");
-        }
-        if (!password) {
-            throw new Error("Please provide a password.");
-        }
-        if (!name) {
-            throw new Error("Please provide a name.");
+        console.log("user",user)
+
+        if(user){
+            throw new Error("Already user exits.")
         }
 
-        // Hash the password
+        if(!email){
+           throw new Error("Please provide email")
+        }
+        if(!password){
+            throw new Error("Please provide password")
+        }
+        if(!name){
+            throw new Error("Please provide name")
+        }
+
         const salt = bcrypt.genSaltSync(10);
         const hashPassword = await bcrypt.hashSync(password, salt);
 
-        // Generate referral code
-        const generatedReferralCode = generateReferralCode();
+        if(!hashPassword){
+            throw new Error("Something is wrong")
+        }
 
+        function generateReferralCode() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            let code = '';
+          
+            for (let i = 0; i < 3; i++) {
+              code += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+            for (let i = 0; i < 3; i++) {
+              code += numbers.charAt(Math.floor(Math.random() * numbers.length));
+            }
+          
+            return code;
+          }
+        const referralCode = generateReferralCode();
         const payload = {
             ...req.body,
             role : "GENERAL",
-            password : hashPassword
-        }
-
-        // Create and save the new user
-        const newUser = new userModel(payload);
-        const savedUser = await newUser.save();
-
-        // If a referral code is provided, update the referrer’s record
-        if (referralCode) {
-            const referrer = await userModel.findOne({ referralCode });
-            if (referrer) {
-                await userModel.updateOne(
-                    { _id: referrer._id },
-                    { $push: { referredUsers: savedUser._id } } // Add the new user to the referrer’s referredUsers list
-                );
+            password : hashPassword,
+            refferal: {
+                refferalcode: referralCode,   // Generate or set a referral code
+                refferredbycode  // Include the referredbycode from the request
             }
         }
 
-        // Respond with the created user data
-        res.status(201).json({
-            data: savedUser,
-            success: true,
-            error: false,
-            message: "User created successfully!"
-        });
+        const userData = new userModel(payload)
+        const saveUser = await userData.save()
 
-    } catch (err) {
-        res.status(400).json({
-            message: err.message || err,
-            error: true,
-            success: false,
-        });
+        res.status(201).json({
+            data : saveUser,
+            success : true,
+            error : false,
+            message : "User created Successfully!"
+        })
+
+
+    }catch(err){
+        res.json({
+            message : err.message || err  ,
+            error : true,
+            success : false,
+        })
     }
 }
 
-module.exports = userSignUpController;
+module.exports = userSignUpController

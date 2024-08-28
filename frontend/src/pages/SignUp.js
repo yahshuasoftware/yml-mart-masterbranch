@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import loginIcons from '../assest/signin.gif' // Corrected asset path
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react'
+import loginIcons from '../assest/signin.gif'
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+import { Link, useNavigate } from 'react-router-dom';
 import imageTobase64 from '../helpers/imageTobase64';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
@@ -13,7 +14,7 @@ const SignUp = () => {
       email : "",
       password : "",
       name : "",
-    //   address : "",
+      refferredbycode:"",
       confirmPassword : "",
       profilePic : "",
       mobileNo:""
@@ -46,50 +47,55 @@ const SignUp = () => {
   }
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (data.password === data.confirmPassword) {
-      try {
-        const response = await fetch(SummaryApi.signUP.url, {
-          method: SummaryApi.signUP.method,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+  const handleSubmit = async(e) =>{
+      e.preventDefault()
 
-        const result = await response.json();
-        if (result.success) {
-          toast.success(result.message);
-          navigate('/login');
-        } else {
-          toast.error(result.message);
-        }
-      } catch (error) {
-        toast.error('An error occurred. Please try again.');
+      if(data.password === data.confirmPassword){
+
+        const dataResponse = await fetch(SummaryApi.signUP.url,{
+            method : SummaryApi.signUP.method,
+            headers : {
+                "content-type" : "application/json"
+            },
+            body : JSON.stringify(data)
+          })
+    
+          const dataApi = await dataResponse.json()
+
+          if(dataApi.success){
+            toast.success(dataApi.message)
+            navigate("/login")
+          }
+
+          if(dataApi.error){
+            toast.error(dataApi.message)
+          }
+    
+      }else{
+        toast.error("Please check password and confirm password")
       }
-    } else {
-      toast.error('Passwords do not match.');
-    }
-  };
+
+  }
 
   return (
     <section id='signup'>
-      <div className='mx-auto container p-4'>
-        <div className='bg-white p-5 w-full max-w-sm mx-auto rounded-lg shadow-md'>
-          <div className='w-20 h-20 mx-auto relative overflow-hidden rounded-full'>
-            <div>
-              <img src={data.profilePic || loginIcons} alt='Profile' />
-            </div>
-            <form>
-              <label>
-                <div className='text-xs bg-opacity-80 bg-slate-200 pb-4 pt-2 cursor-pointer text-center absolute bottom-0 w-full'>
-                  Upload Photo
-                </div>
-                <input type='file' className='hidden' onChange={handleUploadPic} />
-              </label>
-            </form>
-          </div>
+        <div className='mx-auto container p-4'>
+
+            <div className='bg-white p-5 w-full max-w-sm mx-auto'>
+
+                    <div className='w-20 h-20 mx-auto relative overflow-hidden rounded-full'>
+                        <div>
+                            <img src={data.profilePic || loginIcons} alt='login icons'/>
+                        </div>
+                        <form>
+                          <label>
+                            <div className='text-xs bg-opacity-80 bg-slate-200 pb-4 pt-2 cursor-pointer text-center absolute bottom-0 w-full'>
+                              Upload  Photo
+                            </div>
+                            <input type='file' className='hidden' onChange={handleUploadPic}/>
+                          </label>
+                        </form>
+                    </div>
 
                     <form className='pt-6 flex flex-col gap-2' onSubmit={handleSubmit}>
                       <div className='grid'>
@@ -133,19 +139,19 @@ const SignUp = () => {
                             </div>
                         </div>
 
-                        {/* <div className='grid'>
-                            <label>Address : </label>
+                        <div className='grid'>
+                            <label>Refferal Code : </label>
                             <div className='bg-slate-100 p-2'>
                                 <input 
                                     type='text' 
-                                    placeholder='Enter Address' 
-                                    name='address'
-                                    value={data.address}
+                                    placeholder='Enter Refferal Code' 
+                                    name='refferredbycode'
+                                    value={data.refferredbycode}
                                     onChange={handleOnChange}
-                                    required
+                                    
                                     className='w-full h-full outline-none bg-transparent'/>
                             </div>
-                        </div> */}
+                        </div>
 
                         <div>
                             <label>Password : </label>
@@ -206,16 +212,13 @@ const SignUp = () => {
 
                     </form>
 
-          <p className='my-5 text-center'>
-            Already have an account?{' '}
-            <Link to={"/login"} className='text-sky-600 hover:text-sky-700 hover:underline'>
-              Login
-            </Link>
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
+                    <p className='my-5'>Already have account ? <Link to={"/login"} className=' text-sky-600 hover:text-sky-700 hover:underline'>Login</Link></p>
+            </div>
 
-export default SignUp;
+
+        </div>
+    </section>
+  )
+}
+
+export default SignUp
