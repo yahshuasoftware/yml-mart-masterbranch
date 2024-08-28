@@ -68,7 +68,7 @@ const Profile = () => {
     uploadAddress(address, setUserData);
   };
 
-  const user = useSelector((state) => state?.user?.user);
+  // const user = useSelector((state) => state?.user?.user);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -86,9 +86,11 @@ const Profile = () => {
         }
 
         const data = await response.json();
+        console.log(data)
         setUserData(data.data);
 
         setOrderData(data.orderDetail);
+
         setAddress({
           street: data.data.address?.street || "",
           city: data.data.address?.city || "",

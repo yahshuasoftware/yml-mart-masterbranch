@@ -2,30 +2,30 @@ import React, { useState } from 'react';
 
 const Header = () => {
   return (
-    <div className="flex items-center justify-between p-6 bg-sky-200 text-black rounded-lg shadow-md">
-      <div className="profile-pic">
+    <div className="justify-between p-6 bg-gray-200 text-black rounded-lg shadow-md">
+      {/* <div className="profile-pic"> */}
         {/* <img src="path_to_profile_pic.jpg" alt="Profile Picture" className="w-16 h-16 rounded-full" /> */}
-      </div>
+      {/* </div> */}
       <div className="user-info text-left ml-4">
-        <p className="text-lg font-semibold">Customer Name: Arjun Hanwate</p>
-        <p className="text-sm">Username: Arjun_123</p>
-        <p className="text-sm">Joining Date: 1st Dec 2001</p>
+        <p className="text-lg font-semibold">Arjun Hanwate</p>
+        <p className="text-sm">Arjun_123</p>
+        <p className="text-sm">arjun@gmail.com</p>
       </div>
-      <ProgressBar width="80%" />
+      {/* <ProgressBar width="80%" /> */}
     </div>
   );
 };
 
-const ProgressBar = ({ width }) => {
-  return (
-    <div className="flex items-center mt-4">
-      <div className="w-full bg-gray-200 rounded-full h-4">
-        <div className="bg-green-500 h-4 rounded-full" style={{ width }}></div>
-      </div>
-      <p className="ml-2 text-sm font-medium text-gray-700">{width}</p>
-    </div>
-  );
-};
+// const ProgressBar = ({ width }) => {
+//   return (
+//     <div className="flex items-center mt-4">
+//       <div className="w-full bg-gray-200 rounded-full h-4">
+//         <div className="bg-green-500 h-4 rounded-full" style={{ width }}></div>
+//       </div>
+//       <p className="ml-2 text-sm font-medium text-gray-700">{width}</p>
+//     </div>
+//   );
+// };
 
 const AccordionItem = ({ title, isOpen, onClick, children }) => {
   return (
@@ -113,24 +113,31 @@ const ProfileForm = () => {
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div>
-              <label htmlFor="account-no" className="block text-sm font-medium text-gray-700">Account No:</label>
-              <input
-                type="number"
-                id="account-no"
-                name="account-no"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
-              />
-            </div>
-            <div>
-              <label htmlFor="ifsc" className="block text-sm font-medium text-gray-700">IFSC Code:</label>
-              <input
-                type="text"
-                id="ifsc"
-                name="ifsc"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
-              />
-            </div>
+            <div className="flex flex-col md:flex-row md:space-x-4">
+  <div className="w-full md:w-1/2">
+    <label htmlFor="account-no" className="block text-sm font-medium text-gray-700">
+      Account No:
+    </label>
+    <input
+      type="number"
+      id="account-no"
+      name="account-no"
+      className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+    />
+  </div>
+  <div className="w-full md:w-1/2 mt-4 md:mt-0">
+    <label htmlFor="ifsc" className="block text-sm font-medium text-gray-700">
+      IFSC Code:
+    </label>
+    <input
+      type="text"
+      id="ifsc"
+      name="ifsc"
+      className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+    />
+  </div>
+</div>
+
             <div>
               <label htmlFor="passbook" className="block text-sm font-medium text-gray-700">Passbook:</label>
               <input

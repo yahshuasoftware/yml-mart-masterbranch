@@ -5,7 +5,7 @@ const orderSchema = new mongoose.Schema({
     order_id: { type: String, required: true },
    products: [
         {
-            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductModel' }, 
+            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' }, 
             name: { type: String, required: true },
             quantity: { type: Number, required: true },
             price: { type: Number, required: true },
@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema({
     receipt: { type: String, required: true },
     status: { type: String, default: 'created' }, // 'created', 'paid', 'failed'
     createdAt: { type: Date, default: Date.now },
-    user: { type: String }, // Assuming you have a User model
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // Assuming you have a User model
     // name:{type:String},
     deliveryStatus:{type: String, default:'Ordered'}
     

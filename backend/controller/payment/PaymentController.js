@@ -1,5 +1,6 @@
 const Razorpay = require('razorpay');
 const Order = require('../../models/order'); // Import the Order model
+const userModel = require("../../models/userModel")
 
 const razorpay = new Razorpay({
     key_id: 'rzp_test_U4XuiM2cjeWzma',
@@ -7,7 +8,7 @@ const razorpay = new Razorpay({
 });
 
 const createOrder = async (req, res) => {
-    const { amount, currency, receipt, userId, products } = req.body;
+    const { amount, currency, receipt, userId, products,order_id } = req.body;
 
     try {
         const options = {
@@ -31,10 +32,12 @@ const createOrder = async (req, res) => {
             amount: order.amount / 100,
             currency: order.currency,
             receipt: order.receipt,
-            user: userId,
+            userId: userId,
         });
         
         await newOrder.save();
+
+        
         
 
         res.status(200).json({ success: true, order });
@@ -45,7 +48,7 @@ const createOrder = async (req, res) => {
 };
 
 const handlePaymentSuccess = async (req, res) => {
-    const { order_id, payment_id, signature } = req.body;
+    const { order_id, payment_id, signature,userId } = req.body;
 
     try {
         // Find the existing order by order_id
@@ -60,9 +63,34 @@ const handlePaymentSuccess = async (req, res) => {
         order.signature = signature;
         order.status = 'paid';
 
+
+       
        
 
+
         await order.save();
+
+        const user = await userModel.findById(userId);
+        console.log(user);
+
+        if (user && user.refferal.refferredbycode) {
+            // Find the referrer using the referred by code
+            const referrer = await userModel.findOne({ 'refferal.refferalcode': user.refferal.refferredbycode });
+            console.log(referrer);
+            if (referrer) {
+                // Add the order details to the referrer's myrefferals array
+                // referrer.refferal.myrefferals.push({});
+                referrer.refferal.myrefferals.push({
+                    'userId':user._id,
+                    "order_id": order._id
+                });
+
+                // Save the referrer with the updated myrefferals array
+                await referrer.save();
+            }
+        }
+
+        
 
         res.status(200).json({ success: true, message: "Payment successful, order updated" });
     } catch (error) {

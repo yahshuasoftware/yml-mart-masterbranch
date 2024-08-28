@@ -10,9 +10,16 @@ const addressSchema = new mongoose.Schema({
 const refferalSchema = new mongoose.Schema({
     refferalcode: String,
     refferredbycode: String,
-    myrefferals: [{}],
+    myrefferals: [
+        {
+            userId:{type:mongoose.Schema.Types.ObjectId, ref: 'user'},
+            order_id: { type:mongoose.Schema.Types.ObjectId, ref: 'Order' },
+            // name:{type:String}
+            
+        }
+    ],
    
-});
+},{_id:false});
 
 const userSchema = new mongoose.Schema({
     name : String,
