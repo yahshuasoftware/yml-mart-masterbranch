@@ -60,13 +60,15 @@ async function userSignUpController(req,res){
 
 
         const userData = new userModel(payload)
-        // const referrer = await userModel.findOne({'refferal.refferalcode' : refferredbycode});
-        // if (referrer) {
-        //     // Add the new user's ID to the referrer's myrefferals array
-        //     referrer.refferal.myrefferals.push({'userId':userData._id});
-        //     // referrer.refferal.myrefferals.push({'order_id':userData.order.id});
-        //     await referrer.save();
-        // }
+        const referrer = await userModel.findOne({'refferal.refferalcode' : refferredbycode});
+        if (referrer) {
+            // Add the new user's ID to the referrer's myrefferals array
+            referrer.refferal.myrefferals.push({
+                'userId':userData._id,
+                'name':userData.name
+            });
+            await referrer.save();
+        }
 
         const saveUser = await userData.save()
 

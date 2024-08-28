@@ -80,9 +80,12 @@ const handlePaymentSuccess = async (req, res) => {
             if (referrer) {
                 // Add the order details to the referrer's myrefferals array
                 // referrer.refferal.myrefferals.push({});
-                referrer.refferal.myrefferals.push({
+                referrer.refferal.myrefferalorders.push({
                     'userId':user._id,
+                    // 'name':user.name,
                     "order_id": order._id
+                    
+
                 });
 
                 // Save the referrer with the updated myrefferals array
