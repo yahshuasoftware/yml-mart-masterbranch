@@ -39,8 +39,8 @@ const AskQuestion = () => {
   return (
     <div>
 <section class="text-gray-600 body-font overflow-hidden">
-  <div class="container px-5 py-12 md:py-24 mx-auto">
-    <div class="text-center mb-12">
+  <div class="container px-5 py-12  mx-auto">
+    <div class="text-center ">
       <h2 class="text-sm title-font text-gray-500 tracking-widest">Need Help?</h2>
       <h1 class="text-gray-900 text-2xl sm:text-3xl title-font font-medium mb-4">Ask a Question</h1>
       <p class="leading-relaxed max-w-2xl mx-auto text-base sm:text-lg">Feel free to reach out with your queries. Our team is here to assist you.</p>
