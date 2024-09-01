@@ -17,7 +17,6 @@ router.post("/signin", require('../controller/user/userSignIn'));
 router.get("/user-details", require('../middleware/authToken'), userDetailsController);
 router.get("/userLogout", require('../controller/user/userLogout'));
 router.post('/user-details',require('../middleware/authToken'), updateAddressController);
-
 router.get('/dashboard', orderController)
 
 
