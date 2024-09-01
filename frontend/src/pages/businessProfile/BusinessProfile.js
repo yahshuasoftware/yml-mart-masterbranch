@@ -26,6 +26,11 @@ const BusinessProfile = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  function withdraw(){
+    
+    alert("Complete KYC!!")
+  }
+
   useEffect(() => {
     // const fetchUserData = async () => {
     //   try {
@@ -200,7 +205,7 @@ const BusinessProfile = () => {
         )}
     </div>
       case 'Business Record':
-        return <div className="p-4">Business Record Content...</div>;
+        return <div className="p-4">Transactions Content...</div>;
       default:
         return <div className="p-4">Select an item to view details</div>;
     }
@@ -233,7 +238,7 @@ const BusinessProfile = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold">Total Commission</h3>
           <p className="text-xl">₹{(totalCommission/3)}</p>
@@ -247,6 +252,8 @@ const BusinessProfile = () => {
           <p className="text-xl">Details...</p>
         </div>
       </div>
+      <button onClick={withdraw} className='h-10 w-50 mb-6 bg-red-500 text-white rounded-md mt-5 px-5'>Withdraw Balance</button>
+
       <div className="flex flex-col sm:flex-row h-auto   bg-white rounded-lg shadow-lg overflow-hidden">
   {/* Sidebar */}
   <div className="w-full sm:w-1/3 bg-gray-50">
@@ -314,7 +321,7 @@ const BusinessProfile = () => {
               }}
               className="text-lg"
             >
-              Business Record
+              Transactions
             </button>
           </li>
         </ul>
