@@ -337,7 +337,7 @@ const Cart = () => {
             >
               {/* Product Image and Quantity */}
               <div className="flex flex-col items-center w-24">
-                <div className="w-16 h-16 bg-white flex items-center justify-center border border-gray-300 rounded-lg overflow-hidden">
+                <div className="w-16 h-16 bg-white flex items-center justify-center  border-gray-300 rounded-lg overflow-hidden">
                   <img
                     src={product.productId.productImage[0]}
                     alt={product.productId.productName}
@@ -347,7 +347,7 @@ const Cart = () => {
                 {/* Quantity Controls */}
                 <div className="flex items-center gap-2 mt-2">
                   <button
-                    className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-8 h-8 flex justify-center items-center rounded-full"
+                    className="border border-red-500 text-red-500 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded-full"
                     onClick={() =>
                       decraseQty(product?._id, product?.quantity)
                     }
@@ -356,7 +356,7 @@ const Cart = () => {
                   </button>
                   <span className="text-gray-700">{product?.quantity}</span>
                   <button
-                    className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-8 h-8 flex justify-center items-center rounded-full"
+                    className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-6 h-6 flex justify-center items-center rounded-full"
                     onClick={() =>
                       increaseQty(product?._id, product?.quantity)
                     }

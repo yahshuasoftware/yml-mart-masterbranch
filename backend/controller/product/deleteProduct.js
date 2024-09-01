@@ -8,7 +8,6 @@ async function deleteProductController(req, res) {
         if (!hasPermission) {
             throw new Error('Permission denied');
         }
-
         // Log the request body to ensure _id is being passed correctly
         console.log('Request Body:', req.body);
 
