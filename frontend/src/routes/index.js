@@ -20,6 +20,7 @@ import AskQuestion from '../pages/AskQuestion'
 import ContactUs from '../pages/ContactUs'
 import AllUsers from '../pages/AllUsers' // Import the All Users component
 import BusinessProfile from '../pages/businessProfile/BusinessProfile'
+import AllBanners from '../pages/AllBanners'
 
 
 
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
                     {
                         path : "order-list", // Move the All Users route here
                         element : <OrderList/>
+                    },
+                    {
+                        path : "all-banners", // Move the All Users route here
+                        element : <AllBanners/>
                     },
                 ]
             },
