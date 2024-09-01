@@ -87,49 +87,56 @@ const handleAddToCart = async (e, id) => {
                 ) : (
                     data.map((product) => (
                         <Link
-                            key={product?._id}
-                            to={"product/" + product?._id}
-                            className='w-full min-w-[320px] md:min-w-[360px] max-w-[320px] md:max-w-[360px] h-48 bg-white rounded-lg shadow-md flex transition-transform transform hover:scale-105 hover:shadow-lg'
-                        >
-                            <div className='bg-slate-200 h-full p-4 min-w-[140px] md:min-w-[160px]'>
-                                <img
-                                    src={product?.productImage[0]}
-                                    className='object-scale-down h-full w-full transition-transform transform hover:scale-110'
-                                    alt={product?.productName}
-                                />
-                            </div>
-                            <div className='p-4 grid'>
-                                <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
-                                <p className='capitalize text-slate-500'>{product?.category}</p>
-                                <div className='flex gap-3'>
-                                    <p className='text-red-600 font-medium'>{displayINRCurrency(product?.sellingPrice)}</p>
-                                    <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
-                                </div>
-                                <div className='flex items-center'>
-                                    <StarRatings
-                                        rating={4.5} // Fixed rating
-                                        starRatedColor="gold"
-                                        starDimension="15px"
-                                        starSpacing="0px" // No space between the star and the text
-                                        numberOfStars={1} // Display only one star
-                                        name='rating'
-                                        />
-                                        <span className='text-slate-500 ml-1 flex items-center'>4.5</span> {/* Flexbox alignment for consistent spacing */}
-                                        <span className='text-slate-500 ml-1 flex items-center'>(10)</span> {/* Flexbox alignment for consistent spacing */}
-                                </div>
-                                <div className='flex flex-col md:flex-row gap-2 mt-2'>
-                                    <button className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'>
-                                        Buy Now
-                                    </button>
-                                    <button
-                                        className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full'
-                                        onClick={(e) => handleAddToCart(e, product?._id)}
-                                    >
-                                        Add to Cart
-                                    </button>
-                                </div>
-                            </div>
-                        </Link>
+    key={product?._id}
+    to={"product/" + product?._id}
+    className="w-full min-w-[320px] md:min-w-[370px] max-w-[320px] md:max-w-[360px] h-48 bg-white rounded-lg shadow-md flex transition-transform transform hover:scale-105 hover:shadow-lg"
+>
+    <div className="bg-slate-200 h-full p-4 min-w-[140px] md:min-w-[160px]">
+        <img
+            src={product?.productImage[0]}
+            className="object-scale-down h-full w-full transition-transform transform hover:scale-110"
+            alt={product?.productName}
+        />
+    </div>
+    <div className="p-4 grid">
+        <h2 className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black">
+            {product?.productName}
+        </h2>
+        <p className="capitalize text-slate-500">{product?.category}</p>
+        <div className="flex gap-3">
+            <p className="text-red-600 font-medium">
+                {displayINRCurrency(product?.sellingPrice)}
+            </p>
+            <p className="text-slate-500 line-through">
+                {displayINRCurrency(product?.price)}
+            </p>
+        </div>
+        <div className="flex items-center">
+            <StarRatings
+                rating={4.5} // Fixed rating
+                starRatedColor="gold"
+                starDimension="15px"
+                starSpacing="0px" // No space between the star and the text
+                numberOfStars={1} // Display only one star
+                name="rating"
+            />
+            <span className="text-slate-500 ml-1 flex items-center">4.5</span> {/* Flexbox alignment for consistent spacing */}
+            <span className="text-slate-500 ml-1 flex items-center">(10)</span> {/* Flexbox alignment for consistent spacing */}
+        </div>
+        <div className="flex flex-col md:flex-row gap-2 mt-2">
+            <button className="text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-center whitespace-nowrap w-full md:w-auto">
+                Buy Now
+            </button>
+            <button
+                className="text-xs md:text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-1 rounded-full whitespace-nowrap"
+                onClick={(e) => handleAddToCart(e, product?._id)}
+            >
+                Add to Cart
+            </button>
+        </div>
+    </div>
+</Link>
+
                     ))
                 )}
             </div>

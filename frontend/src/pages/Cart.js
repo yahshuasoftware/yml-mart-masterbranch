@@ -160,93 +160,98 @@ const Cart = () => {
   };
   // razorepay
   const handlePayment = async () => {
-   
-    try {
-      // Step 1: Create an order on the backend
-      const response = await fetch(
-        "http://localhost:8080/api/payment/create-order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: totalPrice, // in INR
-            currency: "INR",
-            receipt: `receipt_${Date.now()}`,
-            products: data,
-            userId: data[0].userId,
-          }),
-        }
-      );
-
-      const responseData = await response.json();
-
-      if (!responseData.success) {
-        alert("Unable to create order. Please try again.");
-        return;
-      }
-
-      // Step 2: Open Razorpay payment gateway
-      const options = {
-        key: "rzp_test_U4XuiM2cjeWzma", // Razorpay key_id
-        amount: responseData.order.amount, // Amount in paisa
-        currency: responseData.order.currency,
-        name: "YML Mart",
-        description: "Payment for Order",
-        image: "/logo.png",
-        order_id: responseData.order.id, // order_id returned from backend
-        handler: async function (response) {
-          // Step 3: Send payment details to backend to store the order
-          const paymentResponse = await fetch(
-            "http://localhost:8080/api/payment/payment-success",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                order_id: response.razorpay_order_id,
-                payment_id: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
-                userId: data[0].userId,
-                products: data,
-                amount: totalPrice,
-                currency: "INR",
-              }),
-            }
-          );
-
-          const paymentResult = await paymentResponse.json();
-
-          if (paymentResult.success) {
-            alert("Payment Successful! Order has been stored.");
-          } else {
-            alert(
-              "Payment was successful, but there was an issue storing the order. Please contact support."
-            );
+    if(!hasAddress){
+      alert("Add Delivery Address")
+    }else{
+      try {
+        // Step 1: Create an order on the backend
+        const response = await fetch(
+          "http://localhost:8080/api/payment/create-order",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              amount: totalPrice, // in INR
+              currency: "INR",
+              receipt: `receipt_${Date.now()}`,
+              products: data,
+              userId: data[0].userId,
+            }),
           }
-        },
-        prefill: {
-          name: user?.name || "Your Name",
-          email: user?.email || "Your Email Id",
-          contact: user?.contact || "0000000000",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-
-      rzp.on("payment.failed", function (response) {
-        alert("Payment Failed");
-        console.error("Payment Failed:", response.error);
-      });
-    } catch (error) {
-      console.error("Payment error:", error);
+        );
+  
+        const responseData = await response.json();
+  
+        if (!responseData.success) {
+          alert("Unable to create order. Please try again.");
+          return;
+        }
+  
+        // Step 2: Open Razorpay payment gateway
+        const options = {
+          key: "rzp_test_U4XuiM2cjeWzma", // Razorpay key_id
+          amount: responseData.order.amount, // Amount in paisa
+          currency: responseData.order.currency,
+          name: "YML Mart",
+          description: "Payment for Order",
+          image: "/logo.png",
+          order_id: responseData.order.id, // order_id returned from backend
+          handler: async function (response) {
+            // Step 3: Send payment details to backend to store the order
+            const paymentResponse = await fetch(
+              "http://localhost:8080/api/payment/payment-success",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  order_id: response.razorpay_order_id,
+                  payment_id: response.razorpay_payment_id,
+                  signature: response.razorpay_signature,
+                  userId: data[0].userId,
+                  products: data,
+                  amount: totalPrice,
+                  currency: "INR",
+                }),
+              }
+            );
+  
+            const paymentResult = await paymentResponse.json();
+  
+            if (paymentResult.success) {
+              alert("Payment Successful! Order has been stored.");
+            } else {
+              alert(
+                "Payment was successful, but there was an issue storing the order. Please contact support."
+              );
+            }
+          },
+          prefill: {
+            name: user?.name || "Your Name",
+            email: user?.email || "Your Email Id",
+            contact: user?.contact || "0000000000",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+  
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+  
+        rzp.on("payment.failed", function (response) {
+          alert("Payment Failed");
+          console.error("Payment Failed:", response.error);
+        });
+      } catch (error) {
+        console.error("Payment error:", error);
+      }
     }
+   
+    
   };
 
   return (

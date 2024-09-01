@@ -320,19 +320,19 @@ const Profile = () => {
             </div>
           </div>
         );
-      case "Track Order":
-        return (
-          <div>
-            <h1 className="text-2xl font-bold mb-4">Track Your Order</h1>
-            <div className="flex flex-col items-center">
-              <CgTrack
-                style={{ fontSize: "6rem" }}
-                className="text-sky-600 text-6xl mb-2"
-              />
-              <p>Order not found!</p>
-            </div>
-          </div>
-        );
+      // case "Track Order":
+        // return (
+        //   <div>
+        //     <h1 className="text-2xl font-bold mb-4">Track Your Order</h1>
+        //     <div className="flex flex-col items-center">
+        //       <CgTrack
+        //         style={{ fontSize: "6rem" }}
+        //         className="text-sky-600 text-6xl mb-2"
+        //       />
+        //       <p>Order not found!</p>
+        //     </div>
+        //   </div>
+        // );
       default:
         return (
           <div>
@@ -405,7 +405,7 @@ const Profile = () => {
                 Address
               </button>
             </li>
-            <li
+            {/* <li
               className={
                 activeSection === "Track Order" ? "font-bold text-sky-600" : ""
               }
@@ -419,7 +419,7 @@ const Profile = () => {
               >
                 Track Order
               </button>
-            </li>
+            </li> */}
           </ul>
         </aside>
         <main className="flex-1 p-4 ">{renderContent()}</main>
