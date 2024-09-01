@@ -105,16 +105,23 @@ const Header = () => {
             </Link>
           )}
 
-          {user?._id && (
-          <Link to={"/refer"} className='blink px-3 py-1 rounded text-white bg-sky-600 hover:bg-sky-700 text-center'>
-            Refer
-          </Link>
-          )}
-          {user?._id && (
-            <Link to={"/businessprofile"} className='px-3 py-1 rounded text-white bg-sky-600 hover:bg-sky-700 text-center'>
-            B Profile
-          </Link>
-          )}
+{user?._id && (
+  <Link 
+    to="/refer" 
+    className="px-3 py-1 rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
+  >
+    Refer
+  </Link>
+)}
+{user?._id && (
+  <Link 
+    to="/businessprofile" 
+    className="px-3 py-1 rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
+  >
+    B Profile
+  </Link>
+)}
+
 
           <div>
             {user?._id ? (

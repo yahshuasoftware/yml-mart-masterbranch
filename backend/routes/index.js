@@ -4,8 +4,10 @@ const userDetailsController = require('../controller/user/userDetails') ;
 const updateAddressController = require("../controller/user/uploadAddress")
 const orderController = require("../controller/user/orderController")
 const updateDeliveryController = require("../controller/user/updateDeliveryController")
+const referralOrderController = require("../controller/product/getReferralOrders")
 // payment routes
 const paymentRoutes = require('../controller/payment/paymentRoutes');
+
 router.use('/payment', paymentRoutes);
 
 // User and Product routes
@@ -37,6 +39,7 @@ router.post("/product-details", require('../controller/product/getProductDetails
 router.get("/search", require('../controller/product/searchProduct'));
 router.post("/filter-product", require('../controller/product/filterProduct'));
 router.post("/popularity", require('../controller/product/popularity'));
+router.get("/referralOrders", require('../middleware/authToken'), referralOrderController)
 
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));

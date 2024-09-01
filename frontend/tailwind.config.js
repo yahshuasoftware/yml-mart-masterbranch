@@ -5,12 +5,13 @@ module.exports = {
   ],
   theme: {
     extend: {
-
+      height: {
+        'max-content': 'max-content',
+      },
       
     },
   },
   plugins: [],
 }
-
 
 

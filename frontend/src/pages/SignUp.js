@@ -65,7 +65,7 @@ const SignUp = () => {
           console.log(dataApi.message)
 
           if(dataApi.success){
-            toast.success(dataApi)
+            toast.success(dataApi.message)
             navigate("/login")
           }
 
