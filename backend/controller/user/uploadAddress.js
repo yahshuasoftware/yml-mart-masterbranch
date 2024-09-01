@@ -29,7 +29,7 @@ async function uploadAddressController(req, res) {
         }
 
         res.json({
-            message: 'Address updated successfully!',
+            message: 'Address updated successfully! Refresh the page!',
             data: updatedUser,
             success: true,
             error: false

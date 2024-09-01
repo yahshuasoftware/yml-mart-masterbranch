@@ -226,7 +226,7 @@ const BusinessProfile = () => {
           <div className="ml-4 text-2xl font-bold">{userData && <div>Welcome, {userData.name}!</div>}</div>
         </div>
         <button
-          className="px-4 py-2 bg-sky-600 z-50 text-white rounded-md hover:bg-sky-700"
+          className="px-4 py-2 bg-sky-600 z-30 text-white rounded-md hover:bg-sky-700"
           onClick={handleProfileClick}
         >
           {showProfileForm ? 'Close Profile' : 'My Profile'}
@@ -251,7 +251,7 @@ const BusinessProfile = () => {
   {/* Sidebar */}
   <div className="w-full sm:w-1/3 bg-gray-50">
   <button
-        className="absolute right-10 bg-sky-600 text-white p-2 rounded-md md:hidden z-50"
+        className="absolute right-10 bg-sky-600 text-white p-2 rounded-md md:hidden z-30"
         onClick={toggleSidebar}
       >
         {sidebarOpen ? <FaTimes /> : <FaBars />}
