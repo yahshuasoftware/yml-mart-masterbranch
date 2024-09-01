@@ -68,7 +68,7 @@ const Header = () => {
             onChange={handleSearch}
             value={search}
           />
-          <button className="text-lg h-10 w-10 bg-sky-600 flex items-center justify-center rounded-r text-white hover:bg-sky-700 transition-colors duration-200">
+          <button className="text-lg h-10 w-10 bg-sky-600 flex items-center justify-center rounded text-white hover:bg-sky-700 transition-colors duration-200">
             <GrSearch />
           </button>
         </div>
@@ -92,8 +92,8 @@ const Header = () => {
               </div>
             )}
 
-{menuDisplay && (
-              <div className='absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded ' style={{ top: '100%', left: '50%', transform: 'translateX(-50%)' }}>
+             {menuDisplay && (
+              <div className='absolute bg-white bottom-0 right-50 top-11 h-fit p-2 shadow-lg rounded'>
                 <nav>
                   {user?.role === ROLE.SUPER_ADMIN && (
                     <Link to={"/super-admin-panel/all-users"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={() => setMenuDisplay(prev => !prev)}>Super Admin Panel</Link>
