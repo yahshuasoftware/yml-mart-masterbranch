@@ -1,43 +1,24 @@
-const uploadProductPermission = require("../../helpers/permission");
-const BannerModel = require("../../models/bannerModel");
+// Backend/controllers/bannerController.js
 
-async function UploadBannerController(req, res) {
+const Banner = require('../../models/bannerModel');
+const uploadProductPermission = require('../../helpers/permission'); // Adjust the path as necessary
+
+const uploadBanner = async (req, res) => {
+    const { userId, imageUrl } = req.body;
+
     try {
-        const sessionUserId = req.userId;
+        const hasPermission = await uploadProductPermission(userId);
 
-        if (!uploadProductPermission(sessionUserId)) {
-            return res.status(403).json({
-                message: "Permission denied",
-                error: true,
-                success: false
-            });
+        if (!hasPermission) {
+            return res.status(403).json({ message: 'You do not have permission to upload a banner or user not found.' });
         }
 
-        if (!req.body.productImage || !Array.isArray(req.body.productImage)) {
-            return res.status(400).json({
-                message: "Invalid productImage data",
-                error: true,
-                success: false
-            });
-        }
-
-        const uploadBanner = new BannerModel(req.body);
-        const savedBanner = await uploadBanner.save();
-
-        res.status(201).json({
-            message: "Banner uploaded successfully",
-            error: false,
-            success: true,
-            data: savedBanner
-        });
-
-    } catch (err) {
-        res.status(400).json({
-            message: err.message || "An error occurred",
-            error: true,
-            success: false
-        });
+        const newBanner = await Banner.create({ imageUrl });
+        res.status(201).json(newBanner);
+    } catch (error) {
+        console.error('Error in uploadBanner:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
     }
-}
+};
 
-module.exports = UploadBannerController;
+module.exports = uploadBanner;

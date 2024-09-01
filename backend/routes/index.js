@@ -41,6 +41,11 @@ router.post("/filter-product", require('../controller/product/filterProduct'));
 router.post("/popularity", require('../controller/product/popularity'));
 router.get("/referralOrders", require('../middleware/authToken'), referralOrderController)
 
+// Banner
+router.post("/upload-banner", require('../middleware/authToken'), require('../controller/banner/uploadBanner'));
+router.get("/all-banner", require('../controller/banner/getBanner'));
+
+
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));
 router.get("/countAddToCartProduct", require('../middleware/authToken'), require('../controller/user/countAddToCartProduct'));

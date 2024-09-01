@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
 const bannerSchema = new mongoose.Schema({
-    productImage: [String], // Define the type of the productImage array
-}, {
-    timestamps: true
+    imageUrl: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
-const BannerModel = mongoose.model("Banner", bannerSchema);
-
-module.exports = BannerModel;
+const Banner = mongoose.model('Banner', bannerSchema);
+module.exports = Banner;
