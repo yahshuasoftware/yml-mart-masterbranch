@@ -28,7 +28,7 @@
     color: #fff;
 }
 .top{
-    height: 80px;
+    height: 70px;
     background: #F0F4FB;
 }
 
@@ -43,7 +43,7 @@ input::placeholder {
     color: #000000;
 }
 .footer-top-img p{
-    font-size: 20px;
+    font-size: 15px;
 }
 .footer-top-img{
     width: 70%;
@@ -75,8 +75,8 @@ h3{
 }
 
 .top img{
-    height: 60px;
-    width: 70px;
+    height: 43px;
+    width: 51px;
 }
 .company-img{
     display: flex;

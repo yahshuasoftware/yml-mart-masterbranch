@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import MyProfile from './ProfileForm';
 import { FaTimes, FaBars } from "react-icons/fa";
+import { FaRegCircleUser } from "react-icons/fa6";
+import moment from 'moment';
+
 
 
 const BusinessProfile = () => {
   const [showProfileForm, setShowProfileForm] = useState(false);
-  const [activeSection, setActiveSection] = useState("Orders");
+  const [activeSection, setActiveSection] = useState("My Team");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [usersData, setUsersData] = useState(null);
+
+  const [orderData, setOrderData] = useState([]);
+  const [totalCommission, setTotalCommission] = useState(0);
+
 
 
   const handleProfileClick = () => {
@@ -17,16 +26,179 @@ const BusinessProfile = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  useEffect(() => {
+    // const fetchUserData = async () => {
+    //   try {
+    //     const response = await fetch("http://localhost:8080/api/user-details", {
+    //       method: "GET",
+    //       credentials: "include",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     });
+
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+
+    //     const data = await response.json();
+    //     console.log(data)
+    //     setUserData(data.data);
+    //     // console.log(userData.refferal.myrefferalorders[0].order_id)
+
+    //     // setOrderData(data.orderDetail);
+    //     // alert(userData.name)
+
+
+    //     // console.log(orderData[0].deliveryStatus)
+
+    //     // total purchasing
+    //     // const totalAmount = data.orderDetail
+    //     //   .filter((order) => order.status === "paid") // Consider only orders with status 'paid'
+    //     //   .reduce(
+    //     //     (acc, order) =>
+    //     //       acc +
+    //     //       order.products.reduce(
+    //     //         (acc, product) => acc + product.price * product.quantity,
+    //     //         0
+    //     //       ),
+    //     //     0
+    //     //   );
+
+    //     // setTotalPurchasing(totalAmount);
+    //   } catch (error) {
+    //     console.error("Error:", error);
+    //   }
+    // };
+
+
+    const fetchOrderData = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/referralOrders", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+    
+        const data = await response.json();
+    
+        // Log the entire response data
+        console.log("Order Data:", data);
+
+    
+
+        let totalCommission = 0;
+
+        if (Array.isArray(data.orders) && data.orders.length > 0) {
+          data.orders.forEach((order) => {
+            if (Array.isArray(order.products) && order.products.length > 0) {
+              order.products.forEach((product) => {
+                if (product.commissionPrice) {
+                  totalCommission += product.commissionPrice;
+                }
+              });
+            }
+          });
+  
+          setOrderData(data.orders);
+          setUserData(data.user) // Store order data in state
+          setUsersData(data.users)
+          setTotalCommission(totalCommission.toFixed(2));  // Store total commission in state
+  
+        } else {
+          console.log("No orders found.");
+        }
+    
+        // Optionally, set the order data to state if needed
+        // setOrderData(data.orders);
+    
+      } catch (error) {
+        console.error("Error fetching order data:", error);
+      }
+    };
+    
+
+    // fetchUserData();
+    fetchOrderData();
+  }, []);
+
+
 
 
   const renderContent = () => {
     switch (activeSection) {
       case 'Orders':
-        return <div className="p-4">Orders Content...</div>;
+        return <div className="order-details  p-4 bg-gray-50 rounded-lg shadow-md">
+
+    {orderData.length > 0 ? (
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <thead className="bg-gray-100 border-b">
+                <tr>
+                    <th className="px-6 py-3 text-left  font-semibold text-gray-700">Product</th>
+                    <th className="px-6 py-3 text-left  font-semibold text-gray-700">Quantity</th>
+                    <th className="px-6 py-3 text-left  font-semibold text-gray-700">Price</th>
+                    <th className="px-6 py-3 text-left  font-semibold text-gray-700">Commission</th>
+                </tr>
+            </thead>
+            <tbody>
+                {orderData.map((order, index) => (
+                    <React.Fragment key={index}>
+                        {order.products.map((product, prodIndex) => (
+                            <tr key={prodIndex} className="hover:bg-gray-50">
+                                <td className="px-6 py-4  text-gray-800">{product.name}</td>
+                                <td className="px-6 py-4  text-gray-800">{product.quantity}</td>
+                                <td className="px-6 py-4  text-gray-800">₹{product.price}</td>
+                                <td className="px-6 py-4  text-gray-800">₹{(product.commissionPrice / 3).toFixed(2)}</td>
+                            </tr>
+                        ))}
+                    </React.Fragment>
+                ))}
+            </tbody>
+        </table>
+    ) : (
+        <p className="text-gray-500">No orders found.</p>
+    )}
+
+
+        </div>;
       case 'Business':
         return <div className="p-4">Business Content...</div>;
       case 'My Team':
-        return <div className="p-4">My Team Content...</div>;
+        return <div className="p-4">
+        {Array.isArray(usersData) && usersData.length > 0 ? (
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-200">
+                    <thead className="bg-gray-100 border-b border-gray-200">
+                        <tr>
+                            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Name</th>
+                            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Email</th>
+                            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Mobile No</th>
+                            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Created At</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {usersData.map((referral, index) => (
+                            <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
+                                <td className="py-3 px-4 text-gray-700">{referral.name}</td>
+                                <td className="py-3 px-4 text-gray-700">{referral.email}</td>
+                                <td className="py-3 px-4 text-gray-700">{referral.mobileNo}</td>
+                                <td className="py-3 px-4 text-gray-700">{moment(referral?.createdAt).format('LL')}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        ) : (
+            <div className="text-center text-gray-500">No referrals available.</div>
+        )}
+    </div>
       case 'Business Record':
         return <div className="p-4">Business Record Content...</div>;
       default:
@@ -40,10 +212,18 @@ const BusinessProfile = () => {
       
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center">
-          <div className="w-16 h-16 bg-sky-600 rounded-full flex justify-center items-center text-white text-xl">
-            AH
+          <div className="w-16 h-16  rounded-full flex justify-center items-center text-white text-xl">
+          {userData?.profilePic ? (
+                  <img
+                    src={`${userData?.profilePic}`}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full mb-2"
+                  />
+                ) : (
+                  <FaRegCircleUser size={70} className="text-gray-500" />
+                )}
           </div>
-          <div className="ml-4 text-2xl font-bold">Arjun Hanwate</div>
+          <div className="ml-4 text-2xl font-bold">{userData && <div>Welcome, {userData.name}!</div>}</div>
         </div>
         <button
           className="px-4 py-2 bg-sky-600 z-50 text-white rounded-md hover:bg-sky-700"
@@ -55,8 +235,8 @@ const BusinessProfile = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h3 className="text-lg font-semibold">Self Balance Rupees</h3>
-          <p className="text-xl">$123</p>
+          <h3 className="text-lg font-semibold">Total Commission</h3>
+          <p className="text-xl">₹{(totalCommission/3)}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold">Business Volume/Intensive</h3>
@@ -67,9 +247,9 @@ const BusinessProfile = () => {
           <p className="text-xl">Details...</p>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row h-[500px] bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="flex flex-col sm:flex-row h-auto   bg-white rounded-lg shadow-lg overflow-hidden">
   {/* Sidebar */}
-  <div className="w-full sm:w-1/3 p-4 bg-gray-50">
+  <div className="w-full sm:w-1/3 bg-gray-50">
   <button
         className="absolute right-10 bg-sky-600 text-white p-2 rounded-md md:hidden z-50"
         onClick={toggleSidebar}
@@ -83,6 +263,19 @@ const BusinessProfile = () => {
         } md:relative md:translate-x-0 md:w-64 z-40`}
       >
         <ul className="space-y-5">
+        <li
+            className={activeSection === 'My Team' ? 'font-bold text-sky-600' : ''}
+          >
+            <button
+              onClick={() => {
+                setActiveSection('My Team');
+                if (sidebarOpen) toggleSidebar(); // Close sidebar on mobile
+              }}
+              className="text-lg"
+            >
+              My Team
+            </button>
+          </li>
           <li
             className={activeSection === 'Orders' ? 'font-bold text-sky-600' : ''}
           >
@@ -90,6 +283,7 @@ const BusinessProfile = () => {
               onClick={() => {
                 setActiveSection('Orders');
                 if (sidebarOpen) toggleSidebar(); // Close sidebar on mobile
+               
               }}
               className="text-lg "
             >
@@ -109,19 +303,7 @@ const BusinessProfile = () => {
               Business
             </button>
           </li>
-          <li
-            className={activeSection === 'My Team' ? 'font-bold text-sky-600' : ''}
-          >
-            <button
-              onClick={() => {
-                setActiveSection('My Team');
-                if (sidebarOpen) toggleSidebar(); // Close sidebar on mobile
-              }}
-              className="text-lg"
-            >
-              My Team
-            </button>
-          </li>
+        
           <li
             className={activeSection === 'Business Record' ? 'font-bold text-sky-600' : ''}
           >
@@ -141,7 +323,7 @@ const BusinessProfile = () => {
   </div>
 
   {/* Content Area */}
-  <div className="w-full sm:w-2/3 bg-white p-6">
+  <div className="w-full sm:w-2/3 bg-white ">
     {renderContent()}
   </div>
 </div>

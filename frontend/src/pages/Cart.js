@@ -250,167 +250,171 @@ const Cart = () => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col lg:flex-row gap-10 p-4">
-      {/*** Left Column - LOGIN, Delivery Address, Payment ***/}
-      <div className="w-full lg:w-[70%] bg-white border  rounded shadow">
-        {/* LOGIN Section */}
-        <div className="mb-4 p-4 border-b-2">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-lg font-semibold">Login</h3>
-            <MdCheckCircle className="text-green-500 size-5" />
-          </div>
-          {isLoggedIn ? (
-            <div className="flex items-center gap-2">
-              <p>
-                {user?.name} ({user?.email})
-              </p>
-            </div>
-          ) : (
-            <p>Please log in to proceed.</p>
-          )}
+   <div className="container mx-auto flex flex-col lg:flex-row gap-8 p-6 lg:p-8">
+  {/*** Left Column - LOGIN, Delivery Address, Payment ***/}
+  <div className="w-full lg:w-[70%] h-max-content bg-white border border-gray-200 rounded-lg shadow-lg">
+    {/* LOGIN Section */}
+    <div className="mb-6 p-6 border-b border-gray-200">
+      <div className="flex items-center gap-2 mb-3">
+        <h3 className="text-xl font-semibold text-gray-800">Login</h3>
+        <MdCheckCircle className="text-green-500 text-xl" />
+      </div>
+      {isLoggedIn ? (
+        <div className="flex items-center gap-2">
+          <p className="text-gray-700">
+            {user?.name} ({user?.email})
+          </p>
         </div>
+      ) : (
+        <p className="text-red-500">Please log in to proceed.</p>
+      )}
+    </div>
 
-        {/* Delivery Address */}
-        <div className="mb-4 p-4 border-b-2">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-lg font-semibold mb-2">Delivery Address</h3>
-            <MdCheckCircle className="text-green-500 size-5" />
-          </div>
-          {hasAddress ? (
-            <div>
-              <p>
-                <strong>Street:</strong> {user?.address?.street}
-                <strong>City:</strong> {user?.address?.city}
-                <strong>State:</strong> {user?.address?.state}
-                <strong>ZIP:</strong> {user?.address?.zip}
-              </p>
-            </div>
-          ) : (
-            <p className="text-red-500">No address provided.</p>
-          )}
-          <div className="flex items-center">
-            <IoIosAddCircle className="text-sky-500"></IoIosAddCircle>
-            <button className="" onClick={handleAddNewAddress}>
-              {showAddressForm ? "Cancel" : "Add New Address"}
-            </button>
-          </div>
-
-          {showAddressForm && (
-            <form className="grid gap-4" onSubmit={handleSubmit}>
-              <AddressForm address={address} setAddress={setAddress} />
-              <button className="bg-green-600 text-white p-2 rounded w-80">
-                Update Address
-              </button>
-            </form>
-          )}
+    {/* Delivery Address */}
+    <div className="mb-6 p-6 border-b border-gray-200">
+      <div className="flex items-center gap-2 mb-3">
+        <h3 className="text-xl font-semibold text-gray-800">Delivery Address</h3>
+        <MdCheckCircle className="text-green-500 text-xl" />
+      </div>
+      {hasAddress ? (
+        <div className="text-gray-700">
+          <p>
+            <strong>Street:</strong> {user?.address?.street}<br />
+            <strong>City:</strong> {user?.address?.city}<br />
+            <strong>State:</strong> {user?.address?.state}<br />
+            <strong>ZIP:</strong> {user?.address?.zip}
+          </p>
         </div>
-        {/* Payment Section */}
-        <div className="mb-4 p-4">
-          <h3 className="text-xl font-semibold mb-5">Payment</h3>
-          <button
-            className="bg-green-600 text-white p-2 rounded w-80"
-            onClick={handlePayment}
-          >
-            Proceed to Payment
-          </button>
-        </div>
+      ) : (
+        <p className="text-red-500">No address provided.</p>
+      )}
+      <div className="flex items-center mt-4">
+        <IoIosAddCircle className="text-sky-500 text-xl" />
+        <button
+          className="ml-2 text-blue-500 hover:text-blue-700"
+          onClick={handleAddNewAddress}
+        >
+          {showAddressForm ? "Cancel" : "Add New Address"}
+        </button>
       </div>
 
-      {/*** Right Column - My Cart Summary ***/}
-      <div className="w-full lg:w-[30%]">
-        <div className="bg-white p-4 shadow-sm rounded-lg">
-          <div className="flex justify-between mb-4">
-            <h3 className="text-xl font-semibold">My Cart</h3>
-            <span>{totalQty} items</span>
-          </div>
-          <div className="mb-4">
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              data.map((product) => (
-                <div
-                  key={product._id}
-                  className="flex justify-between mb-4 p-2 "
-                >
-                  {/* Product Image and Quantity */}
-                  <div className="flex flex-col items-center w-24">
-                    <div className="w-16 h-16 bg-white flex items-center justify-center">
-                      <img
-                        src={product.productId.productImage[0]}
-                        alt={product.productId.productName}
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2 mt-2">
-                      <button
-                        className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded"
-                        onClick={() =>
-                          decraseQty(product?._id, product?.quantity)
-                        }
-                      >
-                        -
-                      </button>
-                      <span>{product?.quantity}</span>
-                      <button
-                        className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-6 h-6 flex justify-center items-center rounded"
-                        onClick={() =>
-                          increaseQty(product?._id, product?.quantity)
-                        }
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
+      {showAddressForm && (
+        <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
+          <AddressForm address={address} setAddress={setAddress} />
+          <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]">
+            Update Address
+          </button>
+        </form>
+      )}
+    </div>
+    {/* Payment Section */}
+    <div className="p-6">
+      <h3 className="text-xl font-semibold mb-4 text-gray-800">Payment</h3>
+      <button
+        className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"
+        onClick={handlePayment}
+      >
+        Proceed to Payment
+      </button>
+    </div>
+  </div>
 
-                  {/* Product Details and Delete Button */}
-                  <div className="flex flex-col flex-1 ml-4">
-                    <div>
-                      <p className="text-sm font-medium">
-                        {product.productId.productName}
-                      </p>
-                      <p className=" font-semibold text-slate-500 line-through">
-                        {displayINRCurrency(
-                          product.quantity * product.productId.price
-                        )}
-                      </p>
-                      <p className=" font-semibold">
-                        {displayINRCurrency(
-                          product.quantity * product.productId.sellingPrice
-                        )}
-                      </p>
-                    </div>
-                    {/* Delete Button */}
-                    <div className="flex justify-end">
-                      <div
-                        className="text-red-600 hover:bg-red-600 hover:text-white p-2 rounded-full cursor-pointer"
-                        onClick={() => deleteCartProduct(product?._id)}
-                      >
-                        <MdDelete />
-                      </div>
-                    </div>
+  {/*** Right Column - My Cart Summary ***/}
+  <div className="w-full lg:w-[30%] bg-white border border-gray-200 rounded-lg shadow-lg">
+    <div className="p-6">
+      <div className="flex justify-between mb-4">
+        <h3 className="text-xl font-semibold text-gray-800">My Cart</h3>
+        <span className="text-gray-600">{totalQty} items</span>
+      </div>
+      <div className="mb-4">
+        {loading ? (
+          <p className="text-gray-600">Loading...</p>
+        ) : (
+          data.map((product) => (
+            <div
+              key={product._id}
+              className="flex justify-between mb-4 p-3 border-b border-gray-200"
+            >
+              {/* Product Image and Quantity */}
+              <div className="flex flex-col items-center w-24">
+                <div className="w-16 h-16 bg-white flex items-center justify-center border border-gray-300 rounded-lg overflow-hidden">
+                  <img
+                    src={product.productId.productImage[0]}
+                    alt={product.productId.productName}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+                {/* Quantity Controls */}
+                <div className="flex items-center gap-2 mt-2">
+                  <button
+                    className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-8 h-8 flex justify-center items-center rounded-full"
+                    onClick={() =>
+                      decraseQty(product?._id, product?.quantity)
+                    }
+                  >
+                    -
+                  </button>
+                  <span className="text-gray-700">{product?.quantity}</span>
+                  <button
+                    className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-8 h-8 flex justify-center items-center rounded-full"
+                    onClick={() =>
+                      increaseQty(product?._id, product?.quantity)
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Product Details and Delete Button */}
+              <div className="flex flex-col flex-1 ml-4">
+                <div className="flex flex-col">
+                  <p className="text-sm font-medium text-gray-800">
+                    {product.productId.productName}
+                  </p>
+                  <p className="text-sm font-semibold text-gray-500 line-through">
+                    {displayINRCurrency(
+                      product.quantity * product.productId.price
+                    )}
+                  </p>
+                  <p className="text-sm font-semibold text-gray-800">
+                    {displayINRCurrency(
+                      product.quantity * product.productId.sellingPrice
+                    )}
+                  </p>
+                </div>
+                {/* Delete Button */}
+                <div className="flex justify-end mt-2">
+                  <div
+                    className="text-red-600 hover:bg-red-600 hover:text-white p-2 rounded-full cursor-pointer"
+                    onClick={() => deleteCartProduct(product?._id)}
+                  >
+                    <MdDelete />
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-          <div className="border-t pt-2">
-            <div className="flex justify-between mb-2">
-              <span>Delivery Charges:</span>
-              <span>₹0</span>
+              </div>
             </div>
-            <div className="flex justify-between mb-2">
-              <span>Discount:</span>
-              <span>₹0</span>
-            </div>
-            <div className="flex justify-between text-lg font-semibold">
-              <span>Total:</span>
-              <span>{displayINRCurrency(totalPrice)}</span>
-            </div>
-          </div>
+          ))
+        )}
+      </div>
+      <div className="border-t pt-4">
+        <div className="flex justify-between mb-2 text-gray-700">
+          <span>Delivery Charges:</span>
+          <span>₹0</span>
+        </div>
+        <div className="flex justify-between mb-2 text-gray-700">
+          <span>Discount:</span>
+          <span>₹0</span>
+        </div>
+        <div className="flex justify-between text-lg font-semibold text-gray-800">
+          <span>Total:</span>
+          <span>{displayINRCurrency(totalPrice)}</span>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
   );
 };
 

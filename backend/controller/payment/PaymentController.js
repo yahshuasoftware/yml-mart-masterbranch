@@ -27,7 +27,8 @@ const createOrder = async (req, res) => {
                 name: product.productId.productName,
                 quantity: product.quantity,
                 price: product.productId.sellingPrice,
-                image: product.productId.productImage
+                image: product.productId.productImage,
+                commissionPrice: product.productId.commissionPrice * product.quantity
             })),
             amount: order.amount / 100,
             currency: order.currency,
