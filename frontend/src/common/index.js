@@ -21,10 +21,6 @@ const SummaryApi = {
         url : `${backendDomin}/api/all-user`,
         method : 'get'
     },
-    allBanner : {
-        url : `${backendDomin}/api/all-banner`,
-        method : 'get'
-    },
     updateUser : {
         url : `${backendDomin}/api/update-user`,
         method : "post"
@@ -41,12 +37,24 @@ const SummaryApi = {
         url : `${backendDomin}/api/upload-banner`,
         method : 'post'
     },
+    uploadAdBanner: {
+        url : `${backendDomin}/api/upload-adbanner`,
+        method : 'post'
+    },
     getOrders : {
         url : `${backendDomin}/api/dashboard`,
         method : 'get'
     },
     allProduct : {
         url : `${backendDomin}/api/get-product`,
+        method : 'get'
+    },
+    allBanner : {
+        url : `${backendDomin}/api/all-banner`,
+        method : 'get'
+    },
+    allAdBanner : {
+        url : `${backendDomin}/api/all-adbanner`,
         method : 'get'
     },
     updateProduct : {

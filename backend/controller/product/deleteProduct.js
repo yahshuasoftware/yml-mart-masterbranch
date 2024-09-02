@@ -41,6 +41,7 @@ async function deleteProductController(req, res) {
             data: deleteProduct,
             success: true,
             error: false,
+            messageType: 'success',
         });
 
     } catch (err) {
