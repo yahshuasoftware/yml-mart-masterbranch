@@ -5,6 +5,17 @@ import { FaInstagram, FaWhatsapp, FaLinkedin, FaFacebook } from "react-icons/fa"
 const ReferCard = () => {
   const [userData, setUserData] = useState(null);
 
+
+  function sendmessege() {
+    const message = `Hello user, here is an offer for you. Just click on the link and enter the referral code ${userData?.refferal?.refferalcode} to get the offer. https://ymlmart.com;`
+    navigator.clipboard.writeText(message).then(() => {
+      alert("Message copied to clipboard!");
+    }).catch(err => {
+      console.error('Failed to copy message: ', err);
+    });
+  }
+
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -78,6 +89,7 @@ const ReferCard = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-green-500"
+            onClick={sendmessege}
           >
             <FaWhatsapp size={40} />
           </a>
@@ -86,6 +98,7 @@ const ReferCard = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-pink-500"
+            onClick={sendmessege}
           >
             <FaInstagram size={40} />
           </a>
@@ -94,6 +107,7 @@ const ReferCard = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500"
+            onClick={sendmessege}
           >
             <FaFacebook size={40} />
           </a>
