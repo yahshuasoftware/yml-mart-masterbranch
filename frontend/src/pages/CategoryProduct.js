@@ -23,6 +23,7 @@ const CategoryProduct = () => {
 
     const [sortBy, setSortBy] = useState("")
 
+    // Fetch data based on selected categories and sortBy
     const fetchData = async () => {
         setLoading(true)
         const response = await fetch(SummaryApi.filterProduct.url, {
@@ -31,7 +32,8 @@ const CategoryProduct = () => {
                 "content-type": "application/json"
             },
             body: JSON.stringify({
-                category: filterCategoryList
+                category: filterCategoryList,
+                sortBy: sortBy
             })
         })
 
@@ -43,18 +45,13 @@ const CategoryProduct = () => {
     const handleSelectCategory = (e) => {
         const { value, checked } = e.target
 
-        setSelectCategory((prev) => {
-            return {
-                ...prev,
-                [value]: checked
-            }
-        })
+        setSelectCategory((prev) => ({
+            ...prev,
+            [value]: checked
+        }))
     }
 
-    useEffect(() => {
-        fetchData()
-    }, [filterCategoryList])
-
+    // Update filterCategoryList and URL based on selected categories
     useEffect(() => {
         const arrayOfCategory = Object.keys(selectCategory).map(categoryKeyName => {
             if (selectCategory[categoryKeyName]) {
@@ -73,24 +70,16 @@ const CategoryProduct = () => {
         })
 
         navigate("/product-category?" + urlFormat.join(""))
-    }, [selectCategory])
+    }, [selectCategory, navigate])
+
+    // Fetch data when filterCategoryList or sortBy changes
+    useEffect(() => {
+        fetchData()
+    }, [filterCategoryList, sortBy])
 
     const handleOnChangeSortBy = (e) => {
         const { value } = e.target
-
         setSortBy(value)
-
-        if (value === 'asc') {
-            setData(prev => [...prev].sort((a, b) => a.sellingPrice - b.sellingPrice))
-        }
-
-        if (value === 'dsc') {
-            setData(prev => [...prev].sort((a, b) => b.sellingPrice - a.sellingPrice))
-        }
-
-        if (value === 'popularity') {
-            setData(prev => [...prev].filter(product => product.purchaseCount > 10))
-        }
     }
 
     return (
@@ -127,14 +116,12 @@ const CategoryProduct = () => {
 
                         <form className='text-sm flex flex-col gap-2 py-2'>
                             {
-                                productCategory.map((categoryName, index) => {
-                                    return (
-                                        <div className='flex items-center gap-3' key={index}>
-                                            <input type='checkbox' name={"category"} checked={selectCategory[categoryName?.value]} value={categoryName?.value} id={categoryName?.value} onChange={handleSelectCategory} />
-                                            <label htmlFor={categoryName?.value}>{categoryName?.label}</label>
-                                        </div>
-                                    )
-                                })
+                                productCategory.map((categoryName, index) => (
+                                    <div className='flex items-center gap-3' key={index}>
+                                        <input type='checkbox' name={"category"} checked={selectCategory[categoryName?.value]} value={categoryName?.value} id={categoryName?.value} onChange={handleSelectCategory} />
+                                        <label htmlFor={categoryName?.value}>{categoryName?.label}</label>
+                                    </div>
+                                ))
                             }
                         </form>
                     </div>

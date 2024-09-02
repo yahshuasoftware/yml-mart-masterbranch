@@ -1,247 +1,241 @@
 import React, { useState } from 'react';
+import SummaryApi from '../../common'; // Adjust the import path if necessary
 
-const Header = () => {
-  return (
-    <div className="justify-between p-6 bg-gray-200 text-black rounded-lg shadow-md">
-      {/* <div className="profile-pic"> */}
-        {/* <img src="path_to_profile_pic.jpg" alt="Profile Picture" className="w-16 h-16 rounded-full" /> */}
-      {/* </div> */}
-      <div className="user-info text-left ml-4">
-        <p className="text-lg font-semibold">Arjun Hanwate</p>
-        <p className="text-sm">Arjun_123</p>
-        <p className="text-sm">arjun@gmail.com</p>
-      </div>
-      {/* <ProgressBar width="80%" /> */}
-    </div>
-  );
-};
+const KYCPage = () => {
+  const [kycDetails, setKycDetails] = useState({
+    panNumber: '',
+    panName: '',
+    panCardFile: null,
+    aadharNumber: '',
+    aadharName: '',
+    aadharFile: null,
+    accountHolderName: '',
+    accountNumber: '',
+    ifscCode: '',
+    passbookFile: null,
+    nomineeName: '',
+    nomineeRelation: '',
+    nomineeMobile: '',
+    nomineeEmail: '',
+  });
 
-// const ProgressBar = ({ width }) => {
-//   return (
-//     <div className="flex items-center mt-4">
-//       <div className="w-full bg-gray-200 rounded-full h-4">
-//         <div className="bg-green-500 h-4 rounded-full" style={{ width }}></div>
-//       </div>
-//       <p className="ml-2 text-sm font-medium text-gray-700">{width}</p>
-//     </div>
-//   );
-// };
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files && files.length > 0) {
+      setKycDetails((prevDetails) => ({
+        ...prevDetails,
+        [name]: files[0], // Store the file object
+      }));
+    } else {
+      setKycDetails((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,
+      }));
+    }
+  };
 
-const AccordionItem = ({ title, isOpen, onClick, children }) => {
-  return (
-    <div className="border-b border-gray-200">
-      <div
-        className="accordion-header flex justify-between items-center p-4 cursor-pointer bg-gray-100 hover:bg-gray-200"
-        onClick={onClick}
-      >
-        <h3 className="text-lg font-medium text-gray-800">{title}</h3>
-        <span className="text-gray-500">{isOpen ? '▲' : '▼'}</span>
-      </div>
-      {isOpen && (
-        <div className="accordion-content p-4 bg-white">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const ProfileForm = () => {
-  const [openAccordion, setOpenAccordion] = useState(null);
+    const formData = new FormData();
+    Object.entries(kycDetails).forEach(([key, value]) => {
+      if (value !== null && value !== '') {
+        formData.append(key, value);
+      }
+    });
 
-  const handleAccordionClick = (id) => {
-    setOpenAccordion(openAccordion === id ? null : id);
+    try {
+      const response = await fetch(SummaryApi.submitKYC.url, {
+        method: SummaryApi.submitKYC.method,
+        body: formData,
+        // No need to set 'Content-Type' header for FormData
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      alert('KYC details submitted successfully!');
+      console.log(result);
+    } catch (error) {
+      console.error('Error submitting KYC details:', error);
+      alert('Failed to submit KYC details.');
+    }
   };
 
   return (
-    <div className="container mx-auto p-6 mt-10">
-      <Header />
-      <div className="accordion mt-6">
-        <AccordionItem
-          title="Pan Card"
-          isOpen={openAccordion === 'pan-card-details'}
-          onClick={() => handleAccordionClick('pan-card-details')}
-        >
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="pan-no" className="block text-sm font-medium text-gray-700">Pan No:</label>
+    <div className="container mx-auto p-6 mt-10 bg-white shadow-md rounded-md max-w-md">
+      <h2 className="text-2xl font-bold mb-6">KYC Information</h2>
+      <div className="max-h-96 overflow-y-auto p-4 border border-gray-300 rounded-md">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Pan Card Details */}
+          <div>
+            <h3 className="text-lg font-semibold">Pan Card Details</h3>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Pan No:</label>
               <input
                 type="text"
-                id="pan-no"
-                name="pan-no"
+                name="panNumber"
+                value={kycDetails.panNumber}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div>
-              <label htmlFor="pan-name" className="block text-sm font-medium text-gray-700">Name as per Pan:</label>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Name as per Pan:</label>
               <input
                 type="text"
-                id="pan-name"
-                name="pan-name"
+                name="panName"
+                value={kycDetails.panName}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div>
-              <label htmlFor="pan-card" className="block text-sm font-medium text-gray-700">Pan Card:</label>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Pan Card:</label>
               <input
                 type="file"
-                id="pan-card"
-                name="pan-card"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+                name="panCardFile"
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <button
-              type="submit"
-              className="mt-4 px-4 py-2 bg-sky-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-600"
-            >
-              Submit
-            </button>
-          </form>
-        </AccordionItem>
-        <AccordionItem
-          title="Bank Details"
-          isOpen={openAccordion === 'bank-details'}
-          onClick={() => handleAccordionClick('bank-details')}
-        >
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="account-holder" className="block text-sm font-medium text-gray-700">Account Holder Name:</label>
+          </div>
+
+          {/* Aadhar Card Details */}
+          <div>
+            <h3 className="text-lg font-semibold">Aadhar Card Details</h3>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Aadhaar Card No:</label>
               <input
                 type="text"
-                id="account-holder"
-                name="account-holder"
+                name="aadharNumber"
+                value={kycDetails.aadharNumber}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div className="flex flex-col md:flex-row md:space-x-4">
-  <div className="w-full md:w-1/2">
-    <label htmlFor="account-no" className="block text-sm font-medium text-gray-700">
-      Account No:
-    </label>
-    <input
-      type="number"
-      id="account-no"
-      name="account-no"
-      className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
-    />
-  </div>
-  <div className="w-full md:w-1/2 mt-4 md:mt-0">
-    <label htmlFor="ifsc" className="block text-sm font-medium text-gray-700">
-      IFSC Code:
-    </label>
-    <input
-      type="text"
-      id="ifsc"
-      name="ifsc"
-      className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
-    />
-  </div>
-</div>
-
-            <div>
-              <label htmlFor="passbook" className="block text-sm font-medium text-gray-700">Passbook:</label>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Name as per Aadhaar Card:</label>
+              <input
+                type="text"
+                name="aadharName"
+                value={kycDetails.aadharName}
+                onChange={handleChange}
+                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+              />
+            </div>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Aadhar Card:</label>
               <input
                 type="file"
-                id="passbook"
-                name="passbook"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+                name="aadharFile"
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <button
-              type="submit"
-              className="mt-4 px-4 py-2 bg-sky-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-600"
-            >
-              Submit
-            </button>
-          </form>
-        </AccordionItem>
+          </div>
 
-        <AccordionItem
-          title="KYC Details"
-          isOpen={openAccordion === 'kyc-details'}
-          onClick={() => handleAccordionClick('kyc-details')}
-        >
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="adhar-no" className="block text-sm font-medium text-gray-700">Aadhaar Card No:</label>
+          {/* Bank Details */}
+          <div>
+            <h3 className="text-lg font-semibold">Bank Details</h3>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Account Holder Name:</label>
               <input
                 type="text"
-                id="adhar-no"
-                name="adhar-no"
+                name="accountHolderName"
+                value={kycDetails.accountHolderName}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div>
-              <label htmlFor="adhar-name" className="block text-sm font-medium text-gray-700">Name as per Aadhaar Card:</label>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Account Number:</label>
               <input
                 type="text"
-                id="adhar-name"
-                name="adhar-name"
+                name="accountNumber"
+                value={kycDetails.accountNumber}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <button
-              type="submit"
-              className="mt-4 px-4 py-2 bg-sky-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-600"
-            >
-              Submit
-            </button>
-          </form>
-        </AccordionItem>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">IFSC Code:</label>
+              <input
+                type="text"
+                name="ifscCode"
+                value={kycDetails.ifscCode}
+                onChange={handleChange}
+                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+              />
+            </div>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Passbook:</label>
+              <input
+                type="file"
+                name="passbookFile"
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+              />
+            </div>
+          </div>
 
-        <AccordionItem
-          title="Nominee Details"
-          isOpen={openAccordion === 'nominee-details'}
-          onClick={() => handleAccordionClick('nominee-details')}
-        >
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="nominee-name" className="block text-sm font-medium text-gray-700">Nominee Name:</label>
+          {/* Nominee Details */}
+          <div>
+            <h3 className="text-lg font-semibold">Nominee Details</h3>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Nominee Name:</label>
               <input
                 type="text"
-                id="nominee-name"
-                name="nominee-name"
+                name="nomineeName"
+                value={kycDetails.nomineeName}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div>
-              <label htmlFor="nominee-mobile" className="block text-sm font-medium text-gray-700">Nominee Mobile No:</label>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Relation:</label>
               <input
                 type="text"
-                id="nominee-mobile"
-                name="nominee-mobile"
+                name="nomineeRelation"
+                value={kycDetails.nomineeRelation}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div>
-              <label htmlFor="nominee-email" className="block text-sm font-medium text-gray-700">Nominee Email:</label>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Nominee Mobile:</label>
+              <input
+                type="text"
+                name="nomineeMobile"
+                value={kycDetails.nomineeMobile}
+                onChange={handleChange}
+                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
+              />
+            </div>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Nominee Email:</label>
               <input
                 type="email"
-                id="nominee-email"
-                name="nominee-email"
+                name="nomineeEmail"
+                value={kycDetails.nomineeEmail}
+                onChange={handleChange}
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
               />
             </div>
-            <div>
-              <label htmlFor="nominee-relation" className="block text-sm font-medium text-gray-700">Nominee Relation:</label>
-              <input
-                type="text"
-                id="nominee-relation"
-                name="nominee-relation"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-sky-600 focus:border-sky-600"
-              />
-            </div>
-            <button
-              type="submit"
-              className="mt-4 px-4 py-2 bg-sky-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-600"
-            >
-              Submit
-            </button>
-          </form>
-        </AccordionItem>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+          >
+            Submit KYC
+          </button>
+        </form>
       </div>
     </div>
   );
 };
 
-export default ProfileForm;
+export default KYCPage;
