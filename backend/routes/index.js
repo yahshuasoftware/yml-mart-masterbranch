@@ -48,6 +48,8 @@ router.get("/all-banner", require('../controller/banner/getBanner'));
 
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));
+router.post("/buyNow", require('../middleware/authToken'), require('../controller/user/buyNowController'));
+
 router.get("/countAddToCartProduct", require('../middleware/authToken'), require('../controller/user/countAddToCartProduct'));
 router.get("/view-card-product", require('../middleware/authToken'), require('../controller/user/addToCartViewProduct'));
 router.post("/update-cart-product", require('../middleware/authToken'), require('../controller/user/updateAddToCartProduct'));

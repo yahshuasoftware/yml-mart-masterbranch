@@ -4,6 +4,8 @@ import displayINRCurrency from '../helpers/displayCurrency';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import addToCart from '../helpers/addToCart';
+import buyNow from '../helpers/buyNow';
+
 import Context from '../context';
 import StarRatings from 'react-star-ratings';
 
@@ -28,6 +30,18 @@ const handleAddToCart = async (e, id) => {
         }
     } catch (error) {
         console.error("Error adding to cart:", error);
+    }
+};
+
+const handleBuyNow = async (e, id) => {
+    try {
+        const response = await buyNow(e, id);
+        if (response?.redirectToLogin) {
+            navigate('/login'); // Redirect to login page
+        } else {
+        }
+    } catch (error) {
+        console.error("Error to buy the product:", error);
     }
 };
 
@@ -124,7 +138,8 @@ const handleAddToCart = async (e, id) => {
             <span className="text-slate-500 ml-1 flex items-center">(10)</span> {/* Flexbox alignment for consistent spacing */}
         </div>
         <div className="flex flex-col md:flex-row gap-2 mt-2">
-            <button className="text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-center whitespace-nowrap w-full md:w-auto">
+            <button className="text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-center whitespace-nowrap w-full md:w-auto"
+            onClick={(e) => handleBuyNow(e, product?._id)}>
                 Buy Now
             </button>
             <button

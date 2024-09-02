@@ -101,7 +101,8 @@ const VerticalCardProduct = ({ category, heading }) => {
                                         <span className='text-slate-500 ml-1 flex items-center'>(10)</span> {/* Flexbox alignment for consistent spacing */}
                                 </div>
                                 <div className='flex flex-col md:flex-row gap-2 mt-2'>
-                                    <button className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto'>
+                                    <button
+                                        className='text-xs md:text-sm bg-green-600 hover:bg-green-700 text-white px-2 md:px-3 py-1 rounded-full text-center w-full md:w-auto' onClick={(e) => handleAddToCart(e, product?._id)}>
                                         Buy Now
                                     </button>
                                     <button

@@ -21,6 +21,7 @@ import ContactUs from '../pages/ContactUs'
 import AllUsers from '../pages/AllUsers' // Import the All Users component
 import BusinessProfile from '../pages/businessProfile/BusinessProfile'
 import AllBanners from '../pages/AllBanners'
+import BuyNow from '../pages/buyNow'
 
 
 
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
             {
                 path : "product/:id",
                 element : <ProductDetails/>
+            },
+            {
+                path : "buynow",
+                element : <BuyNow/>
             },
             {
                 path : 'cart',

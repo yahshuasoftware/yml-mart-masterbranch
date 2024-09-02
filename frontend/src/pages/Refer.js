@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'
+import { FaInstagram, FaWhatsapp, FaLinkedin, FaFacebook } from "react-icons/fa";
 
 const ReferCard = () => {
   const [userData, setUserData] = useState(null);
@@ -69,6 +70,35 @@ const ReferCard = () => {
               UPI CASH
             </button>
           </div>
+          <div className="text-center mb-4 mt-6">
+        <p className="text-md font-bold text-gray-900 mb-2">Share with friends via</p>
+        <div className="flex justify-center space-x-4">
+          <a
+            href="https://wa.me/?text=Check%20this%20out!"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-500"
+          >
+            <FaWhatsapp size={40} />
+          </a>
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-pink-500"
+          >
+            <FaInstagram size={40} />
+          </a>
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500"
+          >
+            <FaFacebook size={40} />
+          </a>
+        </div>
+      </div>
         </div>
       </div>
     </div>

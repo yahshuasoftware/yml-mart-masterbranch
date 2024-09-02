@@ -68,46 +68,69 @@ const Header = () => {
             onChange={handleSearch}
             value={search}
           />
-          <button className="text-lg h-10 w-10 bg-sky-600 flex items-center justify-center rounded text-white hover:bg-sky-700 transition-colors duration-200">
+          <button className="text-lg h-10 w-10 bg-sky-600 flex items-center justify-center rounded-r text-white hover:bg-sky-700 transition-colors duration-200">
             <GrSearch />
           </button>
         </div>
 
         <div className="flex items-center gap-6">
-          <div className="relative">
-            {user?._id && (
-              <div
-                className="text-3xl cursor-pointer flex items-center justify-center"
-                onClick={() => setMenuDisplay((prev) => !prev)}
-              >
-                {user?.profilePic ? (
-                  <img
-                    src={user?.profilePic}
-                    className="w-10 h-10 rounded-full object-cover"
-                    alt={user?.name}
-                  />
-                ) : (
-                  <FaRegCircleUser className="text-gray-700" />
-                )}
-              </div>
-            )}
+        <div className="relative">
+  {user?._id && (
+    <div
+      className="text-3xl cursor-pointer flex items-center justify-center"
+      onClick={() => setMenuDisplay((prev) => !prev)}
+    >
+      {user?.profilePic ? (
+        <img
+          src={user?.profilePic}
+          className="w-10 h-10 rounded-full object-cover"
+          alt={user?.name}
+        />
+      ) : (
+        <FaRegCircleUser className="text-gray-700" />
+      )}
+    </div>
+  )}
 
-             {menuDisplay && (
-              <div className='absolute bg-white bottom-0 right-50 top-11 h-fit p-2 shadow-lg rounded'>
-                <nav>
-                  {user?.role === ROLE.SUPER_ADMIN && (
-                    <Link to={"/super-admin-panel/all-users"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={() => setMenuDisplay(prev => !prev)}>Super Admin Panel</Link>
-                  )}
-                  {user?.role === ROLE.ADMIN && (
-                    <Link to={"/admin-panel/all-products"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={() => setMenuDisplay(prev => !prev)}>Admin Panel</Link>
-                  )}
-                  {user?.role === ROLE.GENERAL && (
-                    <Link to={"/user-details"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={() => setMenuDisplay(prev => !prev)}>Profile</Link>
-                  )}
-                </nav>
-              </div>
-            )}
-          </div>
+  <div
+    className={`absolute bg-white left-1/2 transform -translate-x-1/2 mt-2 p-2 shadow-lg rounded z-10 transition-transform duration-300 ease-out origin-top ${
+      menuDisplay ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-3'
+    }`}
+  >
+    <nav>
+      {user?.role === ROLE.SUPER_ADMIN && (
+        <Link
+          to={"/super-admin-panel/all-users"}
+          className="block whitespace-nowrap hover:bg-slate-100 p-2"
+          onClick={() => setMenuDisplay(false)}
+        >
+          Super Admin Panel
+        </Link>
+      )}
+      {user?.role === ROLE.ADMIN && (
+        <Link
+          to={"/admin-panel/all-products"}
+          className="block whitespace-nowrap hover:bg-slate-100 p-2"
+          onClick={() => setMenuDisplay(false)}
+        >
+          Admin Panel
+        </Link>
+      )}
+      {user?.role === ROLE.GENERAL && (
+        <Link
+          to={"/user-details"}
+          className="block whitespace-nowrap hover:bg-slate-100 p-2"
+          onClick={() => setMenuDisplay(false)}
+        >
+          Profile
+        </Link>
+      )}
+    </nav>
+  </div>
+</div>
+
+
+
 
           {user?._id && (
             <Link to="/cart" className="text-2xl relative">
