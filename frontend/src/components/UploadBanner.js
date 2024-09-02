@@ -22,7 +22,7 @@ const handleSubmit = async (e) => {
         const uploadedImage = await uploadImage(image);
 
         // Assuming you have access to the user's ID from context or props
-        const userId = "66c06da1fc5b3bd687d57875";  // Replace with actual user ID
+        const userId = "66d42c2761d50fc1400a33ec";  // Replace with actual user ID
 
         const response = await fetch(SummaryApi.uploadBanner.url,{
             method : SummaryApi.uploadBanner.method,

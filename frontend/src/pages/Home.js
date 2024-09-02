@@ -3,13 +3,14 @@ import CategoryList from '../components/CategoryList'
 import BannerProduct from '../components/BannerProduct'
 import HorizontalCardProduct from '../components/HorizontalCardProduct'
 import VerticalCardProduct from '../components/VerticalCardProduct'
-
+import AdBanner from '../components/AdBannerProduct'
 
 const Home = () => {
   return (
     <div>
       <CategoryList/>
       <BannerProduct/>
+      <AdBanner/>
       <HorizontalCardProduct category={"groceries"} heading={"Popular's Groceries"}/>
 
       <HorizontalCardProduct category={"medicines"} heading={"Medicines"}/>

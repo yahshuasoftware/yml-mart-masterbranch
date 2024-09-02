@@ -44,6 +44,10 @@ router.get("/referralOrders", require('../middleware/authToken'), referralOrderC
 router.post("/upload-banner", require('../middleware/authToken'), require('../controller/banner/uploadBanner'));
 router.get("/all-banner", require('../controller/banner/getBanner'));
 
+// AdBanner
+router.post("/upload-adbanner", require('../middleware/authToken'), require('../controller/adbanner/uploadBanner'));
+router.get("/all-adbanner", require('../controller/adbanner/getBanner'));
+
 
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));

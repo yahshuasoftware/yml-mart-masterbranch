@@ -31,7 +31,8 @@ const AdminPanel = () => {
                 <nav className='p-4'>
                     <Link to={"all-products"} className='block px-2 py-1 hover:bg-slate-100'>All Products</Link>
                     <Link to={"order-list"} className='block px-2 py-1 hover:bg-slate-100'>All Orders</Link>
-                    <Link to={"all-banners"} className='block px-2 py-1 hover:bg-slate-100'>All Banners</Link>
+                    <Link to={"all-banners"} className='block px-2 py-1 hover:bg-slate-100'>Offer Banners</Link>
+                    <Link to={"all-adbanners"} className='block px-2 py-1 hover:bg-slate-100'>Ad Banners</Link>
                 </nav>
             </aside>
             <main className='flex-1 p-2'>
