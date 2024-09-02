@@ -4,8 +4,12 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const connectDB = require('./config/db');
 const router = require('./routes'); // Correctly importing the router from Routes
-
+const multer = require('multer');
 const app = express();
+const path = require('path');
+
+const upload = multer({ dest: 'uploads/' });
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
     origin: 'http://localhost:3000',
