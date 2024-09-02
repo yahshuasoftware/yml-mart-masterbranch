@@ -15,6 +15,9 @@ const Cart = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
   const context = useContext(Context);
+  const [totalCommission, setTotalCommission] = useState(0);
+  const [finalAmount, setFinalAmount] = useState(0);
+
 
   const [userData, setUserData] = useState({});
   const [address, setAddress] = useState({});
@@ -62,6 +65,9 @@ const Cart = () => {
     }
   };
 
+
+
+
   const fetchData = async () => {
     try {
       const response = await fetch(SummaryApi.addToCartProductView.url, {
@@ -83,17 +89,34 @@ const Cart = () => {
     }
   };
 
+
   useEffect(() => {
     fetchUserDetails(); // Fetch user details including address
     fetchData(); // Fetch cart data
   }, []);
 
+ useEffect(() => {
+    if (!loading && data.length > 0) {
+      const total = data.reduce((previousValue, currentValue) => {
+        return (
+          previousValue +
+          (currentValue.quantity * currentValue.productId.commissionPrice) / 3
+        );
+      }, 0);
+
+      const finalAmount = totalPrice - total;
+      setTotalCommission(total);
+      setFinalAmount(finalAmount);
+
+    }
+  }, [data, loading]);
+ 
   const totalQty = data.reduce(
     (previousValue, currentValue) => previousValue + currentValue.quantity,
     0
   );
   const totalPrice = data.reduce(
-    (prev, curr) => prev + curr.quantity * curr?.productId?.sellingPrice,
+    (prev, curr) => (prev + curr.quantity * curr?.productId?.sellingPrice),
     0
   );
 
@@ -173,7 +196,7 @@ const Cart = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              amount: totalPrice, // in INR
+              amount: finalAmount, // in INR
               currency: "INR",
               receipt: `receipt_${Date.now()}`,
               products: data,
@@ -213,7 +236,7 @@ const Cart = () => {
                   signature: response.razorpay_signature,
                   userId: data[0].userId,
                   products: data,
-                  amount: totalPrice,
+                  amount: finalAmount,
                   currency: "INR",
                 }),
               }
@@ -336,6 +359,7 @@ const Cart = () => {
           <p className="text-gray-600">Loading...</p>
         ) : (
           data.map((product) => (
+            
             <div
               key={product._id}
               className="flex justify-between mb-4 p-3 border-b border-gray-200"
@@ -385,7 +409,9 @@ const Cart = () => {
                   <p className="text-sm font-semibold text-gray-800">
                     {displayINRCurrency(
                       product.quantity * product.productId.sellingPrice
+              
                     )}
+                    
                   </p>
                 </div>
                 {/* Delete Button */}
@@ -396,6 +422,8 @@ const Cart = () => {
                   >
                     <MdDelete />
                   </div>
+                  
+
                 </div>
               </div>
             </div>
@@ -409,11 +437,13 @@ const Cart = () => {
         </div>
         <div className="flex justify-between mb-2 text-gray-700">
           <span>Discount:</span>
-          <span>₹0</span>
+          
+               {displayINRCurrency(totalCommission)}
+          
         </div>
         <div className="flex justify-between text-lg font-semibold text-gray-800">
           <span>Total:</span>
-          <span>{displayINRCurrency(totalPrice)}</span>
+          <span>{displayINRCurrency(totalPrice)}- {displayINRCurrency(totalCommission)} = {displayINRCurrency(finalAmount)} </span>
         </div>
       </div>
     </div>
