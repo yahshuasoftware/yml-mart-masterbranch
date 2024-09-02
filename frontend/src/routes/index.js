@@ -21,7 +21,6 @@ import ContactUs from '../pages/ContactUs'
 import AllUsers from '../pages/AllUsers' // Import the All Users component
 import BusinessProfile from '../pages/businessProfile/BusinessProfile'
 import AllBanners from '../pages/AllBanners'
-import BuyNow from '../pages/buyNow'
 
 
 
@@ -106,6 +105,10 @@ const router = createBrowserRouter([
                     {
                         path : "all-banners", // Move the All Users route here
                         element : <AllBanners/>
+                    },
+                    {
+                        path : "all-adbanners", // Move the All Users route here
+                        element : <AllAdBanners/>
                     },
                 ]
             },

@@ -17,7 +17,6 @@ router.post("/signin", require('../controller/user/userSignIn'));
 router.get("/user-details", require('../middleware/authToken'), userDetailsController);
 router.get("/userLogout", require('../controller/user/userLogout'));
 router.post('/user-details',require('../middleware/authToken'), updateAddressController);
-
 router.get('/dashboard', orderController)
 
 
@@ -44,6 +43,10 @@ router.get("/referralOrders", require('../middleware/authToken'), referralOrderC
 // Banner
 router.post("/upload-banner", require('../middleware/authToken'), require('../controller/banner/uploadBanner'));
 router.get("/all-banner", require('../controller/banner/getBanner'));
+
+// AdBanner
+router.post("/upload-adbanner", require('../middleware/authToken'), require('../controller/adbanner/uploadBanner'));
+router.get("/all-adbanner", require('../controller/adbanner/getBanner'));
 
 
 // User Cart Routes
