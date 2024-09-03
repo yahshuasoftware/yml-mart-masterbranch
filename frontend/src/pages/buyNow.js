@@ -89,7 +89,7 @@ console.log(product)
 
     try {
         // Step 1: Create an order on the backend
-        const response = await fetch("http://localhost:8080/api/payment/create-order", {
+        const response = await fetch("http://localhost:8080/api/payment/create-order-buynow", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

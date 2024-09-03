@@ -21,6 +21,8 @@ const Header = () => {
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
 
+  const { totalPurchasing } = useContext(Context);
+
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
       method: SummaryApi.logout_user.method,
@@ -150,11 +152,16 @@ const Header = () => {
                 Refer
               </Link>
               <Link
-                to="/businessprofile"
-                className="px-3 py-1 text-sm rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
-              >
-                B Profile
-              </Link>
+        to="/businessprofile"
+        className={`px-3 py-1 text-sm rounded border ${
+          totalPurchasing >= 5000
+            ? 'border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300'
+            : 'border-gray-400 text-gray-400 bg-transparent cursor-not-allowed'
+        }`}
+        style={{ pointerEvents: totalPurchasing >= 5000 ? 'auto' : 'none' }}
+      >
+        B Profile
+      </Link>
             </>
           )}
 

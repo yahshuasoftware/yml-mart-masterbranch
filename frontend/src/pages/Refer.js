@@ -7,7 +7,7 @@ const ReferCard = () => {
 
 
   function sendmessege() {
-    const message = `Check this out! Here is an offer for you. Just click on the link and enter the referral code ${userData?.refferal?.refferalcode} to get the offer: https://ymlmart.com`
+    const message = `Check this out! Here is an offer for you. Just click on the link and enter the referral code ${userData?.refferal?.refferalcode} to get extra 5% off on every order: https://ymlmart.com`
     navigator.clipboard.writeText(message).then(() => {
       alert("Message copied to clipboard!");
     }).catch(err => {

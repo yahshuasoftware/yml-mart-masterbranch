@@ -196,7 +196,7 @@ const Cart = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              amount: finalAmount, // in INR
+              amount: totalPrice, // in INR
               currency: "INR",
               receipt: `receipt_${Date.now()}`,
               products: data,
@@ -236,7 +236,7 @@ const Cart = () => {
                   signature: response.razorpay_signature,
                   userId: data[0].userId,
                   products: data,
-                  amount: finalAmount,
+                  amount: totalPrice,
                   currency: "INR",
                 }),
               }

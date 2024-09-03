@@ -16,6 +16,8 @@ import 'animate.css';
 function App() {
   const dispatch = useDispatch()
   const [cartProductCount,setCartProductCount] = useState(0)
+  const [totalPurchasing, setTotalPurchasing] = useState(0);
+
 
   const fetchUserDetails = async()=>{
       const dataResponse = await fetch(SummaryApi.current_user.url,{
@@ -41,11 +43,42 @@ function App() {
     setCartProductCount(dataApi?.data?.count)
   }
 
+
+
+  const fetchTotalPurchasing = async () => {
+    // Fetch total purchasing amount here
+    const dataResponse = await fetch('http://localhost:8080/api/user-details', {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    const data = await dataResponse.json();
+    console.log(data)
+    const totalAmount = data.orderDetail
+      .filter((order) => order.status === 'paid')
+      .reduce(
+        (acc, order) =>
+          acc +
+          order.products.reduce(
+            (acc, product) => acc + product.price * product.quantity,
+            0
+          ),
+        0
+      );
+
+    setTotalPurchasing(totalAmount);
+  };
+
+
+
+
   useEffect(()=>{
     /**user Details */
     fetchUserDetails()
     /**user Details cart product */
     fetchUserAddToCart()
+    fetchTotalPurchasing();
+
 
   },[])
   return (
@@ -53,7 +86,8 @@ function App() {
       <Context.Provider value={{
           fetchUserDetails, // user detail fetch 
           cartProductCount, // current user add to cart product count,
-          fetchUserAddToCart
+          fetchUserAddToCart,
+          totalPurchasing
       }}>
         <ToastContainer 
           position='top-center'
