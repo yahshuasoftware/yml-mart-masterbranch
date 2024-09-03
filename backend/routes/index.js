@@ -4,32 +4,34 @@ const userDetailsController = require('../controller/user/userDetails') ;
 const updateAddressController = require("../controller/user/uploadAddress")
 const orderController = require("../controller/user/orderController")
 const updateDeliveryController = require("../controller/user/updateDeliveryController")
+const referralOrderController = require("../controller/product/getReferralOrders")
 // payment routes
 const paymentRoutes = require('../controller/payment/paymentRoutes');
+
 router.use('/payment', paymentRoutes);
 
-// User and Order Routes
-router.put('/orders/:orderId', require("../controller/user/updateDeliveryController"));
+// User and Product routes
+router.put('/orders/:orderId', updateDeliveryController);
 router.post("/signup", require("../controller/user/userSignUp"));
 router.post("/signin", require('../controller/user/userSignIn'));
-router.get("/user-details", authToken, require('../controller/user/userDetails'));
+router.get("/user-details", require('../middleware/authToken'), userDetailsController);
 router.get("/userLogout", require('../controller/user/userLogout'));
 router.post('/user-details',require('../middleware/authToken'), updateAddressController);
-
 router.get('/dashboard', orderController)
 
 
 
 // Admin Panel Routes
-router.get("/all-user", authToken, require('../controller/user/allUsers'));
-router.post("/update-user", authToken, require('../controller/user/updateUser'));
-router.delete("/delete-user/:userId", authToken, require('../controller/user/deleteUser'));
+router.get("/all-user", require('../middleware/authToken'), require('../controller/user/allUsers'));
+router.post("/update-user", require('../middleware/authToken'), require('../controller/user/updateUser'));
+router.delete("/delete-user/:userId", require('../middleware/authToken'), require('../controller/user/deleteUser'));
+
 
 // Product Routes
-router.post("/upload-product", authToken, require('../controller/product/uploadProduct'));
+router.post("/upload-product", require('../middleware/authToken'), require('../controller/product/uploadProduct'));
 router.get("/get-product", require('../controller/product/getProduct'));
-router.post("/update-product", authToken, require('../controller/product/updateProduct'));
-router.delete("/delete-product", authToken, require('../controller/product/deleteProduct'));
+router.post("/update-product", require('../middleware/authToken'), require('../controller/product/updateProduct'));
+router.delete("/delete-product", require('../middleware/authToken'), require('../controller/product/deleteProduct'));
 router.get("/get-categoryProduct", require('../controller/product/getCategoryProductOne'));
 router.post("/category-product", require('../controller/product/getCategoryWiseProduct'));
 router.post("/product-details", require('../controller/product/getProductDetails'));
@@ -49,6 +51,8 @@ router.get("/all-adbanner", require('../controller/adbanner/getBanner'));
 
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));
+router.post("/buyNow", require('../middleware/authToken'), require('../controller/user/buyNowController'));
+
 router.get("/countAddToCartProduct", require('../middleware/authToken'), require('../controller/user/countAddToCartProduct'));
 router.get("/view-card-product", require('../middleware/authToken'), require('../controller/user/addToCartViewProduct'));
 router.post("/update-cart-product", require('../middleware/authToken'), require('../controller/user/updateAddToCartProduct'));
