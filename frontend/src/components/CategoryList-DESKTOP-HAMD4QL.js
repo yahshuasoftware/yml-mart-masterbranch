@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
+import personalCareImage from '../assest/Images/Personal Care/8.jpeg';
+import homeCareImage from '../assest/Images/Home Care/5.jpeg';
+import medicinesImage from '../assest/Images/Medicines/7.jpeg';
+import fruitsImage from '../assest/Images/fruits/3.jpeg';
+import beautyImage from '../assest/Images/Beauty/1.jpeg';
+import stationaryImage from '../assest/Images/Stationary/10.jpeg';
+import electronicsImage from '../assest/Images/Electronics/2.jpeg';
+import homeDecorImage from '../assest/Images/Kitchen/11.jpeg';
+import groceriesImage from '../assest/Images/Groceries/4.png';
 
-// Assuming you have a set of images for each category
 const categoryImages = {
-    "personal care": require('../assest/Images/Personal Care/8.jpeg'),
-    "home care": require('../assest/Images/Home Care/5.jpeg'),
-    "medicines": require('../assest/Images/Medicines/7.jpeg'),
-    "fruits": require('../assest/Images/fruits/3.jpeg'),
-    "beauty": require('../assest/Images/Beauty/1.jpeg'),
-    "stationary": require('../assest/Images/Stationary/10.jpeg'),
-    "electronics": require('../assest/Images/Electronics/2.jpeg'),
-    "home decor": require('../assest/Images/Kitchen/11.jpeg'),
-    "groceries": require('../assest/Images/Groceries/4.png'),
-    //"default": require('../assets/default-image.png') // Default image if no specific category image is found
+    "personal care": personalCareImage,
+    "home care": homeCareImage,
+    "medicines": medicinesImage,
+    "fruits": fruitsImage,
+    "beauty": beautyImage,
+    "stationary": stationaryImage,
+    "electronics": electronicsImage,
+    "home decor": homeDecorImage,
+    "groceries": groceriesImage,
 };
 
 const CategoryList = () => {
@@ -28,11 +35,11 @@ const CategoryList = () => {
             const response = await fetch(SummaryApi.categoryProduct.url);
             const dataResponse = await response.json();
 
-            // Ensure that dataResponse.data is an array or set it to an empty array if it's undefined
+            
             setCategoryProduct(Array.isArray(dataResponse.data) ? dataResponse.data : []);
         } catch (error) {
             console.error("Failed to fetch category products:", error);
-            setCategoryProduct([]); // Set an empty array on error to prevent map errors
+            setCategoryProduct([]); 
         } finally {
             setLoading(false);
         }
@@ -43,7 +50,7 @@ const CategoryList = () => {
     }, []);
 
     return (
-        <div className='container mx-auto pt-5 pb-8 px-8'>
+        <div className='container mx-auto py-5 px-8'>
             <div className='flex items-center gap-4 justify-between overflow-scroll scrollbar-none'>
                 {loading ? (
                     categoryLoading.map((_, index) => (
