@@ -94,6 +94,22 @@ const SummaryApi = {
         url: `${backendDomain}/api/kyc`,
         method: 'post',
     },
+    requestOtp: {
+        url: 'http://localhost:8080/api/send-otp',
+        method: 'POST',
+      },
+      verifyOtp: {
+        url: 'http://localhost:8080/api/verify-otp',
+        method: 'POST',
+      },
+      fetchUserDetails: {
+        url: 'http://localhost:8080/api/user-details',
+        method: 'GET',
+      },
+      fetchUserAddToCart: {
+        url: 'http://localhost:8080/api/user-cart',
+        method: 'GET',
+      },
 };
 
 export default SummaryApi;

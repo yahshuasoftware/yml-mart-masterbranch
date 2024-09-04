@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const authToken = require('../middleware/authToken');
+const otpController = require('../controller/user/otpController');
+
+router.post('/send-otp', otpController.sendOtpController);
+router.post('/verify-otp', otpController.verifyOtpController);
 
 router.post('/kyc', require('../controller/user/kycController').upload, require('../controller/user/kycController').handleKYC);
+
 
 // User and Order Routes
 router.put('/orders/:orderId', require("../controller/user/updateDeliveryController"));
