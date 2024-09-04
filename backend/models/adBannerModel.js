@@ -11,5 +11,5 @@ const bannerSchema = new mongoose.Schema({
     },
 });
 
-const Banner = mongoose.model('Banner', bannerSchema);
+const Banner = mongoose.model('Ad-Banner', bannerSchema);
 module.exports = Banner;

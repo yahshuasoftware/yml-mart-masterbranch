@@ -22,14 +22,14 @@ const Footer = () => {
 
           <Link to={"/contact"}>
             <div className="company-img">
-              <img src="contact.png" alt="" />
+              <img src="support.png" alt="" />
             </div>
             <p>Contact Us</p>
           </Link>
 
           <Link to="/askquestion">
             <div className="company-img">
-              <img src="comp2.png" alt="" />
+              <img src="question.png" alt="" />
             </div>
             <p>Ask Question</p>
           </Link>

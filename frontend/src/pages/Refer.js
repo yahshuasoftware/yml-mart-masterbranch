@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'
+import { FaInstagram, FaWhatsapp, FaLinkedin, FaFacebook } from "react-icons/fa";
 
 const ReferCard = () => {
   const [userData, setUserData] = useState(null);
+
+
+  function sendmessege() {
+    const message = `Check this out! Here is an offer for you. Just click on the link and enter the referral code ${userData?.refferal?.refferalcode} to get extra 5% off on every order: https://ymlmart.com`
+    navigator.clipboard.writeText(message).then(() => {
+      alert("Message copied to clipboard!");
+    }).catch(err => {
+      console.error('Failed to copy message: ', err);
+    });
+  }
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -69,6 +81,38 @@ const ReferCard = () => {
               UPI CASH
             </button>
           </div>
+          <div className="text-center mb-4 mt-6">
+        <p className="text-md font-bold text-gray-900 mb-2">Share with friends via</p>
+        <div className="flex justify-center space-x-4">
+          <a
+            href="https://wa.me/?text=Check%20this%20out!"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-500"
+            onClick={sendmessege}
+          >
+            <FaWhatsapp size={40} />
+          </a>
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-pink-500"
+            onClick={sendmessege}
+          >
+            <FaInstagram size={40} />
+          </a>
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500"
+            onClick={sendmessege}
+          >
+            <FaFacebook size={40} />
+          </a>
+        </div>
+      </div>
         </div>
       </div>
     </div>

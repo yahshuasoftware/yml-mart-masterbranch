@@ -4,14 +4,14 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import 'swiper/css/effect-coverflow';
-import { Pagination, Autoplay,} from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 import SummaryApi from '../common';
 
 const BannerProduct = () => {
     const [bannerImages, setBannerImages] = useState([]);
 
     useEffect(() => {
-        fetch(SummaryApi.allBanner.url)
+        fetch(SummaryApi.allAdBanner.url)
             .then(response => response.json())
             .then(data => {
                 if (data.success && data.data) {
@@ -25,31 +25,35 @@ const BannerProduct = () => {
     }, []);
 
     return (
-        <div className='container mx-auto px-4 rounded relative'>
-            <div className='h-56 md:h-72 w-full relative' style={{ height: '250px' }}>
+        <div className="container mx-auto px-4 rounded relative">
+            <div className="h-56 md:h-72 w-full relative" style={{ height: '250px' }}>
                 
                 {/* Desktop and tablet version */}
-                <div className='hidden md:block h-full w-full relative'>
+                <div className="hidden md:block h-full w-full relative mt-10">
                     <Swiper
-                        slidesPerView={3}
-                        spaceBetween={20}
+                        slidesPerView={1}
                         loop={true}
                         pagination={{ clickable: true }}
                         autoplay={{ delay: 3000, disableOnInteraction: false }} // Adjust delay as needed
-                        modules={[Pagination, Autoplay,]}
-                        className='h-full'
-                        effect='coverflow'
+                        modules={[Pagination, Autoplay]}
+                        className="h-full"
+                        effect="coverflow"
                     >
                         {bannerImages.map((banner, index) => (
-                            <SwiperSlide key={banner._id || index} className='flex justify-center items-center'>
-                                <img src={banner.imageUrl} className='w-full h-full object-cover rounded-md' alt={`Banner ${index}`} />
+                            <SwiperSlide key={banner._id || index} className="flex justify-center items-center relative">
+                                <div className="w-full h-full relative">
+                                    <img src={banner.imageUrl} className="w-full h-full object-cover rounded-md" alt={`Banner ${index}`} />
+                                    <span className="absolute top-2 right-2 bg-white bg-opacity-50 text-black text-xs px-2 py-1 rounded">
+                                    Ad
+                                    </span>
+                                </div>
                             </SwiperSlide>
                         ))}
                     </Swiper>
                 </div>
 
                 {/* Mobile version */}
-                <div className='md:hidden h-full w-full relative'>
+                <div className="md:hidden h-full w-full relative">
                     <Swiper
                         slidesPerView={1}
                         spaceBetween={10}
@@ -57,11 +61,16 @@ const BannerProduct = () => {
                         pagination={{ clickable: true }}
                         autoplay={{ delay: 3000, disableOnInteraction: false }} // Adjust delay as needed
                         modules={[Pagination, Autoplay]}
-                        className='h-full'
+                        className="h-full"
                     >
                         {bannerImages.map((banner, index) => (
-                            <SwiperSlide key={banner._id || index} className='flex justify-center items-center'>
-                                <img src={banner.imageUrl} className='w-full h-full object-cover rounded-md' alt={`Banner ${index}`} />
+                            <SwiperSlide key={banner._id || index} className="flex justify-center items-center relative">
+                                <div className="w-full h-full relative">
+                                    <img src={banner.imageUrl} className="w-full h-full object-cover rounded-md" alt={`Banner ${index}`} />
+                                    <span className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded">
+                                        Ad
+                                    </span>
+                                </div>
                             </SwiperSlide>
                         ))}
                     </Swiper>

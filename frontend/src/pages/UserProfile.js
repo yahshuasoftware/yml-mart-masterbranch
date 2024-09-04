@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
@@ -10,6 +10,8 @@ import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
+import Context from "../context/index";
+
 
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
@@ -18,6 +20,9 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
 
+  const { totalPurchasing } = useContext(Context);
+
+
   const [address, setAddress] = useState({
     street: "",
     city: "",
@@ -25,7 +30,7 @@ const Profile = () => {
     zip: "",
   });
 
-  const [totalPurchasing, setTotalPurchasing] = useState(0);
+  // const [totalPurchasing, setTotalPurchasing] = useState(0);
 
   //   const { name, value } = e.target;
   //   setAddress((prev) => ({
@@ -99,20 +104,8 @@ const Profile = () => {
         });
         // console.log(orderData[0].deliveryStatus)
 
-        // total purchasing
-        const totalAmount = data.orderDetail
-          .filter((order) => order.status === "paid") // Consider only orders with status 'paid'
-          .reduce(
-            (acc, order) =>
-              acc +
-              order.products.reduce(
-                (acc, product) => acc + product.price * product.quantity,
-                0
-              ),
-            0
-          );
 
-        setTotalPurchasing(totalAmount);
+
       } catch (error) {
         console.error("Error:", error);
       }
@@ -320,19 +313,19 @@ const Profile = () => {
             </div>
           </div>
         );
-      case "Track Order":
-        return (
-          <div>
-            <h1 className="text-2xl font-bold mb-4">Track Your Order</h1>
-            <div className="flex flex-col items-center">
-              <CgTrack
-                style={{ fontSize: "6rem" }}
-                className="text-sky-600 text-6xl mb-2"
-              />
-              <p>Order not found!</p>
-            </div>
-          </div>
-        );
+      // case "Track Order":
+        // return (
+        //   <div>
+        //     <h1 className="text-2xl font-bold mb-4">Track Your Order</h1>
+        //     <div className="flex flex-col items-center">
+        //       <CgTrack
+        //         style={{ fontSize: "6rem" }}
+        //         className="text-sky-600 text-6xl mb-2"
+        //       />
+        //       <p>Order not found!</p>
+        //     </div>
+        //   </div>
+        // );
       default:
         return (
           <div>
@@ -405,7 +398,7 @@ const Profile = () => {
                 Address
               </button>
             </li>
-            <li
+            {/* <li
               className={
                 activeSection === "Track Order" ? "font-bold text-sky-600" : ""
               }
@@ -419,13 +412,19 @@ const Profile = () => {
               >
                 Track Order
               </button>
-            </li>
+            </li> */}
           </ul>
         </aside>
         <main className="flex-1 p-4 ">{renderContent()}</main>
       </div>
+
     </div>
+    
+
+
+
   );
+
 };
 
 export default Profile;

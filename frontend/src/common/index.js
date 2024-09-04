@@ -1,90 +1,111 @@
-const backendDomain = "http://localhost:8080";
+const backendDomin = "http://localhost:8080"
 
 const SummaryApi = {
-    signUP: {
-        url: `${backendDomain}/api/signup`,
-        method: "post",
+    signUP : {
+        url : `${backendDomin}/api/signup`,
+        method : "post"
     },
-    signIn: {
-        url: `${backendDomain}/api/signin`,
-        method: "post",
+    signIn : {
+        url : `${backendDomin}/api/signin`,
+        method : "post"
     },
-    current_user: {
-        url: `${backendDomain}/api/user-details`,
-        method: "get",
+    current_user : {
+        url : `${backendDomin}/api/user-details`,
+        method : "get"
     },
-    logout_user: {
-        url: `${backendDomain}/api/userLogout`,
-        method: 'get',
+    logout_user : {
+        url : `${backendDomin}/api/userLogout`,
+        method : 'get'
     },
-    allUser: {
-        url: `${backendDomain}/api/all-user`,
-        method: 'get',
+    allUser : {
+        url : `${backendDomin}/api/all-user`,
+        method : 'get'
     },
-    updateUser: {
-        url: `${backendDomain}/api/update-user`,
-        method: "post",
+    updateUser : {
+        url : `${backendDomin}/api/update-user`,
+        method : "post"
     },
-    uploadProduct: {
-        url: `${backendDomain}/api/upload-product`,
-        method: 'post',
+    uploadProduct : {
+        url : `${backendDomin}/api/upload-product`,
+        method : 'post'
     },
-    uploadAddress: {
-        url: `${backendDomain}/api/user-details`,
-        method: 'post',
+    uploadAddress : {
+        url : `${backendDomin}/api/user-details`,
+        method : 'post'
     },
-    getOrders: {
-        url: `${backendDomain}/api/dashboard`,
-        method: 'get',
+    uploadBanner: {
+        url : `${backendDomin}/api/upload-banner`,
+        method : 'post'
     },
-    allProduct: {
-        url: `${backendDomain}/api/get-product`,
-        method: 'get',
+    uploadAdBanner: {
+        url : `${backendDomin}/api/upload-adbanner`,
+        method : 'post'
     },
-    updateProduct: {
-        url: `${backendDomain}/api/update-product`,
-        method: 'post',
+    getOrders : {
+        url : `${backendDomin}/api/dashboard`,
+        method : 'get'
+    },
+    allProduct : {
+        url : `${backendDomin}/api/get-product`,
+        method : 'get'
+    },
+    allBanner : {
+        url : `${backendDomin}/api/all-banner`,
+        method : 'get'
+    },
+    allAdBanner : {
+        url : `${backendDomin}/api/all-adbanner`,
+        method : 'get'
+    },
+    updateProduct : {
+        url : `${backendDomin}/api/update-product`,
+        method  : 'post'
     },
     deleteProduct: {
-        url: `${backendDomain}/api/delete-product`,
-        method: 'delete',
+        url: `${backendDomin}/api/delete-product`,
+        method: 'delete' 
+      },
+    categoryProduct : {
+        url : `${backendDomin}/api/get-categoryProduct`,
+        method : 'get'
     },
-    categoryProduct: {
-        url: `${backendDomain}/api/get-categoryProduct`,
-        method: 'get',
+    categoryWiseProduct : {
+        url : `${backendDomin}/api/category-product`,
+        method : 'post'
     },
-    categoryWiseProduct: {
-        url: `${backendDomain}/api/category-product`,
-        method: 'post',
+    productDetails : {
+        url : `${backendDomin}/api/product-details`,
+        method : 'post'
     },
-    productDetails: {
-        url: `${backendDomain}/api/product-details`,
-        method: 'post',
+    addToCartProduct : {
+        url : `${backendDomin}/api/addtocart`,
+        method : 'post'
     },
-    addToCartProduct: {
-        url: `${backendDomain}/api/addtocart`,
-        method: 'post',
+    buyNow : {
+        url : `${backendDomin}/api/buyNow`,
+        method : "post"
     },
-    addToCartProductCount: {
-        url: `${backendDomain}/api/countAddToCartProduct`,
-        method: 'get',
+    addToCartProductCount : {
+        url : `${backendDomin}/api/countAddToCartProduct`,
+        method : 'get'
     },
-    addToCartProductView: {
-        url: `${backendDomain}/api/view-card-product`,
-        method: 'get',
+    addToCartProductView : {
+        url : `${backendDomin}/api/view-card-product`,
+        method : 'get'
     },
-    updateCartProduct: {
-        url: `${backendDomain}/api/update-cart-product`,
-        method: 'post',
+    updateCartProduct : {
+        url : `${backendDomin}/api/update-cart-product`,
+        method : 'post'
     },
-    deleteCartProduct: {
-        url: `${backendDomain}/api/delete-cart-product`,
-        method: 'post',
+    deleteCartProduct : {
+        url : `${backendDomin}/api/delete-cart-product`,
+        method : 'post'
     },
-    searchProduct: {
-        url: `${backendDomain}/api/search`,
-        method: 'get',
+    searchProduct : {
+        url : `${backendDomin}/api/search`,
+        method : 'get'
     },
+<<<<<<< HEAD
     filterProduct: {
         url: `${backendDomain}/api/filter-product`,
         method: 'post',
@@ -111,5 +132,13 @@ const SummaryApi = {
         method: 'GET',
       },
 };
+=======
+    filterProduct : {
+        url : `${backendDomin}/api/filter-product`,
+        method : 'post'
+    }
+}
+>>>>>>> 8884386f3355412c76c0c9a9cc4f862a04d258fa
 
-export default SummaryApi;
+
+export default SummaryApi

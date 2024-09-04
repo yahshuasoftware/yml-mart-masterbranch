@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import UploadBanner from '../components/UploadBanner';
+import UploadAdBanner from '../components/UploadAdBanner';
 import SummaryApi from '../common';
 import AdminBannerCard from '../components/AdminBannerCard';
 
@@ -9,7 +9,7 @@ const AllBanners = () => {
 
   const fetchAllBanner = async () => {
     try {
-      const response = await fetch(SummaryApi.allBanner.url);
+      const response = await fetch(SummaryApi.allAdBanner.url);
       const dataResponse = await response.json();
       console.log("banner data", dataResponse);
 
@@ -49,7 +49,7 @@ const AllBanners = () => {
       {/** Upload banner component */}
       {
         openUploadBanner && (
-          <UploadBanner onClose={() => setOpenUploadBanner(false)} fetchData={fetchAllBanner} />
+          <UploadAdBanner onClose={() => setOpenUploadBanner(false)} fetchData={fetchAllBanner} />
         )
       }
     </div>

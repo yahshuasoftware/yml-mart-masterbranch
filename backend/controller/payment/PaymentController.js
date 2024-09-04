@@ -27,7 +27,8 @@ const createOrder = async (req, res) => {
                 name: product.productId.productName,
                 quantity: product.quantity,
                 price: product.productId.sellingPrice,
-                image: product.productId.productImage
+                image: product.productId.productImage,
+                commissionPrice: product.productId.commissionPrice * product.quantity
             })),
             amount: order.amount / 100,
             currency: order.currency,
@@ -39,6 +40,47 @@ const createOrder = async (req, res) => {
 
         
         
+
+        res.status(200).json({ success: true, order });
+    } catch (error) {
+        console.error("Error creating Razorpay order", error);
+        res.status(500).json({ success: false, message: "Server Error", error });
+    }
+};
+
+const createOrderBuynow = async (req, res) => {
+    const { amount, currency, receipt, userId, products } = req.body;
+
+    try {
+        const options = {
+            amount: amount , // Amount in paisa (multiply by 100)
+            currency: currency || "INR",
+            receipt: receipt || `receipt_${Date.now()}`,
+        };
+
+        const order = await razorpay.orders.create(options);
+
+        // Check if `products` is an array or a single object
+        const formattedProducts = Array.isArray(products) ? products : [products];
+
+        // Save a preliminary order to the database with status 'created'
+        const newOrder = new Order({
+            order_id: order.id,
+            products: formattedProducts.map(product => ({
+                productId: product._id,
+                name: product.productName,
+                quantity: product.quantity || 1, // Default quantity to 1 if not provided
+                price: product.sellingPrice,
+                image: product.productImage[0], // Assuming you want the first image if there are multiple
+                commissionPrice: (product.commissionPrice || 0) * (product.quantity || 1)
+            })),
+            amount: order.amount ,
+            currency: order.currency,
+            receipt: order.receipt,
+            userId: userId,
+        });
+        
+        await newOrder.save();
 
         res.status(200).json({ success: true, order });
     } catch (error) {
@@ -102,4 +144,4 @@ const handlePaymentSuccess = async (req, res) => {
     }
 };
 
-module.exports = { createOrder, handlePaymentSuccess };
+module.exports = { createOrder, createOrderBuynow, handlePaymentSuccess };

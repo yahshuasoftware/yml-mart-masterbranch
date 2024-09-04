@@ -24,8 +24,8 @@ const handleSubmit = async (e) => {
         // Assuming you have access to the user's ID from context or props
         const userId = "66d42c2761d50fc1400a33ec";  // Replace with actual user ID
 
-        const response = await fetch(SummaryApi.uploadBanner.url,{
-            method : SummaryApi.uploadBanner.method,
+        const response = await fetch(SummaryApi.uploadAdBanner.url,{
+            method : SummaryApi.uploadAdBanner.method,
             credentials : 'include',
             headers: {
                 'Content-Type': 'application/json',
