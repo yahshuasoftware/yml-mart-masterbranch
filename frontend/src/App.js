@@ -54,19 +54,26 @@ function App() {
 
     const data = await dataResponse.json();
     console.log(data)
-    const totalAmount = data.orderDetail
-      .filter((order) => order.status === 'paid')
-      .reduce(
-        (acc, order) =>
-          acc +
-          order.products.reduce(
-            (acc, product) => acc + product.price * product.quantity,
-            0
-          ),
-        0
-      );
+    if (data && Array.isArray(data.orderDetail)) {
+      const totalAmount = data.orderDetail
+        .filter((order) => order.status === 'paid')
+        .reduce(
+          (acc, order) =>
+            acc +
+            order.products.reduce(
+              (acc, product) => acc + product.price * product.quantity,
+              0
+            ),
+          0
+        );
 
-    setTotalPurchasing(totalAmount);
+      setTotalPurchasing(totalAmount);
+    } else {
+      console.log('orderDetail is either undefined or not an array.');
+      setTotalPurchasing(0); // Set to 0 or some default value
+    }
+
+   
   };
 
 
