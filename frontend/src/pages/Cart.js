@@ -15,8 +15,9 @@ const Cart = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
   const context = useContext(Context);
-  const [totalCommission, setTotalCommission] = useState(0);
   const [finalAmount, setFinalAmount] = useState(0);
+  const [discountPrice, setDiscountPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); 
 
 
   const [userData, setUserData] = useState({});
@@ -95,19 +96,20 @@ const Cart = () => {
     fetchData(); // Fetch cart data
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     if (!loading && data.length > 0) {
+      // Calculate total price
       const total = data.reduce((previousValue, currentValue) => {
-        return (
-          previousValue +
-          (currentValue.quantity * currentValue.productId.commissionPrice) / 3
-        );
+        return previousValue + (currentValue.quantity * currentValue.productId.sellingPrice);
       }, 0);
-
-      const finalAmount = totalPrice - total;
-      setTotalCommission(total);
-      setFinalAmount(finalAmount);
-
+  
+      // Calculate discount
+      const discount = 0.05 * total;
+  
+      // Set states
+      setTotalPrice(total);
+      setDiscountPrice(discount);
+      setFinalAmount(total - discount);
     }
   }, [data, loading]);
  
@@ -115,10 +117,13 @@ const Cart = () => {
     (previousValue, currentValue) => previousValue + currentValue.quantity,
     0
   );
-  const totalPrice = data.reduce(
-    (prev, curr) => (prev + curr.quantity * curr?.productId?.sellingPrice),
-    0
-  );
+  // const totalPrice = data.reduce(
+  //   (prev, curr) => (prev + curr.quantity * curr?.productId?.sellingPrice),
+    
+  //   setDiscountPrice = 0.05 * totalPrice
+  // );
+
+  
 
   const increaseQty = async (id, qty) => {
     const response = await fetch(SummaryApi.updateCartProduct.url, {
@@ -196,7 +201,7 @@ const Cart = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              amount: totalPrice, // in INR
+              amount: finalAmount, // in INR
               currency: "INR",
               receipt: `receipt_${Date.now()}`,
               products: data,
@@ -236,7 +241,7 @@ const Cart = () => {
                   signature: response.razorpay_signature,
                   userId: data[0].userId,
                   products: data,
-                  amount: totalPrice,
+                  amount: finalAmount,
                   currency: "INR",
                 }),
               }
@@ -282,15 +287,15 @@ const Cart = () => {
   {/*** Left Column - LOGIN, Delivery Address, Payment ***/}
   <div className="w-full lg:w-[70%] h-max-content bg-white border border-gray-200 rounded-lg shadow-lg">
     {/* LOGIN Section */}
-    <div className="mb-6 p-6 border-b border-gray-200">
-      <div className="flex items-center gap-2 mb-3">
+    <div className=" p-6 border-b border-gray-200">
+      <div className="flex items-center gap-2 ">
         <h3 className="text-xl font-semibold text-gray-800">Login</h3>
         <MdCheckCircle className="text-green-500 text-xl" />
       </div>
       {isLoggedIn ? (
         <div className="flex items-center gap-2">
           <p className="text-gray-700">
-            {user?.name} ({user?.email})
+            {user?.name}
           </p>
         </div>
       ) : (
@@ -435,16 +440,14 @@ const Cart = () => {
           <span>Delivery Charges:</span>
           <span>₹0</span>
         </div>
-        <div className="flex justify-between mb-2 text-gray-700">
-          <span>Discount:</span>
-          
-               {displayINRCurrency(totalCommission)}
-          
-        </div>
-        <div className="flex justify-between text-lg font-semibold text-gray-800">
-          <span>Total:</span>
-          <span>{displayINRCurrency(totalPrice)}- {displayINRCurrency(totalCommission)} = {displayINRCurrency(finalAmount)} </span>
-        </div>
+            <div className="flex justify-between mb-2 text-red-500">
+      <span>Discount:</span>
+      {displayINRCurrency(discountPrice)}
+    </div>
+<div className="flex justify-between  font-semibold text-gray-800">
+  <span>Total:</span>
+  <span className="text-md">{ displayINRCurrency(totalPrice)} - {displayINRCurrency(discountPrice)} = {displayINRCurrency(finalAmount)}</span>
+</div>
       </div>
     </div>
   </div>
