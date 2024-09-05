@@ -312,10 +312,10 @@ const Cart = () => {
       {hasAddress ? (
         <div className="text-gray-700">
           <p>
-            <strong>Street:</strong> {user?.address?.street}<br />
-            <strong>City:</strong> {user?.address?.city}<br />
-            <strong>State:</strong> {user?.address?.state}<br />
-            <strong>ZIP:</strong> {user?.address?.zip}
+             {user?.address?.street}, {user?.address?.city}, <br />
+             {user?.address?.state}, <strong>{user?.address?.zip}</strong>
+
+           
           </p>
         </div>
       ) : (

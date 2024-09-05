@@ -13,14 +13,17 @@ import { uploadAddress } from "../helpers/uploadAddress";
 import Context from "../context/index";
 
 
+
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
+  const [totalPurchasing, setTotalPurchasing] = useState(0);
 
-  const { totalPurchasing } = useContext(Context);
+
+  // const { totalPurchasing } = useContext(Context);
 
 
   const [address, setAddress] = useState({
@@ -30,56 +33,19 @@ const Profile = () => {
     zip: "",
   });
 
-  // const [totalPurchasing, setTotalPurchasing] = useState(0);
 
-  //   const { name, value } = e.target;
-  //   setAddress((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const response = await fetch(SummaryApi.uploadAddress.url, {  // Update the API endpoint
-  //     method: SummaryApi.uploadAddress.method,
-  //     credentials: 'include',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ address }),
-  //   });
-
-  //   const responseData = await response.json();
-
-  //   if (responseData.success) {
-  //     toast.success(responseData?.message);
-
-  //     // fetchUserData(); // Call a function to refresh the user data
-  //     setUserData((prevUserData) => ({
-  //       ...prevUserData,
-  //       address: address,
-  //   }));
-  //   }
-
-  //   if (responseData.error) {
-  //     toast.error(responseData?.message);
-  //   }
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     uploadAddress(address, setUserData);
   };
 
-  // const user = useSelector((state) => state?.user?.user);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/user-details", {
-          method: "GET",
+        const response = await fetch(SummaryApi.current_user.url,{
+          method : SummaryApi.current_user.method,
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
@@ -104,7 +70,21 @@ const Profile = () => {
         });
         // console.log(orderData[0].deliveryStatus)
 
-
+        if (data.orderDetail) {
+          const totalAmount = data.orderDetail
+            .filter((order) => order.status === 'paid')
+            .reduce(
+              (acc, order) =>
+                acc +
+                order.products.reduce(
+                  (acc, product) => acc + product.price * product.quantity,
+                  0
+                ),
+              0
+            );
+    
+          setTotalPurchasing(totalAmount);
+        }
 
       } catch (error) {
         console.error("Error:", error);
