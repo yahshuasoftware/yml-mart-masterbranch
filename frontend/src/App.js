@@ -45,36 +45,38 @@ function App() {
 
 
 
-  const fetchTotalPurchasing = async () => {
-    // Fetch total purchasing amount here
-    const dataResponse = await fetch('http://localhost:8080/api/user-details', {
-      method: 'GET',
-      credentials: 'include'
-    });
 
-    const data = await dataResponse.json();
-    console.log(data)
-    if (data && Array.isArray(data.orderDetail)) {
-      const totalAmount = data.orderDetail
-        .filter((order) => order.status === 'paid')
-        .reduce(
-          (acc, order) =>
-            acc +
-            order.products.reduce(
-              (acc, product) => acc + product.price * product.quantity,
-              0
-            ),
-          0
-        );
+  // const fetchTotalPurchasing = async () => {
+  //   const dataResponse = await fetch(SummaryApi.current_user.url, {
+  //     method: SummaryApi.current_user.method,
+  //     credentials: 'include',
+  //   });
+  
+  //   const data = await dataResponse.json();
+  
+  //   // Check if orderDetail exists and is an array
+  //   if (data && Array.isArray(data.orderDetail)) {
+  //     const totalAmount = data.orderDetail
+  //       .filter((order) => order.status === 'paid')
+  //       .reduce(
+  //         (acc, order) =>
+  //           acc +
+  //           order.products.reduce(
+  //             (acc, product) => acc + product.price * product.quantity,
+  //             0
+  //           ),
+  //         0
+  //       );
+  
+  //     setTotalPurchasing(totalAmount);
+  //   } else {
+  //     // Handle case when orderDetail is not available or not an array
+  //     setTotalPurchasing(0);
+  //     console.error("Order details not available or invalid format");
+  //   }
+  // };
+  
 
-      setTotalPurchasing(totalAmount);
-    } else {
-      console.log('orderDetail is either undefined or not an array.');
-      setTotalPurchasing(0); // Set to 0 or some default value
-    }
-
-   
-  };
 
 
 
@@ -84,7 +86,7 @@ function App() {
     fetchUserDetails()
     /**user Details cart product */
     fetchUserAddToCart()
-    fetchTotalPurchasing();
+    // fetchTotalPurchasing();
 
 
   },[])
@@ -94,7 +96,7 @@ function App() {
           fetchUserDetails, // user detail fetch 
           cartProductCount, // current user add to cart product count,
           fetchUserAddToCart,
-          totalPurchasing
+          // totalPurchasing
       }}>
         <ToastContainer 
           position='top-center'

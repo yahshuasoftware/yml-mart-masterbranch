@@ -3,8 +3,7 @@ import MyProfile from './ProfileForm';
 import { FaTimes, FaBars } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import moment from 'moment';
-
-
+import SummaryApi from '../../common';
 
 const BusinessProfile = () => {
   const [showProfileForm, setShowProfileForm] = useState(false);
@@ -14,8 +13,8 @@ const BusinessProfile = () => {
   const [usersData, setUsersData] = useState(null);
 
   const [orderData, setOrderData] = useState([]);
-  const [totalCommission, setTotalCommission] = useState(0);
-
+  const [totalBusiness, setTotalBusiness] = useState(0);
+  const [totalIntensive, setTotalIntensive] = useState(0);
 
 
   const handleProfileClick = () => {
@@ -32,55 +31,12 @@ const BusinessProfile = () => {
   }
 
   useEffect(() => {
-    // const fetchUserData = async () => {
-    //   try {
-    //     const response = await fetch("http://localhost:8080/api/user-details", {
-    //       method: "GET",
-    //       credentials: "include",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     });
-
-    //     if (!response.ok) {
-    //       throw new Error("Network response was not ok");
-    //     }
-
-    //     const data = await response.json();
-    //     console.log(data)
-    //     setUserData(data.data);
-    //     // console.log(userData.refferal.myrefferalorders[0].order_id)
-
-    //     // setOrderData(data.orderDetail);
-    //     // alert(userData.name)
-
-
-    //     // console.log(orderData[0].deliveryStatus)
-
-    //     // total purchasing
-    //     // const totalAmount = data.orderDetail
-    //     //   .filter((order) => order.status === "paid") // Consider only orders with status 'paid'
-    //     //   .reduce(
-    //     //     (acc, order) =>
-    //     //       acc +
-    //     //       order.products.reduce(
-    //     //         (acc, product) => acc + product.price * product.quantity,
-    //     //         0
-    //     //       ),
-    //     //     0
-    //     //   );
-
-    //     // setTotalPurchasing(totalAmount);
-    //   } catch (error) {
-    //     console.error("Error:", error);
-    //   }
-    // };
-
+    
 
     const fetchOrderData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/referralOrders", {
-          method: "GET",
+        const response = await fetch(SummaryApi.referralOrders.url,{
+          method : SummaryApi.referralOrders.method,
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
@@ -98,14 +54,17 @@ const BusinessProfile = () => {
 
     
 
-        let totalCommission = 0;
+
+        let totalBusiness = 0;
 
         if (Array.isArray(data.orders) && data.orders.length > 0) {
           data.orders.forEach((order) => {
             if (Array.isArray(order.products) && order.products.length > 0) {
               order.products.forEach((product) => {
-                if (product.commissionPrice) {
-                  totalCommission += product.commissionPrice;
+                // console.log(product.price)
+                if (product.price) {
+                  totalBusiness += product.price;
+
                 }
               });
             }
@@ -114,14 +73,14 @@ const BusinessProfile = () => {
           setOrderData(data.orders);
           setUserData(data.user) // Store order data in state
           setUsersData(data.users)
-          setTotalCommission(totalCommission.toFixed(2));  // Store total commission in state
+          setTotalBusiness(totalBusiness.toFixed(2));  
+          console.log(totalBusiness)
+          setTotalIntensive(0.05 * totalBusiness)// Store total Intensive in state
   
         } else {
           console.log("No orders found.");
         }
-    
-        // Optionally, set the order data to state if needed
-        // setOrderData(data.orders);
+
     
       } catch (error) {
         console.error("Error fetching order data:", error);
@@ -148,7 +107,7 @@ const BusinessProfile = () => {
                     <th className="px-6 py-3 text-left  font-semibold text-gray-700">Product</th>
                     <th className="px-6 py-3 text-left  font-semibold text-gray-700">Quantity</th>
                     <th className="px-6 py-3 text-left  font-semibold text-gray-700">Price</th>
-                    <th className="px-6 py-3 text-left  font-semibold text-gray-700">Commission</th>
+                    {/* <th className="px-6 py-3 text-left  font-semibold text-gray-700">Commission</th> */}
                 </tr>
             </thead>
             <tbody>
@@ -159,7 +118,7 @@ const BusinessProfile = () => {
                                 <td className="px-6 py-4  text-gray-800">{product.name}</td>
                                 <td className="px-6 py-4  text-gray-800">{product.quantity}</td>
                                 <td className="px-6 py-4  text-gray-800">₹{product.price}</td>
-                                <td className="px-6 py-4  text-gray-800">₹{(product.commissionPrice / 3).toFixed(2)}</td>
+                                {/* <td className="px-6 py-4  text-gray-800">₹{product.totalBusiness}</td> */}
                             </tr>
                         ))}
                     </React.Fragment>
@@ -240,12 +199,12 @@ const BusinessProfile = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h3 className="text-lg font-semibold">Total Commission</h3>
-          <p className="text-xl">₹{(totalCommission/3)}</p>
+          <h3 className="text-lg font-semibold">Total Purchasing</h3>
+          <p className="text-xl">₹{(totalBusiness)}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h3 className="text-lg font-semibold">Business Volume/Intensive</h3>
-          <p className="text-xl">$123</p>
+          <h3 className="text-lg font-semibold">Business Intensive(Income)</h3>
+          <p className="text-xl">₹{totalIntensive}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold">Other Info</h3>
