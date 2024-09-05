@@ -5,6 +5,7 @@ import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Context from "../context";
+import { Plus, Minus } from 'react-feather';
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
 
@@ -381,7 +382,7 @@ const Cart = () => {
                 {/* Quantity Controls */}
                 <div className="flex items-center gap-2 mt-2">
                   <button
-                    className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-8 h-8 flex justify-center items-center rounded-full"
+                    className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-5 h-5  flex justify-center items-center rounded-full"
                     onClick={() =>
                       decraseQty(product?._id, product?.quantity)
                     }
@@ -390,7 +391,7 @@ const Cart = () => {
                   </button>
                   <span className="text-gray-700">{product?.quantity}</span>
                   <button
-                    className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-6 h-6 flex justify-center items-center rounded-full"
+                    className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-5 h-5 flex justify-center items-center rounded-full"
                     onClick={() =>
                       increaseQty(product?._id, product?.quantity)
                     }

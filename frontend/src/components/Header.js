@@ -76,7 +76,28 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-6">
+        {user?._id && (
+            <>
+                         <Link
+        to="/businessprofile"
+        className="px-3 py-1 text-sm rounded border
+          border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300'
+             border-gray-400 text-gray-400 bg-transparent cursor-not-allowed"
+      >
+        B Profile
+      </Link>
+              <Link
+                to="/refer"
+                className="px-3 py-1 text-sm rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
+              >
+                Refer
+              </Link>
+ 
+            </>
+          )}
         <div className="relative">
+
+          
   {user?._id && (
     <div
       className="text-3xl cursor-pointer flex items-center justify-center"
@@ -99,7 +120,10 @@ const Header = () => {
       menuDisplay ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-3'
     }`}
   >
+     
     <nav>
+      
+
       {user?.role === ROLE.SUPER_ADMIN && (
         <Link
           to={"/super-admin-panel/all-users"}
@@ -143,24 +167,7 @@ const Header = () => {
             </Link>
           )}
 
-          {user?._id && (
-            <>
-              <Link
-                to="/refer"
-                className="px-3 py-1 text-sm rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
-              >
-                Refer
-              </Link>
-              <Link
-        to="/businessprofile"
-        className="px-3 py-1 text-sm rounded border
-          border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300'
-             border-gray-400 text-gray-400 bg-transparent cursor-not-allowed"
-      >
-        B Profile
-      </Link>
-            </>
-          )}
+         
 
           <div>
             {user?._id ? (
