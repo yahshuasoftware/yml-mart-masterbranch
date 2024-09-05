@@ -7,7 +7,7 @@ const router = require('./routes'); // Correctly importing the router from Route
 const multer = require('multer');
 const app = express();
 const path = require('path');
-
+const kycRoutes = require('./routes/index');
 
 const upload = multer({ dest: 'uploads/' });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -20,6 +20,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api", router); // Mounting the router correctly on the '/api' path
+app.use('/api', kycRoutes);
+
 
 const PORT = process.env.PORT || 8080;
 

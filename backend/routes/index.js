@@ -1,8 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const authToken = require('../middleware/authToken');
+const userDetailsController = require('../controller/user/userDetails');
+const updateAddressController = require('../controller/user/uploadAddress');
+const orderController = require('../controller/user/orderController');
+const updateDeliveryController = require('../controller/user/updateDeliveryController');
+const referralOrderController = require('../controller/product/getReferralOrders');
+const upload = require('../config/multer'); // Import the multer configuration
 
-router.post('/kyc', require('../controller/user/kycController').upload, require('../controller/user/kycController').handleKYC);
+// Payment routes
+const paymentRoutes = require('../controller/payment/paymentRoutes');
+router.use('/payment', paymentRoutes);
+
+const kycController = require('../controller/user/kycController'); // Import your controller
+
+// Define route to handle KYC data and file uploads
+router.post('/upload-kyc', upload.fields([
+  { name: 'panCardFile', maxCount: 1 },
+  { name: 'aadharFile', maxCount: 1 },
+  { name: 'passbookFile', maxCount: 1 }
+]), kycController.handleKYC);
 
 // User and Product routes
 router.put('/orders/:orderId', updateDeliveryController);
@@ -10,9 +26,8 @@ router.post("/signup", require("../controller/user/userSignUp"));
 router.post("/signin", require('../controller/user/userSignIn'));
 router.get("/user-details", require('../middleware/authToken'), userDetailsController);
 router.get("/userLogout", require('../controller/user/userLogout'));
-router.post('/user-details',require('../middleware/authToken'), updateAddressController);
-router.get('/dashboard', orderController)
-
+router.post('/user-details', require('../middleware/authToken'), updateAddressController);
+router.get('/dashboard', orderController);
 
 
 // Admin Panel Routes
