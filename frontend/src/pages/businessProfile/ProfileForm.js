@@ -18,7 +18,7 @@ const KYCPage = () => {
     passbookFile: null,
   });
   const [submissionStatus, setSubmissionStatus] = useState('');
-  const [formVisible, setFormVisible] = useState(true); // New state to control form visibility
+  const [formVisible, setFormVisible] = useState(true); 
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
