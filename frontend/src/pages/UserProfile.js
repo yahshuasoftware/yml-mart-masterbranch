@@ -11,6 +11,12 @@ import { toast } from "react-toastify";
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
 import Context from "../context/index";
+import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorcycle } from "react-icons/fa";import { MdLocalShipping, MdCancel } from "react-icons/md";
+// import { BsBagXFill } from "react-icons/bs";
+import { RiShoppingCartFill } from "react-icons/ri"; 
+
+
+
 
 
 const Profile = () => {
@@ -19,8 +25,10 @@ const Profile = () => {
 
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
+  const [totalPurchasing, setTotalPurchasing] = useState(0);
 
-  const { totalPurchasing } = useContext(Context);
+
+  // const { totalPurchasing } = useContext(Context);
 
 
   const [address, setAddress] = useState({
@@ -30,56 +38,80 @@ const Profile = () => {
     zip: "",
   });
 
-  // const [totalPurchasing, setTotalPurchasing] = useState(0);
 
-  //   const { name, value } = e.target;
-  //   setAddress((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
+  const resetTotalPurchasing = () => {
+    setTotalPurchasing(0);
+    console.log("Total purchasing reset to 0");
+  };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
+  
 
-  //   const response = await fetch(SummaryApi.uploadAddress.url, {  // Update the API endpoint
-  //     method: SummaryApi.uploadAddress.method,
-  //     credentials: 'include',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ address }),
-  //   });
 
-  //   const responseData = await response.json();
+  const getTimeUntilNextFirst = () => {
+    const now = new Date();
+    const nextMonth = now.getMonth() + 1;
+    const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
+    const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
+    return firstOfNextMonth - now;
+  };
 
-  //   if (responseData.success) {
-  //     toast.success(responseData?.message);
 
-  //     // fetchUserData(); // Call a function to refresh the user data
-  //     setUserData((prevUserData) => ({
-  //       ...prevUserData,
-  //       address: address,
-  //   }));
-  //   }
+  useEffect(() => {
+    // Function to handle the monthly reset
+    const handleMonthlyReset = () => {
+      const now = new Date();
+      const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
 
-  //   if (responseData.error) {
-  //     toast.error(responseData?.message);
-  //   }
-  // };
+      // Retrieve the last reset month from localStorage
+      const lastResetMonth = localStorage.getItem('lastResetMonth');
+
+      if (lastResetMonth !== currentMonthYear) {
+        if (now.getDate() === 1) {
+          resetTotalPurchasing();
+          localStorage.setItem('lastResetMonth', currentMonthYear);
+        }
+      }
+    };
+
+    // Perform the initial check on component mount
+    handleMonthlyReset();
+
+    // Schedule the next reset
+    const scheduleNextReset = () => {
+      const delay = getTimeUntilNextFirst();
+      setTimeout(() => {
+        resetTotalPurchasing();
+        const now = new Date();
+        const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
+        localStorage.setItem('lastResetMonth', currentMonthYear);
+        // Schedule the subsequent reset
+        scheduleNextReset();
+      }, delay);
+    };
+
+    scheduleNextReset();
+
+    // Cleanup function to clear timeout when component unmounts
+    return () => {
+      // If you store the timeout ID, you can clear it here
+      // Example:
+      // clearTimeout(timer);
+    };
+  }, []);
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     uploadAddress(address, setUserData);
   };
 
-  // const user = useSelector((state) => state?.user?.user);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/user-details", {
-          method: "GET",
+        const response = await fetch(SummaryApi.current_user.url,{
+          method : SummaryApi.current_user.method,
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
@@ -104,7 +136,21 @@ const Profile = () => {
         });
         // console.log(orderData[0].deliveryStatus)
 
-
+        if (data.orderDetail) {
+          const totalAmount = data.orderDetail
+            .filter((order) => order.status === 'paid')
+            .reduce(
+              (acc, order) =>
+                acc +
+                order.products.reduce(
+                  (acc, product) => acc + product.price * product.quantity,
+                  0
+                ),
+              0
+            );
+    
+          setTotalPurchasing(totalAmount);
+        }
 
       } catch (error) {
         console.error("Error:", error);
@@ -117,6 +163,31 @@ const Profile = () => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+    // Function to return the appropriate icon for each delivery status
+    const getStatusIcon = (status) => {
+      
+      switch (status.toLowerCase()) {
+        case "ordered":
+          return <RiShoppingCartFill className="text-yellow-600" />;
+        case "shipped":
+          return <FaTruck className="text-blue-600" />;
+        case "in-transit":
+          return <MdLocalShipping className="text-orange-500" />;
+        case "delivered":
+          return <FaCheckCircle className="text-green-600" />;
+        case "cancelled":
+          return <FaTimesCircle className="text-red-600" />;
+        case "processing":
+          return <FaHourglassHalf className="text-purple-600" />;  // Add a processing icon
+          case "out of delivery": // Make sure it's lowercase
+          return <FaMotorcycle className="text-indigo-600" />;  // Add out-for-delivery icon
+        default:
+          return <FaBox className="text-gray-500" />;
+
+      }
+    };
+  
   const renderContent = () => {
     switch (activeSection) {
       case "Profile Information":
@@ -124,7 +195,7 @@ const Profile = () => {
           <div>
             <div className="flex  justify-between">
               <h1 className="text-2xl font-bold mb-4">Profile Information</h1>
-              <h3>Total Purchasing:₹{totalPurchasing} </h3>
+              <h3>Your total purchasing:₹{totalPurchasing} </h3>
             </div>
             <div className="flex flex-col items-center mb-6">
               <div className="relative inline-block">
@@ -189,86 +260,80 @@ const Profile = () => {
       case "My Orders":
         return (
           <div>
-            <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
+      <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
 
-            {orderData ? (
-              <div className="w-full max-w-3xl">
-                {orderData && orderData.length > 0 ? (
-                  <div>
-                    <h2 className="text-xl font-semibold mb-4">
-                      Order Details
-                    </h2>
-                    {orderData.map((order) => (
-                      <div key={order._id} className="mb-6 relative">
-                        <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
-                          {order.products.map((product) => (
-                            <div
-                              key={product._id}
-                              className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm"
-                            >
-                              <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
-                                <img
-                                  src={product.image[0]}
-                                  alt={product.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                              <div className="ml-4 flex flex-col justify-between">
-                                <h3 className="text-lg font-semibold text-gray-800">
-                                  {product.name}
-                                </h3>
-                                <h4 className="text-sm text-gray-600">
-                                  {product.category}
-                                </h4>
-                                <p className="text-sm text-gray-700">
-                                  <strong>Quantity:</strong> {product.quantity}
-                                </p>
-                                <p className="text-sm text-gray-700">
-                                  <strong>Total Cost:</strong>{" "}
-                                  <span className="font-bold text-gray-800">
-                                    {"₹" + product.price * product.quantity}
-                                  </span>
-                                </p>
-                                <p className="text-sm">
-                                  <strong>Status:</strong>{" "}
-                                  <span className="text-green-700 font-semibold">
-                                    {order.status}
-                                  </span>
-                                </p>
-                              </div>
-                            </div>
-                          ))}
-                          {/* Order ID and Tracking Status */}
-                          <div className="absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg">
-                            {/* <p className='text-sm text-gray-700 font-semibold'>Order ID: {order._id}</p> */}
-                            <p className="text-sm text-blue-600 font-semibold">
-                              Tracking Status: {order.deliveryStatus}
-                            </p>
-                          </div>
+      {orderData ? (
+        <div className="w-full max-w-3xl">
+          {orderData.length > 0 ? (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+              {orderData.map((order) => (
+                <div key={order._id} className="mb-6 relative">
+                  <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
+                    {order.products.map((product) => (
+                      <div
+                        key={product._id}
+                        className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm"
+                      >
+                        <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
+                          <img
+                            src={product.image[0]}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="ml-4 flex flex-col justify-between">
+                          <h3 className="text-lg font-semibold text-gray-800">
+                            {product.name}
+                          </h3>
+                          <h4 className="text-sm text-gray-600">
+                            {product.category}
+                          </h4>
+                          <p className="text-sm text-gray-700">
+                            <strong>Quantity:</strong> {product.quantity}
+                          </p>
+                          <p className="text-sm text-gray-700">
+                            <strong>Total Cost:</strong>{" "}
+                            <span className="font-bold text-gray-800">
+                              {"₹" + product.price * product.quantity}
+                            </span>
+                          </p>
+                          <p className="text-sm flex items-center">
+                            <strong>Status:</strong>{" "}
+                            <span className="text-green-700 font-semibold flex items-center">
+                              {/* {getStatusIcon(order.status)}{" "} */}
+                              <span className="ml-2">{order.status}</span>
+                            </span>
+                          </p>
                         </div>
                       </div>
                     ))}
+
+                    {/* Order ID and Tracking Status */}
+                    <div className="absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg">
+                      <p className="text-sm text-blue-600 font-semibold flex items-center">
+                        {getStatusIcon(order.deliveryStatus)}
+                        <span className="ml-2">Tracking Status: {order.deliveryStatus}</span>
+                      </p>
+                    </div>
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center">
-                    <BsBagXFill
-                      style={{ fontSize: "6rem" }}
-                      className="text-sky-600 text-6xl mb-2"
-                    />
-                    <p>No orders found!</p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center">
-                <BsBagXFill
-                  style={{ fontSize: "6rem" }}
-                  className="text-sky-600 text-6xl mb-2"
-                />
-                <p>No order found!</p>
-              </div>
-            )}
-          </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+              <p>No orders found!</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center">
+          <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+          <p>No order found!</p>
+        </div>
+      )}
+    </div>
         );
       case "Address":
         return (

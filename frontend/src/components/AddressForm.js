@@ -25,7 +25,7 @@ const AddressForm = ({ address, setAddress }) => {
                 name="street"
                 value={address.street}
                 onChange={handleOnChange}
-                className="p-3 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
                 required
               />
             </div>
@@ -41,7 +41,7 @@ const AddressForm = ({ address, setAddress }) => {
                 name="city"
                 value={address.city}
                 onChange={handleOnChange}
-                className="p-3 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
                 required
               />
             </div>
@@ -59,7 +59,7 @@ const AddressForm = ({ address, setAddress }) => {
                 name="state"
                 value={address.state}
                 onChange={handleOnChange}
-                className="p-3 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
                 required
               />
             </div>
@@ -75,7 +75,7 @@ const AddressForm = ({ address, setAddress }) => {
                 name="zip"
                 value={address.zip}
                 onChange={handleOnChange}
-                className="p-3 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
                 required
               />
             </div>
