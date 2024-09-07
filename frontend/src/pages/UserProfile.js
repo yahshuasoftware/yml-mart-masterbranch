@@ -25,7 +25,6 @@ const Profile = () => {
 
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
-  const [totalPurchasing, setTotalPurchasing] = useState(0);
 
 
   // const { totalPurchasing } = useContext(Context);
@@ -39,65 +38,10 @@ const Profile = () => {
   });
 
 
-  const resetTotalPurchasing = () => {
-    setTotalPurchasing(0);
-    console.log("Total purchasing reset to 0");
-  };
+  
 
   
 
-
-  const getTimeUntilNextFirst = () => {
-    const now = new Date();
-    const nextMonth = now.getMonth() + 1;
-    const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
-    const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
-    return firstOfNextMonth - now;
-  };
-
-
-  useEffect(() => {
-    // Function to handle the monthly reset
-    const handleMonthlyReset = () => {
-      const now = new Date();
-      const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
-
-      // Retrieve the last reset month from localStorage
-      const lastResetMonth = localStorage.getItem('lastResetMonth');
-
-      if (lastResetMonth !== currentMonthYear) {
-        if (now.getDate() === 1) {
-          resetTotalPurchasing();
-          localStorage.setItem('lastResetMonth', currentMonthYear);
-        }
-      }
-    };
-
-    // Perform the initial check on component mount
-    handleMonthlyReset();
-
-    // Schedule the next reset
-    const scheduleNextReset = () => {
-      const delay = getTimeUntilNextFirst();
-      setTimeout(() => {
-        resetTotalPurchasing();
-        const now = new Date();
-        const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
-        localStorage.setItem('lastResetMonth', currentMonthYear);
-        // Schedule the subsequent reset
-        scheduleNextReset();
-      }, delay);
-    };
-
-    scheduleNextReset();
-
-    // Cleanup function to clear timeout when component unmounts
-    return () => {
-      // If you store the timeout ID, you can clear it here
-      // Example:
-      // clearTimeout(timer);
-    };
-  }, []);
 
 
 
@@ -136,21 +80,7 @@ const Profile = () => {
         });
         // console.log(orderData[0].deliveryStatus)
 
-        if (data.orderDetail) {
-          const totalAmount = data.orderDetail
-            .filter((order) => order.status === 'paid')
-            .reduce(
-              (acc, order) =>
-                acc +
-                order.products.reduce(
-                  (acc, product) => acc + product.price * product.quantity,
-                  0
-                ),
-              0
-            );
-    
-          setTotalPurchasing(totalAmount);
-        }
+     
 
       } catch (error) {
         console.error("Error:", error);
@@ -195,7 +125,7 @@ const Profile = () => {
           <div>
             <div className="flex  justify-between">
               <h1 className="text-2xl font-bold mb-4">Profile Information</h1>
-              <h3>Your total purchasing:₹{totalPurchasing} </h3>
+              {/* <h3>Your total purchasing:₹{totalPurchasing} </h3> */}
             </div>
             <div className="flex flex-col items-center mb-6">
               <div className="relative inline-block">
