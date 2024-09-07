@@ -59,11 +59,9 @@ const VerticalCardProduct = ({ category, heading }) => {
                 <button className='bg-white shadow-md rounded-full p-1 absolute right-0 text-lg hidden md:block' onClick={scrollRight}>
                     <FaAngleRight />
                 </button>
-                <div/>
+        <div/>
                 <div/>
                 
-
-            
        <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none transition-all'>
        {
 

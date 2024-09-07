@@ -16,6 +16,40 @@ const AddressForm = ({ address, setAddress }) => {
       <div className="grid gap-6">
         <div className="flex gap-4">
           <div className="w-1/2">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Name:</label>
+            <div className="relative">
+              <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input 
+                type="text"
+                id="name"
+                name="name"
+                value={address.name}
+                onChange={handleOnChange}
+                className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                required
+              />
+            </div>
+          </div>
+          <div className="w-1/2">
+            <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-700 mb-2">Mobile No:</label>
+            <div className="relative">
+              <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input 
+                type="Number"
+                id="mobileNo"
+                name="mobileNo"
+                value={address.mobileNo}
+                onChange={handleOnChange}
+                className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+                required
+              />
+            </div>
+          </div>
+          </div>
+
+          <div className="flex gap-4">
+
+          <div className="w-1/2">
             <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-2">Street:</label>
             <div className="relative">
               <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -30,7 +64,7 @@ const AddressForm = ({ address, setAddress }) => {
               />
             </div>
           </div>
-
+        
           <div className="w-1/2">
             <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">City:</label>
             <div className="relative">
@@ -47,6 +81,7 @@ const AddressForm = ({ address, setAddress }) => {
             </div>
           </div>
         </div>
+       
 
         <div className="flex gap-4">
           <div className="w-1/2">
@@ -66,7 +101,7 @@ const AddressForm = ({ address, setAddress }) => {
           </div>
 
           <div className="w-1/2">
-            <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-2">ZIP Code:</label>
+            <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-2">Pincode No:</label>
             <div className="relative">
               <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input 

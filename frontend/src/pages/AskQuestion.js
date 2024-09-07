@@ -21,9 +21,9 @@ const AskQuestion = () => {
       const handleSubmit = (e) => {
         e.preventDefault();
     
-        const serviceID = 'YOUR_SERVICE_ID';
-        const templateID = 'YOUR_TEMPLATE_ID';
-        const userID = 'YOUR_USER_ID';
+        const serviceID = 'service_rkhrgav';
+        const templateID = 'template_uz7wsuw';
+        const userID = 'ZtK6JUqPrOpOKaDoa';
     
         emailjs.send(serviceID, templateID, formData, userID)
           .then((response) => {
@@ -43,7 +43,7 @@ const AskQuestion = () => {
     <div class="text-center ">
       <h2 class="text-sm title-font text-gray-500 tracking-widest">Need Help?</h2>
       <h1 class="text-gray-900 text-2xl sm:text-3xl title-font font-medium mb-4">Ask a Question</h1>
-      <p class="leading-relaxed max-w-2xl mx-auto text-base sm:text-lg">Feel free to reach out with your queries. Our team is here to assist you.</p>
+      {/* <p class="leading-relaxed max-w-2xl mx-auto text-base sm:text-lg">Feel free to reach out with your queries. Our team is here to assist you.</p> */}
     </div>
     <div class="lg:w-4/5 mx-auto flex flex-wrap items-center">
       <img alt="Ask a Question" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="ask1.png" />
@@ -82,7 +82,7 @@ const AskQuestion = () => {
               <label htmlFor="message" className="leading-7 text-sm text-gray-600">Question</label>
               <textarea
                 id="message"
-                name="question"
+                name="message"
                 value={formData.message}
                 onChange={handleChange}
                 className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
