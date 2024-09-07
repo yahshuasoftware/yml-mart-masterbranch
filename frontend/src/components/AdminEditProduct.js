@@ -227,7 +227,7 @@ const AdminEditProduct = ({
                         className='p-2 bg-slate-100 border rounded'
                         required
                     />
-                    <label htmlFor='commissionPrice' className='mt-3'>Commission Price :</label>
+                    {/* <label htmlFor='commissionPrice' className='mt-3'>Commission Price :</label>
                     <input 
                     type='number' 
                     id='commissionPrice' 
@@ -237,7 +237,7 @@ const AdminEditProduct = ({
                     onChange={handleOnChange}
                     className='p-2 bg-slate-100 border rounded'
                     required
-                    />
+                    /> */}
 
                     <label htmlFor='description' className='mt-3'>Description :</label>
                     <textarea 
