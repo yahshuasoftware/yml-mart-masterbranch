@@ -35,9 +35,7 @@ const Header = () => {
       toast.success(data.message);
       dispatch(setUserDetails(null));
       navigate("/");
-    }
-
-    if (data.error) {
+    } else if (data.error) {
       toast.error(data.message);
     }
   };
@@ -45,22 +43,15 @@ const Header = () => {
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearch(value);
-
-    if (value) {
-      navigate(`/search?q=${value}`);
-    } else {
-      navigate("/search");
-    }
+    navigate(value ? `/search?q=${value}` : "/search");
   };
 
   return (
     <header className="h-16 shadow-md bg-white fixed w-full z-40">
       <div className="h-full container mx-auto flex items-center px-6 justify-between">
-        <div>
-          <Link to="/">
-            <img src="logo.png" alt="Logo" className="w-32" />
-          </Link>
-        </div>
+        <Link to="/">
+          <img src="logo.png" alt="Logo" className="w-32" />
+        </Link>
 
         <div className="hidden lg:flex items-center w-full max-w-md border border-gray-300 rounded-md pl-4 focus-within:shadow-md">
           <input
@@ -76,87 +67,77 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-6">
-        {user?._id && (
+          {user?._id && (
             <>
-                         <Link
-        to="/businessprofile"
-        className="px-3 py-1 text-sm rounded border
-          border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300'
-             border-gray-400 text-gray-400 bg-transparent cursor-not-allowed"
-      >
-        B Profile
-      </Link>
+              <Link
+                to="/businessprofile"
+                className="px-3 py-1 text-sm rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
+              >
+                B Profile
+              </Link>
               <Link
                 to="/refer"
                 className="px-3 py-1 text-sm rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
               >
                 Refer
               </Link>
- 
             </>
           )}
-        <div className="relative">
 
-          
-  {user?._id && (
-    <div
-      className="text-3xl cursor-pointer flex items-center justify-center"
-      onClick={() => setMenuDisplay((prev) => !prev)}
-    >
-      {user?.profilePic ? (
-        <img
-          src={user?.profilePic}
-          className="w-10 h-10 rounded-full object-cover"
-          alt={user?.name}
-        />
-      ) : (
-        <FaRegCircleUser className="text-gray-700" />
-      )}
-    </div>
-  )}
+          <div className="relative">
+            {user?._id && (
+              <div
+                className="text-3xl cursor-pointer flex items-center justify-center"
+                onClick={() => setMenuDisplay((prev) => !prev)}
+              >
+                {user?.profilePic ? (
+                  <img
+                    src={user?.profilePic}
+                    className="w-10 h-10 rounded-full object-cover"
+                    alt={user?.name}
+                  />
+                ) : (
+                  <FaRegCircleUser className="text-gray-700" />
+                )}
+              </div>
+            )}
 
-  <div
-    className={`absolute bg-white left-1/2 transform -translate-x-1/2 mt-2 p-2 shadow-lg rounded z-10 transition-transform duration-300 ease-out origin-top ${
-      menuDisplay ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-3'
-    }`}
-  >
-     
-    <nav>
-      
-
-      {user?.role === ROLE.SUPER_ADMIN && (
-        <Link
-          to={"/super-admin-panel/all-users"}
-          className="block whitespace-nowrap hover:bg-slate-100 p-2"
-          onClick={() => setMenuDisplay(false)}
-        >
-          Super Admin Panel
-        </Link>
-      )}
-      {user?.role === ROLE.ADMIN && (
-        <Link
-          to={"/admin-panel/all-products"}
-          className="block whitespace-nowrap hover:bg-slate-100 p-2"
-          onClick={() => setMenuDisplay(false)}
-        >
-          Admin Panel
-        </Link>
-      )}
-      {user?.role === ROLE.GENERAL && (
-        <Link
-          to={"/user-details"}
-          className="block whitespace-nowrap hover:bg-slate-100 p-2"
-          onClick={() => setMenuDisplay(false)}
-        >
-          Profile
-        </Link>
-      )}
-    </nav>
-  </div>
-</div>
-
-
-
+            <div
+              className={`absolute bg-white left-1/2 transform -translate-x-1/2 mt-2 p-2 shadow-lg rounded z-10 transition-transform duration-300 ease-out origin-top ${
+                menuDisplay ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
+              }`}
+            >
+              <nav>
+                {user?.role === ROLE.SUPER_ADMIN && (
+                  <Link
+                    to="/super-admin-panel/all-users"
+                    className="block whitespace-nowrap hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(false)}
+                  >
+                    Super Admin Panel
+                  </Link>
+                )}
+                {user?.role === ROLE.ADMIN && (
+                  <Link
+                    to="/admin-panel/all-products"
+                    className="block whitespace-nowrap hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(false)}
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                {user?.role === ROLE.GENERAL && (
+                  <Link
+                    to="/user-details"
+                    className="block whitespace-nowrap hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(false)}
+                  >
+                    Profile
+                  </Link>
+                )}
+              </nav>
+            </div>
+          </div>
 
           {user?._id && (
             <Link to="/cart" className="text-2xl relative">
@@ -166,8 +147,6 @@ const Header = () => {
               </div>
             </Link>
           )}
-
-         
 
           <div>
             {user?._id ? (

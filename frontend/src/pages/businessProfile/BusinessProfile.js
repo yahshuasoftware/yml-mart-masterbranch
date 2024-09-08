@@ -11,6 +11,8 @@ const BusinessProfile = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [usersData, setUsersData] = useState(null);
+  const [totalPurchasing, setTotalPurchasing] = useState(0);
+
 
   const [orderData, setOrderData] = useState([]);
   const [totalBusiness, setTotalBusiness] = useState(0);
@@ -85,10 +87,110 @@ const BusinessProfile = () => {
       } catch (error) {
         console.error("Error fetching order data:", error);
       }
+
+
+    };
+
+  //   const resetTotalPurchasing = () => {
+  //     setTotalPurchasing(0);
+  //     console.log("Total purchasing reset to 0");
+  //   };
+
+    
+  // const getTimeUntilNextFirst = () => {
+  //   const now = new Date();
+  //   const nextMonth = now.getMonth() + 1;
+  //   const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
+  //   const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
+  //   return firstOfNextMonth - now;
+  // };
+
+
+  // useEffect(() => {
+  //   // Function to handle the monthly reset
+  //   const handleMonthlyReset = () => {
+  //     const now = new Date();
+  //     const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
+
+  //     // Retrieve the last reset month from localStorage
+  //     const lastResetMonth = localStorage.getItem('lastResetMonth');
+
+  //     if (lastResetMonth !== currentMonthYear) {
+  //       if (now.getDate() === 1) {
+  //         resetTotalPurchasing();
+  //         localStorage.setItem('lastResetMonth', currentMonthYear);
+  //       }
+  //     }
+  //   };
+
+  //   // Perform the initial check on component mount
+  //   handleMonthlyReset();
+
+  //   // Schedule the next reset
+  //   const scheduleNextReset = () => {
+  //     const delay = getTimeUntilNextFirst();
+  //     setTimeout(() => {
+  //       resetTotalPurchasing();
+  //       const now = new Date();
+  //       const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
+  //       localStorage.setItem('lastResetMonth', currentMonthYear);
+  //       // Schedule the subsequent reset
+  //       scheduleNextReset();
+  //     }, delay);
+  //   };
+
+  //   scheduleNextReset();
+
+  //   // Cleanup function to clear timeout when component unmounts
+  //   return () => {
+  //     // If you store the timeout ID, you can clear it here
+  //     // Example:
+  //     // clearTimeout(timer);
+  //   };
+  // }, []);
+
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(SummaryApi.current_user.url,{
+          method : SummaryApi.current_user.method,
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log(data)
+       
+
+        if (data.orderDetail) {
+          const totalAmount = data.orderDetail
+            .filter((order) => order.status === 'paid')
+            .reduce(
+              (acc, order) =>
+                acc +
+                order.products.reduce(
+                  (acc, product) => acc + product.price * product.quantity,
+                  0
+                ),
+              0
+            );
+    
+          setTotalPurchasing(totalAmount);
+        }
+
+      } catch (error) {
+        console.error("Error:", error);
+      }
     };
     
 
-    // fetchUserData();
+    fetchUserData();
     fetchOrderData();
   }, []);
 
@@ -141,8 +243,8 @@ const BusinessProfile = () => {
                     <thead className="bg-gray-100 border-b border-gray-200">
                         <tr>
                             <th className="py-3 px-4 text-left text-gray-600 font-semibold">Name</th>
-                            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Email</th>
-                            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Mobile No</th>
+                            {/* <th className="py-3 px-4 text-left text-gray-600 font-semibold">Email</th>
+                            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Mobile No</th> */}
                             <th className="py-3 px-4 text-left text-gray-600 font-semibold">Created At</th>
                         </tr>
                     </thead>
@@ -151,8 +253,8 @@ const BusinessProfile = () => {
                         {usersData.map((referral, index) => (
                             <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
                                 <td className="py-3 px-4 text-gray-700">{referral.name}</td>
-                                <td className="py-3 px-4 text-gray-700">{referral.email}</td>
-                                <td className="py-3 px-4 text-gray-700">{referral.mobileNo}</td>
+                                {/* <td className="py-3 px-4 text-gray-700">{referral.email}</td>
+                                <td className="py-3 px-4 text-gray-700">{referral.mobileNo}</td> */}
                                 <td className="py-3 px-4 text-gray-700">{moment(referral?.createdAt).format('LL')}</td>
                             </tr>
                         ))}
@@ -163,8 +265,7 @@ const BusinessProfile = () => {
             <div className="text-center text-gray-500">No referrals available.</div>
         )}
     </div>
-      case 'Business Record':
-        return <div className="p-4">Transactions Content...</div>;
+   
       default:
         return <div className="p-4">Select an item to view details</div>;
     }
@@ -207,8 +308,8 @@ const BusinessProfile = () => {
           <p className="text-xl">₹{totalIntensive}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h3 className="text-lg font-semibold">Other Info</h3>
-          <p className="text-xl">Details...</p>
+          <h3 className="text-lg font-semibold">My Purchasing</h3>
+          <p className="text-xl">₹{totalPurchasing}</p>
         </div>
       </div>
       <button onClick={withdraw} className='h-10 w-50 mb-6 bg-red-500 text-white rounded-md mt-5 px-5'>Withdraw Balance</button>
@@ -256,19 +357,7 @@ const BusinessProfile = () => {
               Orders
             </button>
           </li>
-          <li
-            className={activeSection === 'Business' ? 'font-bold text-sky-600' : ''}
-          >
-            <button
-              onClick={() => {
-                setActiveSection('Business');
-                if (sidebarOpen) toggleSidebar(); // Close sidebar on mobile
-              }}
-              className="text-lg"
-            >
-              Business
-            </button>
-          </li>
+          
         
           <li
             className={activeSection === 'Business Record' ? 'font-bold text-sky-600' : ''}

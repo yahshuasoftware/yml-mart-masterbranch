@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
 const addressSchema = new mongoose.Schema({
+    name : String,
+    mobileNo : Number,
     street: String,
     city: String,
     state: String,
@@ -36,7 +38,7 @@ const userSchema = new mongoose.Schema({
         required : true
     },
     mobileNo: Number,
-    address: addressSchema,
+    address: [addressSchema],
     password : String,
     profilePic : String,
     role : String,

@@ -10,6 +10,8 @@ import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
+import { IoIosAddCircle } from "react-icons/io";
+
 import Context from "../context/index";
 import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorcycle } from "react-icons/fa";import { MdLocalShipping, MdCancel } from "react-icons/md";
 // import { BsBagXFill } from "react-icons/bs";
@@ -25,13 +27,24 @@ const Profile = () => {
 
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
-  const [totalPurchasing, setTotalPurchasing] = useState(0);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
 
 
   // const { totalPurchasing } = useContext(Context);
+  const handleAddNewAddress = () => {
+    // Toggle the form's visibility
+    setShowAddressForm((prevState) => !prevState);
 
+    // Reset the address only when opening the form
+    if (!showAddressForm) {
+      setAddress({ name:"", mobileNo : "",street: "", city: "", state: "", zip: "" });
+    }
+  };
 
   const [address, setAddress] = useState({
+    name:"", 
+    mobileNo : "",
     street: "",
     city: "",
     state: "",
@@ -39,71 +52,10 @@ const Profile = () => {
   });
 
 
-  const resetTotalPurchasing = () => {
-    setTotalPurchasing(0);
-    console.log("Total purchasing reset to 0");
-  };
-
-  
-
-
-  const getTimeUntilNextFirst = () => {
-    const now = new Date();
-    const nextMonth = now.getMonth() + 1;
-    const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
-    const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
-    return firstOfNextMonth - now;
-  };
-
-
-  useEffect(() => {
-    // Function to handle the monthly reset
-    const handleMonthlyReset = () => {
-      const now = new Date();
-      const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
-
-      // Retrieve the last reset month from localStorage
-      const lastResetMonth = localStorage.getItem('lastResetMonth');
-
-      if (lastResetMonth !== currentMonthYear) {
-        if (now.getDate() === 1) {
-          resetTotalPurchasing();
-          localStorage.setItem('lastResetMonth', currentMonthYear);
-        }
-      }
-    };
-
-    // Perform the initial check on component mount
-    handleMonthlyReset();
-
-    // Schedule the next reset
-    const scheduleNextReset = () => {
-      const delay = getTimeUntilNextFirst();
-      setTimeout(() => {
-        resetTotalPurchasing();
-        const now = new Date();
-        const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
-        localStorage.setItem('lastResetMonth', currentMonthYear);
-        // Schedule the subsequent reset
-        scheduleNextReset();
-      }, delay);
-    };
-
-    scheduleNextReset();
-
-    // Cleanup function to clear timeout when component unmounts
-    return () => {
-      // If you store the timeout ID, you can clear it here
-      // Example:
-      // clearTimeout(timer);
-    };
-  }, []);
-
-
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    uploadAddress(address, setUserData);
+    await uploadAddress(address, setUserData); // uploadAddress updates the userData with the new address
+    setShowAddressForm(false);  // Hide form after submission
   };
 
 
@@ -125,32 +77,23 @@ const Profile = () => {
         const data = await response.json();
         console.log(data)
         setUserData(data.data);
+        console.log(data.data)
+        
+        
 
         setOrderData(data.orderDetail);
 
-        setAddress({
-          street: data.data.address?.street || "",
-          city: data.data.address?.city || "",
-          state: data.data.address?.state || "",
-          zip: data.data.address?.zip || "",
-        });
-        // console.log(orderData[0].deliveryStatus)
+        // setAddress({
+        //   name: data.data.address?.name,
+        //   mobile:data.data.address?.mobile
+        //   street: data.data.address?.street || "",
+        //   city: data.data.address?.city || "",
+        //   state: data.data.address?.state || "",
+        //   zip: data.data.address?.zip || "",
+        // });
+        console.log(orderData[0].deliveryStatus)
 
-        if (data.orderDetail) {
-          const totalAmount = data.orderDetail
-            .filter((order) => order.status === 'paid')
-            .reduce(
-              (acc, order) =>
-                acc +
-                order.products.reduce(
-                  (acc, product) => acc + product.price * product.quantity,
-                  0
-                ),
-              0
-            );
-    
-          setTotalPurchasing(totalAmount);
-        }
+     
 
       } catch (error) {
         console.error("Error:", error);
@@ -195,7 +138,7 @@ const Profile = () => {
           <div>
             <div className="flex  justify-between">
               <h1 className="text-2xl font-bold mb-4">Profile Information</h1>
-              <h3>Your total purchasing:₹{totalPurchasing} </h3>
+              {/* <h3>Your total purchasing:₹{totalPurchasing} </h3> */}
             </div>
             <div className="flex flex-col items-center mb-6">
               <div className="relative inline-block">
@@ -339,7 +282,49 @@ const Profile = () => {
         return (
           <div>
             <h1 className="text-2xl font-bold mb-4">Address</h1>
-            <div className="bg-white p-6 rounded-lg shadow-md">
+
+            <div className="flex items-center mt-4">
+        <IoIosAddCircle className="text-sky-500 text-xl" />
+        <button
+          className="ml-2 text-blue-500 hover:text-blue-700"
+          onClick={handleAddNewAddress}
+        >
+          {showAddressForm ? "Cancel" : "Add New Address"}
+        </button>
+      </div>           
+      {showAddressForm && (
+        <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
+          <AddressForm address={address} setAddress={setAddress} />
+          <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]">
+            Add New Address
+          </button>
+        </form>
+      )} 
+      <div className="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+  {userData.address.length > 0 ? (
+    userData.address.map((addr, index) => (
+      <div
+        key={index}
+        className="p-6 bg-white shadow-md rounded-lg border border-gray-300"
+      >
+        <p className="text-gray-800">
+          <strong>{addr.name}</strong>
+          <br />
+          <span>{addr.mobileNo}</span>
+        </p>
+        <p className="text-gray-700 mt-2">
+          {addr.street}, {addr.city}, <br />
+          {addr.state} - <strong>{addr.zip}</strong>
+        </p>
+      </div>
+    ))
+  ) : (
+    <p className="text-red-500">No addresses provided.</p>
+  )}
+</div>
+
+      
+      {/* <div className="bg-white p-6 rounded-lg shadow-md">
               {userData.address ? (
                 <div className="flex flex-col lg:flex-row justify-between items-center bg-slate-50 p-4 rounded-md mb-6 shadow-sm">
                   <div className="text-lg">
@@ -375,7 +360,7 @@ const Profile = () => {
                   Update Address
                 </button>
               </form>
-            </div>
+            </div> */}
           </div>
         );
       // case "Track Order":
