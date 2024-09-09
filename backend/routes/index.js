@@ -41,6 +41,8 @@ router.post("/upload-product", require('../middleware/authToken'), require('../c
 router.get("/get-product", require('../controller/product/getProduct'));
 router.post("/update-product", require('../middleware/authToken'), require('../controller/product/updateProduct'));
 router.delete("/delete-product", require('../middleware/authToken'), require('../controller/product/deleteProduct'));
+router.delete("/delete-address", require('../middleware/authToken'), require('../controller/product/deleteAddress'));
+
 router.get("/get-categoryProduct", require('../controller/product/getCategoryProductOne'));
 router.post("/category-product", require('../controller/product/getCategoryWiseProduct'));
 router.post("/product-details", require('../controller/product/getProductDetails'));

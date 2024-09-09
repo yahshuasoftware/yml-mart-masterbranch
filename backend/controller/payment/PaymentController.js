@@ -8,7 +8,7 @@ const razorpay = new Razorpay({
 });
 
 const createOrder = async (req, res) => {
-    const { amount, currency, receipt, userId, products,order_id } = req.body;
+    const { amount, currency, receipt, userId, products,order_id, deliveryAddress } = req.body;
 
     try {
         const options = {
@@ -34,6 +34,7 @@ const createOrder = async (req, res) => {
             currency: order.currency,
             receipt: order.receipt,
             userId: userId,
+            deliveryAddress : deliveryAddress
         });
         
         await newOrder.save();

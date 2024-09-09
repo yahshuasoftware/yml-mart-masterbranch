@@ -69,6 +69,10 @@ const SummaryApi = {
         url: `${backendDomin}/api/delete-product`,
         method: 'delete' 
       },
+      deleteAddress:{
+        url: `${backendDomin}/api/delete-address`,
+        method: 'delete' 
+      },
     categoryProduct : {
         url : `${backendDomin}/api/get-categoryProduct`,
         method : 'get'

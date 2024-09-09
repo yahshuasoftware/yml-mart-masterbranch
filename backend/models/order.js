@@ -1,5 +1,13 @@
 
 const mongoose = require('mongoose');
+const deliveryAddressSchema = new mongoose.Schema({
+    name : String,
+    mobileNo : Number,
+    street: String,
+    city: String,
+    state: String,
+    zip: String
+})
 
 const orderSchema = new mongoose.Schema({
    order_id: { type: String, required: true },
@@ -22,7 +30,8 @@ const orderSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // Assuming you have a User model
     // name:{type:String},
-    deliveryStatus:{type: String, default:'Ordered'}
+    deliveryStatus:{type: String, default:'Ordered'},
+    deliveryAddress:deliveryAddressSchema
     
 });
 

@@ -3,8 +3,9 @@ import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
+
 import { useSelector } from "react-redux";
-import { MdModeEditOutline } from "react-icons/md";
+import { MdModeEditOutline,MdDelete } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
@@ -100,8 +101,40 @@ const Profile = () => {
       }
     };
 
+
+
     fetchUserData();
   }, []);
+
+  const deleteAddress = async (id, userId) => {
+    try {
+      const response = await fetch(SummaryApi.deleteAddress.url, {
+        method: SummaryApi.deleteAddress.method,
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          AddressId: id,
+          userId: userId,
+        }),
+      });
+  
+      const responseData = await response.json();
+      if (responseData.success) {
+        // Ensure `address` field is correctly updated in the state
+        setUserData((prevData) => ({
+          ...prevData,
+          address: responseData.data?.address || [], // Ensure address is always an array
+        }));
+        alert("Address deleted successfully");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Failed to delete address");
+    }
+  };
+  
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -301,15 +334,23 @@ const Profile = () => {
         </form>
       )} 
       <div className="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-  {userData.address.length > 0 ? (
+      {userData?.address?.length > 0 ? (
     userData.address.map((addr, index) => (
       <div
         key={index}
-        className="p-6 bg-white shadow-md rounded-lg border border-gray-300"
+        className="relative p-6 bg-white shadow-md rounded-lg border border-gray-300 mb-4"
       >
-        <p className="text-gray-800">
-          <strong>{addr.name}</strong>
-          <br />
+        <div className="flex justify-between">
+          <strong className="text-gray-800">{addr.name}</strong>
+          <div
+            className="absolute top-2 right-2 text-red-500 cursor-pointer p-2 hover:text-white hover:bg-red-600 hover:rounded-full"
+            onClick={() => deleteAddress(addr._id, userData._id)}
+          >
+            <MdDelete fontSize={18} />
+          </div>
+        </div>
+
+        <p className="text-gray-800 mt-4">
           <span>{addr.mobileNo}</span>
         </p>
         <p className="text-gray-700 mt-2">
@@ -318,9 +359,12 @@ const Profile = () => {
         </p>
       </div>
     ))
-  ) : (
-    <p className="text-red-500">No addresses provided.</p>
-  )}
+) : (
+  <div className="flex justify-center items-center p-2">
+    <p className="text-red-500 text-md p">No addresses provided.</p>
+  </div>
+)}
+
 </div>
 
       

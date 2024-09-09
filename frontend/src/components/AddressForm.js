@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { FaMapMarkerAlt, FaCity, FaRegAddressCard, FaEnvelope } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaCity, FaRegAddressCard, FaEnvelope, FaMobileAlt  } from 'react-icons/fa';
+import { SiNamecheap } from "react-icons/si";
+
 
 const AddressForm = ({ address, setAddress }) => {
   const handleOnChange = (e) => {
@@ -18,7 +20,7 @@ const AddressForm = ({ address, setAddress }) => {
           <div className="w-1/2">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Name:</label>
             <div className="relative">
-              <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <SiNamecheap className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input 
                 type="text"
                 id="name"
@@ -33,7 +35,7 @@ const AddressForm = ({ address, setAddress }) => {
           <div className="w-1/2">
             <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-700 mb-2">Mobile No:</label>
             <div className="relative">
-              <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FaMobileAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input 
                 type="Number"
                 id="mobileNo"

@@ -19,27 +19,35 @@ const Cart = () => {
   const [finalAmount, setFinalAmount] = useState(0);
   const [discountPrice, setDiscountPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0); 
-
+  const [selectedAddress, setSelectedAddress] = useState(user?.address[0]); 
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [showAllAddresses, setShowAllAddresses] = useState(false);
 
   const [userData, setUserData] = useState({});
   const [address, setAddress] = useState({});
-  const [showAddressForm, setShowAddressForm] = useState(false);
 
   const handleAddNewAddress = () => {
     // Toggle the form's visibility
     setShowAddressForm((prevState) => !prevState);
 
     // Reset the address only when opening the form
-    if (!showAddressForm) {
-      setAddress({ street: "", city: "", state: "", zip: "" });
-    }
+    // if (!showAddressForm) {
+    //   setAddress({ street: "", city: "", state: "", zip: "" });
+    // }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    uploadAddress(address, setUserData, setShowAddressForm, setAddress);
-    setShowAddressForm(false); // Hide the form after submission
+  const handleSelectAddress = (address) => {
+    setSelectedAddress(address);
+    setShowAllAddresses(false); // Hide the list once an address is selected
   };
+
+
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   uploadAddress(address, setUserData, setShowAddressForm, setAddress);
+  //   setShowAddressForm(false); // Hide the form after submission
+  // };
 
   const fetchUserDetails = async () => {
     try {
@@ -56,6 +64,7 @@ const Cart = () => {
 
         setIsLoggedIn(true);
         setHasAddress(!!result.data.address);
+        setSelectedAddress(result.data.address[0])
       } else {
         setIsLoggedIn(false);
         setHasAddress(false);
@@ -109,8 +118,16 @@ const Cart = () => {
   
       // Set states
       setTotalPrice(total);
-      setDiscountPrice(discount);
-      setFinalAmount(total - discount);
+      if(user?.refferal?.refferredbycode){
+        setDiscountPrice(discount);
+        alert("yes have a refferbycode")
+      }else setDiscountPrice(0);
+
+      // alert(discountPrice)
+
+      
+      setFinalAmount(total - discountPrice);
+      alert(finalAmount)
     }
   }, [data, loading]);
  
@@ -187,8 +204,10 @@ const Cart = () => {
       context.fetchUserAddToCart();
     }
   };
+
+  
   // razorepay
-  const handlePayment = async () => {
+  const handlePayment = async (finalAddress) => {
     if(!hasAddress){
       alert("Add Delivery Address")
     }else{
@@ -207,6 +226,7 @@ const Cart = () => {
               receipt: `receipt_${Date.now()}`,
               products: data,
               userId: data[0].userId,
+              deliveryAddress : finalAddress
             }),
           }
         );
@@ -306,48 +326,65 @@ const Cart = () => {
 
     {/* Delivery Address */}
     <div className="mb-6 p-6 border-b border-gray-200">
-      <div className="flex items-center gap-2 mb-3">
+
+    <div className="flex items-center gap-2 mb-3">
         <h3 className="text-xl font-semibold text-gray-800">Delivery Address</h3>
         <MdCheckCircle className="text-green-500 text-xl" />
+        
       </div>
-      {hasAddress ? (
-        <div className="text-gray-700">
+    {selectedAddress ? (
+        <div className="text-gray-700 flex gap-10">
           <p>
-             {user?.address?.street}, {user?.address?.city}, <br />
-             {user?.address?.state}, <strong>{user?.address?.zip}</strong>
-
-           
+          {selectedAddress?.name}, {selectedAddress?.mobileNo}, <br />
+            {selectedAddress?.street}, {selectedAddress?.city}, <br />
+            {selectedAddress?.state}, <strong>{selectedAddress?.zip}</strong>
           </p>
-        </div>
+          </div>
       ) : (
         <p className="text-red-500">No address provided.</p>
       )}
-      <div className="flex items-center mt-4">
-        <IoIosAddCircle className="text-sky-500 text-xl" />
+          <div className="flex items-center mt-4">
         <button
-          className="ml-2 text-blue-500 hover:text-blue-700"
-          onClick={handleAddNewAddress}
+          className="ml-2  text-sky-600 hover:text-sky-700"
+          onClick={() => setShowAllAddresses(!showAllAddresses)}
         >
-          {showAddressForm ? "Cancel" : "Add New Address"}
+          {showAllAddresses ? 'Hide Addresses' : 'Change Address'}
         </button>
       </div>
 
-      {showAddressForm && (
-        <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
-          <AddressForm address={address} setAddress={setAddress} />
-          <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]">
-            Update Address
-          </button>
-        </form>
+      {showAllAddresses && (
+        <div className="mt-4">
+          {user?.address?.length > 0 ? (
+            user?.address.map((addr, index) => (
+              <div key={index} className="p-4 mb-4 border rounded-lg bg-gray-100">
+                <p className="text-gray-700">
+                {addr?.name}, {addr?.mobileNo}, <br />
+                  {addr?.street}, {addr?.city}, <br />
+                  {addr?.state} - <strong>{addr?.zip}</strong>
+                </p>
+                <button
+                  className="mt-2 text-green-500 hover:text-green-700"
+                  onClick={() => handleSelectAddress(addr)}
+                >
+                  Select
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="text-red-500">No addresses available.</p>
+          )}
+        </div>
       )}
-    </div>
+              
+
+      
+      </div>
     {/* Payment Section */}
     <div className="p-6">
       <h3 className="text-xl font-semibold mb-4 text-gray-800">Payment</h3>
       <button
         className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"
-        onClick={handlePayment}
-      >
+        onClick={() => handlePayment(selectedAddress)}      >
         Proceed to Payment
       </button>
     </div>
@@ -442,10 +479,10 @@ const Cart = () => {
           <span>₹0</span>
         </div>
             <div className="flex justify-between mb-2 text-red-500">
-      <span>Discount:</span>
-      {displayINRCurrency(discountPrice)}
-    </div>
-<div className="flex justify-between  font-semibold text-gray-800">
+              <span>Discount:</span>
+              {displayINRCurrency(discountPrice)}
+            </div>
+        <div className="flex justify-between  font-semibold text-gray-800">
   <span>Total:</span>
   <span className="text-md">{ displayINRCurrency(totalPrice)} - {displayINRCurrency(discountPrice)} = {displayINRCurrency(finalAmount)}</span>
 </div>
