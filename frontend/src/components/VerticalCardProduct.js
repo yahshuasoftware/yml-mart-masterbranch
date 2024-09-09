@@ -5,20 +5,19 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
-import StarRatings from 'react-star-ratings';
 
 const VerticalCardProduct = ({ category, heading }) => {
-    const [data, setData] = useState([]); 
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [scrollPosition, setScrollPosition] = useState(0);
     const loadingList = new Array(13).fill(null);
 
     const scrollElement = useRef();
 
     const { fetchUserAddToCart } = useContext(Context);
 
-
-
     const handleAddToCart = async (e, id) => {
+        e.stopPropagation();  // Stop event propagation to prevent Link navigation
         await addToCart(e, id);
         fetchUserAddToCart();
     };
@@ -27,10 +26,10 @@ const VerticalCardProduct = ({ category, heading }) => {
         setLoading(true);
         try {
             const categoryProduct = await fetchCategoryWiseProduct(category);
-            setData(Array.isArray(categoryProduct?.data) ? categoryProduct.data : []); 
+            setData(Array.isArray(categoryProduct?.data) ? categoryProduct.data : []);
         } catch (error) {
-            console.error("Failed to fetch category-wise products:", error); 
-            setData([]); 
+            console.error('Failed to fetch category-wise products:', error);
+            setData([]);
         } finally {
             setLoading(false);
         }
@@ -38,92 +37,102 @@ const VerticalCardProduct = ({ category, heading }) => {
 
     useEffect(() => {
         fetchData();
-    }, [category]); 
+    }, [category]);
 
+    // Handle right scroll
     const scrollRight = () => {
-        scrollElement.current.scrollLeft += 300;
+        const scrollAmount = 300;
+        scrollElement.current.scrollLeft += scrollAmount;
+        setScrollPosition(scrollElement.current.scrollLeft + scrollAmount); // Update the scroll position
     };
 
+    // Handle left scroll
     const scrollLeft = () => {
-        scrollElement.current.scrollLeft -= 300;
+        const scrollAmount = 300;
+        scrollElement.current.scrollLeft -= scrollAmount;
+        setScrollPosition(scrollElement.current.scrollLeft - scrollAmount); // Update the scroll position
     };
 
     return (
-        <div className='container mx-auto px-4 my-6 relative'>
+        <div className='container mx-auto px-10 my-6 relative'>
+            <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
 
-        <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
-        <div className='flex items-center gap-4 md:gap-6 overflow-scroll scrollbar-none transition-all' ref={scrollElement}>
-                <button className='bg-white shadow-md rounded-full p-1 absolute left-0 text-lg hidden md:block' onClick={scrollLeft}>
-                    <FaAngleLeft />
-                </button>
-                <button className='bg-white shadow-md rounded-full p-1 absolute right-0 text-lg hidden md:block' onClick={scrollRight}>
-                    <FaAngleRight />
-                </button>
-        <div/>
-                <div/>
-                
-       <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none transition-all'>
-       {
+            {/* Scroll buttons */}
+            <button
+                className='bg-white shadow-md rounded-full p-2 absolute left-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
+                onClick={scrollLeft}
+                disabled={scrollElement.current && scrollElement.current.scrollLeft <= 0} // Disable left button if at start
+            >
+                <FaAngleLeft />
+            </button>
+            <button
+                className='bg-white shadow-md rounded-full p-2 absolute right-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
+                onClick={scrollRight}
+                disabled={scrollElement.current && scrollElement.current.scrollLeft + scrollElement.current.offsetWidth >= scrollElement.current.scrollWidth} // Disable right button if at the end
+            >
+                <FaAngleRight />
+            </button>
 
-            loading ? (
-                loadingList.map((product,index)=>{
-                    return(
-                        <div className='w-full min-w-[280px]  md:min-w-[320px] max-w-[280px] md:max-w-[320px]  bg-white rounded-sm shadow '>
-                            <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse'>
-                            </div>
-                            <div className='p-4 grid gap-3'>
-                                <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 py-2 animate-pulse rounded-full bg-slate-200'></h2>
-                                <p className='capitalize text-slate-500 p-1 animate-pulse rounded-full bg-slate-200  py-2'></p>
-                                <div className='flex gap-3'>
-                                    <p className='text-red-600 font-medium p-1 animate-pulse rounded-full bg-slate-200 w-full  py-2'></p>
-                                    <p className='text-slate-500 line-through p-1 animate-pulse rounded-full bg-slate-200 w-full  py-2'></p>
-                                </div>
-                                <button className='text-sm  text-white px-3  rounded-full bg-slate-200  py-2 animate-pulse'></button>
+            {/* Products Slider */}
+            <div
+                ref={scrollElement}
+                className='flex gap-4 overflow-x-auto scrollbar-none'
+                style={{
+                    scrollBehavior: 'smooth', // Ensure smooth scrolling behavior
+                }}
+            >
+                {loading ? (
+                    loadingList.map((_, index) => (
+                        <div key={index} className='bg-white rounded-sm shadow'>
+                            <div className='bg-slate-200 h-40 p-4 flex justify-center items-center animate-pulse'></div>
+                            <div className='p-4 space-y-2'>
+                                <div className='h-4 bg-slate-200 rounded-full animate-pulse'></div>
+                                <div className='h-4 bg-slate-200 rounded-full animate-pulse'></div>
+                                <div className='h-4 bg-slate-200 rounded-full animate-pulse'></div>
                             </div>
                         </div>
-                    )
-                })
-            ) : (
-                data.map((product,index)=>{
-                    return(
-                        <Link to={"/product/"+product?._id} className='w-full min-w-[280px]  md:min-w-[320px] max-w-[280px] md:max-w-[320px]  bg-white rounded-sm shadow ' >
-                            <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
-                                <img src={product.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply'/>
+                    ))
+                ) : (
+                    data.map((product, index) => (
+                        <Link
+                            key={index}
+                            to={`/product/${product?._id}`}
+                            className='bg-white rounded-sm shadow hover:shadow-lg transition-shadow'
+                            style={{ minWidth: '200px' }} // Ensure consistent width for each product
+                        >
+                            <div className='bg-slate-200 h-40 p-4 flex justify-center items-center'>
+                                <img
+                                    src={product.productImage[0]}
+                                    className='object-contain h-full w-full hover:scale-110 transition-transform'
+                                    alt={product?.productName}
+                                />
                             </div>
-                            <div className='p-4 grid gap-3'>
-                                <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
-                                <div className="flex items-center">
-                            <StarRatings
-                                rating={4.5} // Fixed rating
-                                starRatedColor="gold"
-                                starDimension="15px"
-                                starSpacing="0px" // No space between the star and the text
-                                numberOfStars={1} // Display only one star
-                                name="rating"
-                            />
-            <span className="text-slate-500 ml-1 flex items-center">4.5</span> {/* Flexbox alignment for consistent spacing */}
-            <span className="text-slate-500 ml-1 flex items-center">(10)</span> {/* Flexbox alignment for consistent spacing */}
-        </div>
-                                <p className='capitalize text-slate-500'>{product?.category}</p>
-                                <div className='flex gap-3'>
-                                    <p className='text-red-600 font-medium'>{ displayINRCurrency(product?.sellingPrice) }</p>
-                                    <p className='text-slate-500 line-through'>{ displayINRCurrency(product?.price)  }</p>
+                            <div className='p-4 space-y-2'>
+                                <h3 className='text-sm md:text-base font-medium text-black truncate'>
+                                    {product?.productName}
+                                </h3>
+                                <div className='flex items-center justify-between'>
+                                    <p className='text-red-600 text-sm font-medium'>
+                                        {displayINRCurrency(product?.sellingPrice)}
+                                    </p>
+                                    <p className='text-slate-500 text-xs line-through'>
+                                        {displayINRCurrency(product?.price)}
+                                    </p>
                                 </div>
-                                <button className='text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-0.5 rounded-full'>
-                                Buy Now
-                            </button>
-                                <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e)=>handleAddToCart(e,product?._id)}>Add to Cart</button>
+                                <div className='flex justify-center pt-2'>
+                                    <button
+                                        className='text-sm text-black border border-black px-3 py-1 rounded-full transition-colors duration-300 hover:text-green-600 hover:border-green-600'
+                                        onClick={(e) => handleAddToCart(e, product?._id)}
+                                    >
+                                        Add to Cart
+                                    </button>
+                                </div>
                             </div>
                         </Link>
-                    )
-                })
-            )   
-        }
-       </div>
-       </div>
-        
-
-</div>
+                    ))
+                )}
+            </div>
+        </div>
     );
 };
 
