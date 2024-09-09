@@ -20,7 +20,7 @@ const UploadProduct = ({
     description : "",
     price : "",
     sellingPrice : "",
-    commissionPrice : ""
+    quantity : ""
   })
   const [openFullScreenImage,setOpenFullScreenImage] = useState(false)
   const [fullScreenImage,setFullScreenImage] = useState("")
@@ -213,17 +213,17 @@ const UploadProduct = ({
                 className='p-2 bg-slate-100 border rounded'
                 required
               />
-              {/* <label htmlFor='commissionPrice' className='mt-3'>Commission Price :</label>
+              <label htmlFor='commissionPrice' className='mt-3'>Quantity :</label>
               <input 
-                type='number' 
-                id='commissionPrice' 
+                type='Number' 
+                id='quantity' 
                 placeholder='Enter Commission price' 
-                value={data.commissionPrice} 
-                name='commissionPrice'
+                value={data.quantity} 
+                name='quantity'
                 onChange={handleOnChange}
                 className='p-2 bg-slate-100 border rounded'
                 required
-              /> */}
+              />
 
               <label htmlFor='description' className='mt-3'>Description :</label>
               <textarea 

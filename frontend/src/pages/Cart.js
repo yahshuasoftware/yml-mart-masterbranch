@@ -5,7 +5,7 @@ import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Context from "../context";
-// import { Plus, Minus } from 'react-feather';
+import { Plus, Minus } from 'react-feather';
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
 
@@ -92,6 +92,7 @@ const Cart = () => {
       const responseData = await response.json();
       if (responseData.success) {
         setData(responseData.data);
+        console.log(data)
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -108,8 +109,12 @@ const Cart = () => {
 
   useEffect(() => {
     if (!loading && data.length > 0) {
-      // Calculate total price
-      const total = data.reduce((previousValue, currentValue) => {
+      // Calculate total pricei
+      const validProducts = data.filter(
+        (product) => product.productId.quantity > 0 && product.quantity > 0
+      );
+      
+      const total = validProducts.reduce((previousValue, currentValue) => {
         return previousValue + (currentValue.quantity * currentValue.productId.sellingPrice);
       }, 0);
   
@@ -120,7 +125,7 @@ const Cart = () => {
       setTotalPrice(total);
       if(user?.refferal?.refferredbycode){
         setDiscountPrice(discount);
-        alert("yes have a refferbycode")
+        // alert("yes have a refferbycode")
       }else setDiscountPrice(0);
 
       // alert(discountPrice)
@@ -131,10 +136,9 @@ const Cart = () => {
     }
   }, [data, loading]);
  
-  const totalQty = data.reduce(
-    (previousValue, currentValue) => previousValue + currentValue.quantity,
-    0
-  );
+  const totalQty = data
+  .filter(product => product.productId.quantity > 0 && product.quantity > 0)
+  .reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
   // const totalPrice = data.reduce(
   //   (prev, curr) => (prev + curr.quantity * curr?.productId?.sellingPrice),
     
@@ -143,7 +147,8 @@ const Cart = () => {
 
   
 
-  const increaseQty = async (id, qty) => {
+  const increaseQty = async (id, qty, prdId) => {
+    console.log(prdId)
     const response = await fetch(SummaryApi.updateCartProduct.url, {
       method: SummaryApi.updateCartProduct.method,
       credentials: "include",
@@ -153,18 +158,27 @@ const Cart = () => {
       body: JSON.stringify({
         _id: id,
         quantity: qty + 1,
+        productId :prdId
+
       }),
     });
-
+  
     const responseData = await response.json();
-
+  
     if (responseData.success) {
-      fetchData();
+      if (responseData.availableStock < 1) {
+        alert('Product out of stock');
+      } else if (responseData.availableStock <= 5) {
+        alert(`Only ${responseData.availableStock} item(s) left in stock`);
+      }
+      fetchData(); // Refresh the cart data
+    } else {
+      alert(responseData.message); // Show error message if any
     }
   };
-
-  const decraseQty = async (id, qty) => {
-    if (qty >= 2) {
+  
+  const decreaseQty = async (id, qty,prdId) => {
+    if (qty > 1) { // Only allow decrease if quantity is greater than 1
       const response = await fetch(SummaryApi.updateCartProduct.url, {
         method: SummaryApi.updateCartProduct.method,
         credentials: "include",
@@ -174,16 +188,20 @@ const Cart = () => {
         body: JSON.stringify({
           _id: id,
           quantity: qty - 1,
+          productId :prdId
         }),
       });
-
+  
       const responseData = await response.json();
-
+  
       if (responseData.success) {
-        fetchData();
+        fetchData(); // Refresh the cart data
+      } else {
+        alert(responseData.message); // Show error message if any
       }
     }
   };
+  
 
   const deleteCartProduct = async (id) => {
     const response = await fetch(SummaryApi.deleteCartProduct.url, {
@@ -392,37 +410,55 @@ const Cart = () => {
 
   {/*** Right Column - My Cart Summary ***/}
   <div className="w-full lg:w-[30%] bg-white border border-gray-200 rounded-lg shadow-lg">
-    <div className="p-6">
-      <div className="flex justify-between mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">My Cart</h3>
-        <span className="text-gray-600">{totalQty} items</span>
-      </div>
-      <div className="mb-4">
-        {loading ? (
-          <p className="text-gray-600">Loading...</p>
-        ) : (
-          data.map((product) => (
-            
+  <div className="p-6">
+    <div className="flex justify-between mb-4">
+      <h3 className="text-xl font-semibold text-gray-800">My Cart</h3>
+      <span className="text-gray-600">{totalQty} items</span>
+    </div>
+
+    <div className="mb-4">
+      {loading ? (
+        <p className="text-gray-600">Loading...</p>
+      ) : (
+        data.map((product) => {
+          // Check if product is out of stock (based on available stock)
+          const isOutOfStock = product.productId.quantity === 0;
+
+          return (
             <div
               key={product._id}
-              className="flex justify-between mb-4 p-3 border-b border-gray-200"
+              className={`flex justify-between mb-4 p-3 border-b border-gray-200 ${isOutOfStock ? 'opacity-50' : ''}`}
             >
               {/* Product Image and Quantity */}
               <div className="flex flex-col items-center w-24">
-                <div className="w-16 h-16 bg-white flex items-center justify-center  border-gray-300 rounded-lg overflow-hidden">
-                  <img
-                    src={product.productId.productImage[0]}
-                    alt={product.productId.productName}
-                    className="max-w-full max-h-full object-contain"
-                  />
+                <div className="w-16 h-16 bg-white flex items-center justify-center border-gray-300 rounded-lg overflow-hidden">
+                <div className="relative">
+          <div className={`max-w-full max-h-full object-contain ${isOutOfStock ? 'grayscale' : ''}`}>
+            <img
+              src={product.productId.productImage[0]}
+              alt={product.productId.productName}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+
+               {/* Show out of stock strap if out of stock */}
+              {isOutOfStock && (
+                <div className="absolute top-0 left-0 w-full bg-red-600 text-white text-center font-bold py-1">
+                  Out of Stock
                 </div>
+              )}
+            </div>
+
+                </div>
+
                 {/* Quantity Controls */}
                 <div className="flex items-center gap-2 mt-2">
                   <button
-                    className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-5 h-5  flex justify-center items-center rounded-full"
+                    className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-5 h-5 flex justify-center items-center rounded-full"
                     onClick={() =>
-                      decraseQty(product?._id, product?.quantity)
+                      decreaseQty(product?._id, product?.quantity, product.productId._id)
                     }
+                    disabled={isOutOfStock} // Disable button if out of stock
                   >
                     -
                   </button>
@@ -430,8 +466,9 @@ const Cart = () => {
                   <button
                     className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-5 h-5 flex justify-center items-center rounded-full"
                     onClick={() =>
-                      increaseQty(product?._id, product?.quantity)
+                      increaseQty(product?._id, product?.quantity, product.productId._id)
                     }
+                    disabled={isOutOfStock} // Disable button if out of stock
                   >
                     +
                   </button>
@@ -452,9 +489,7 @@ const Cart = () => {
                   <p className="text-sm font-semibold text-gray-800">
                     {displayINRCurrency(
                       product.quantity * product.productId.sellingPrice
-              
                     )}
-                    
                   </p>
                 </div>
                 {/* Delete Button */}
@@ -465,30 +500,34 @@ const Cart = () => {
                   >
                     <MdDelete />
                   </div>
-                  
-
                 </div>
               </div>
             </div>
-          ))
-        )}
+          );
+        })
+      )}
+    </div>
+
+    {/* Cart Summary */}
+    <div className="border-t pt-4">
+      <div className="flex justify-between mb-2 text-gray-700">
+        <span>Delivery Charges:</span>
+        <span>₹0</span>
       </div>
-      <div className="border-t pt-4">
-        <div className="flex justify-between mb-2 text-gray-700">
-          <span>Delivery Charges:</span>
-          <span>₹0</span>
-        </div>
-            <div className="flex justify-between mb-2 text-red-500">
-              <span>Discount:</span>
-              {displayINRCurrency(discountPrice)}
-            </div>
-        <div className="flex justify-between  font-semibold text-gray-800">
-  <span>Total:</span>
-  <span className="text-md">{ displayINRCurrency(totalPrice)} - {displayINRCurrency(discountPrice)} = {displayINRCurrency(finalAmount)}</span>
-</div>
+      <div className="flex justify-between mb-2 text-red-500">
+        <span>Discount:</span>
+        {displayINRCurrency(discountPrice)}
+      </div>
+      <div className="flex justify-between font-semibold text-gray-800">
+        <span>Total:</span>
+        <span className="text-md">
+          {displayINRCurrency(totalPrice)} - {displayINRCurrency(discountPrice)} = {displayINRCurrency(finalAmount)}
+        </span>
       </div>
     </div>
   </div>
+</div>
+
 </div>
 
   );

@@ -120,12 +120,16 @@ const VerticalCardProduct = ({ category, heading }) => {
                                     </p>
                                 </div>
                                 <div className='flex justify-center pt-2'>
+                                {product?.quantity > 0 ? (
                                     <button
-                                        className='text-sm text-black border border-black px-3 py-1 rounded-full transition-colors duration-300 hover:text-green-600 hover:border-green-600'
+                                        className='text-sm text-black border border-green-600 px-3 py-1 rounded-full transition-colors duration-300 hover:text-green-600 hover:border-green-600'
                                         onClick={(e) => handleAddToCart(e, product?._id)}
                                     >
                                         Add to Cart
                                     </button>
+                                    ) : (
+                                        <span className='text-md  text-red-500  border font-bold border-white px-3 py-1 rounded-full transition-colors duration-300 '>Out of Stock</span>
+                                    )}
                                 </div>
                             </div>
                         </Link>

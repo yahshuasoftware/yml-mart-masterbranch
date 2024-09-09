@@ -16,7 +16,7 @@ const VerticalCard = ({ loading, data = [] }) => {
     };
 
     return (
-        <div className='grid grid-cols-[repeat(auto-fit,minmax(260px,300px))] justify-center md:justify-between md:gap-4 overflow-x-scroll scrollbar-none transition-all'>
+        <div className='grid grid-cols-[repeat(auto-fit,minmax(260px,200px))] justify-center md:justify-between md:gap-4 overflow-x-scroll scrollbar-none transition-all pr-3'>
             {
                 loading ? (
                     loadingList.map((product, index) => {
@@ -39,33 +39,44 @@ const VerticalCard = ({ loading, data = [] }) => {
                 ) : (
                     data.map((product, index) => {
                         return (
-                            <Link to={"/product/" + product?._id} key={index} className='w-full min-w-[280px] md:min-w-[300px] max-w-[280px] md:max-w-[300px] bg-white rounded-sm shadow' onClick={scrollTop}>
-                                <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
-                                    <img src={product?.productImage[0]} alt={product?.productName} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
+                            <Link
+                                key={index}
+                                to={`/product/${product?._id}`}
+                                className="bg-white rounded-sm shadow hover:shadow-lg transition-shadow"
+                            >
+                                <div className="bg-slate-200 h-40 p-4 flex justify-center items-center">
+                                <img
+                                    src={product.productImage[0]}
+                                    className="object-contain h-full w-full hover:scale-110 transition-transform"
+                                    alt={product?.productName}
+                                />
                                 </div>
-                                <div className='p-4 grid gap-3'>
-                                    <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
-                                    <p className='capitalize text-slate-500'>{product?.category}</p>
-                                    <div className='flex gap-3'>
-                                        <p className='text-red-600 font-medium'>{displayINRCurrency(product?.sellingPrice)}</p>
-                                        <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
-                                    </div>
-                                    <div className='flex items-center'>
-                                    <StarRatings
-                                        rating={4.5} // Fixed rating
-                                        starRatedColor="gold"
-                                        starDimension="15px"
-                                        starSpacing="0px" // No space between the star and the text
-                                        numberOfStars={1} // Display only one star
-                                        name='rating'
-                                        />
-                                        <span className='text-slate-500 ml-1 flex items-center'>4.5</span> {/* Flexbox alignment for consistent spacing */}
-                                        <span className='text-slate-500 ml-1 flex items-center'>(10)</span> {/* Flexbox alignment for consistent spacing */}
+                                <div className="p-4 space-y-2">
+                                <h3 className="text-sm md:text-base font-medium text-black truncate">
+                                    {product?.productName}
+                                </h3>
+                                <div className="flex items-center justify-between">
+                                    <p className="text-red-600 text-sm font-medium">
+                                    {displayINRCurrency(product?.sellingPrice)}
+                                    </p>
+                                    <p className="text-slate-500 text-xs line-through">
+                                    {displayINRCurrency(product?.price)}
+                                    </p>
                                 </div>
-                                    <button className='text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-0.5 rounded-full'>
-                                        Buy Now
+                                <div className="flex justify-center pt-2">
+                                    {product?.quantity > 0 ? (
+                                    <button
+                                        className="text-sm text-black border border-black px-3 py-1 rounded-full transition-colors duration-300 hover:text-green-600 hover:border-green-600"
+                                        onClick={(e) => handleAddToCart(e, product?._id)}
+                                    >
+                                        Add to Cart
                                     </button>
-                                    <button className='text-sm bg-sky-600 hover:bg-sky-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>Add to Cart</button>
+                                    ) : (
+                                    <span className="text-red-600 text-lg font-bold ">
+                                        Out of Stock
+                                    </span>
+                                    )}
+                                </div>
                                 </div>
                             </Link>
                         );

@@ -203,10 +203,19 @@ const ProductDetails = () => {
                   <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
                 </div>
 
-                <div className='flex items-center gap-3 my-2'>
-                  <button className='border-2 border-sky-600 rounded px-3 py-1 min-w-[120px] text-sky-600 font-medium hover:bg-sky-600 hover:text-white' onClick={(e)=>handleBuyProduct(e,data?._id)}>Buy</button>
+                {data?.quantity > 0 ? (
+                  // <button
+                  //   className="text-sm text-black border border-black px-3 py-1 rounded-full transition-colors duration-300 hover:text-green-600 hover:border-green-600"
+                    
+                  // >
                   <button className='border-2 border-sky-600 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-sky-600 hover:text-sky-600 hover:bg-white' onClick={(e)=>handleAddToCart(e,data?._id)}>Add To Cart</button>
-                </div>
+                 
+                ) : (
+                  <span className="text-red-600 text-lg font-bold">
+                    Out of Stock
+                  </span>
+                )}
+               
 
                 <div>
                   <p className='text-slate-600 font-medium my-1'>Description : </p>
