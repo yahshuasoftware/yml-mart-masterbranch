@@ -5,7 +5,7 @@ import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Context from "../context";
-import { Plus, Minus } from 'react-feather';
+// import { Plus, Minus } from 'react-feather';
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
 
