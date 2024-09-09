@@ -14,8 +14,8 @@ const upload = multer({ dest: 'uploads/' });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://3.92.88.54'],
-    // credentials: true,
+    origin: ['http://localhost:3000', 'http://3.92.88.54:3000',"*"],
+    credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
