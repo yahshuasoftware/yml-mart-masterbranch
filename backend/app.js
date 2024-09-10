@@ -1,8 +1,8 @@
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
 const connectDB = require('./config/db');
 const router = require('./routes'); // Correctly importing the router from Routes
 const multer = require('multer');
@@ -17,6 +17,7 @@ app.use(cors({
     origin: ['http://localhost:3000', 'http://34.224.97.99:3000',"*"],
     credentials: true,
 }));
+// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
