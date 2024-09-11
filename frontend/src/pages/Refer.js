@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'
 import { FaInstagram, FaWhatsapp, FaLinkedin, FaFacebook } from "react-icons/fa";
+import SummaryApi from '../common';
 
 const ReferCard = () => {
   const [userData, setUserData] = useState(null);
@@ -19,7 +20,7 @@ const ReferCard = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/user-details", {
+        const response = await fetch(SummaryApi.current_user.url, {
           method: "GET",
           credentials: "include",
           headers: {

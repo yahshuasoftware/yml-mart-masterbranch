@@ -4,7 +4,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import AddressForm from "../components/AddressForm";
 import displayINRCurrency from "../helpers/displayCurrency";
 import { uploadAddress } from "../helpers/uploadAddress";
-
+import SummaryApi from '../common';
 
 
 const BuyNow = () => {
@@ -23,7 +23,7 @@ const BuyNow = () => {
 
     const fetchUserDetails = async () => {
         try {
-          const response = await fetch("http://localhost:8080/api/user-details", {
+          const response = await fetch(SummaryApi.current_user.url, {
             method: "GET",
             credentials: "include", // Include cookies to send the token
             headers: {
@@ -89,7 +89,7 @@ console.log(product)
 
     try {
         // Step 1: Create an order on the backend
-        const response = await fetch("http://localhost:8080/api/payment/create-order-buynow", {
+        const response = await fetch(SummaryApi.createOrder_from_buynow.url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -128,7 +128,7 @@ console.log(product)
             order_id: responseData.order.order_id, // order_id returned from backend
             handler: async function (response) {
                 // Step 3: Send payment details to backend to store the order
-                const paymentResponse = await fetch("http://localhost:8080/api/payment/payment-success", {
+                const paymentResponse = await fetch("http://localhost:8000/api/payment/payment-success", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

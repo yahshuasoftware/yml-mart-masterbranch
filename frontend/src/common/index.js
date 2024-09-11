@@ -1,5 +1,5 @@
-// const backendDomin = "http://localhost:8080"
-const backendDomin = "http://34.224.97.99:8080"
+const backendDomin = "http://localhost:8000"
+// const backendDomin = process.env.SERVER_URI ;
 const SummaryApi = {
     signUP : {
         url : `${backendDomin}/api/signup`,
@@ -115,6 +115,18 @@ const SummaryApi = {
     },
     filterProduct : {
         url : `${backendDomin}/api/filter-product`,
+        method : 'post'
+    },
+    createOrder : {
+        url : `${backendDomin}/api/payment/create-order`,
+        method : 'post'
+    },
+    createOrder_from_buynow : {
+        url : `${backendDomin}/api/payment/create-order-buynow`,
+        method : 'post'
+    },
+    payment_Success : {
+        url : `${backendDomin}/api/payment/payment-success`,
         method : 'post'
     }
 }
