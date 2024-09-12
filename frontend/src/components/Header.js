@@ -8,9 +8,13 @@ import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
+
 import Context from "../context";
 
 const Header = () => {
+  const backendDomain = process.env.REACT_APP_LOCALHOST_URI;
+
+  
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
   const [menuDisplay, setMenuDisplay] = useState(false);
@@ -20,9 +24,13 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
+  const profilePicUrl = user?.profilePic ? `${backendDomain}/${user.profilePic}` : 'defaultProfilePicUrl';
 
   const { totalPurchasing } = useContext(Context);
 
+
+
+  
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
       method: SummaryApi.logout_user.method,
@@ -92,14 +100,16 @@ const Header = () => {
               >
                 {user?.profilePic ? (
                   <img
-                    src={user?.profilePic}
-                    className="w-10 h-10 rounded-full object-cover"
-                    alt={user?.name}
-                  />
+                  src={profilePicUrl}
+                  className="w-10 h-10 rounded-full object-cover"
+                  alt={user?.name}
+                />
                 ) : (
                   <FaRegCircleUser className="text-gray-700" />
                 )}
+                
               </div>
+              
             )}
 
             <div

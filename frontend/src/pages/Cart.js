@@ -219,7 +219,7 @@ const Cart = () => {
   
   // razorepay
   const handlePayment = async (finalAddress) => {
-    if(!hasAddress){
+    if(!selectedAddress){
       alert("Add Delivery Address")
     }else{
       try {

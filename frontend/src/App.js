@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { setUserDetails } from './store/userSlice';
 import 'animate.css';
 
+
 function App() {
   const dispatch = useDispatch()
   const [cartProductCount,setCartProductCount] = useState(0)

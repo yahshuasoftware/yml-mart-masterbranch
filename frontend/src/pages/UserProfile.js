@@ -25,10 +25,13 @@ import { RiShoppingCartFill } from "react-icons/ri";
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const backendDomain = process.env.REACT_APP_LOCALHOST_URI;
 
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
+  const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
+
 
 
 
@@ -177,7 +180,7 @@ const Profile = () => {
               <div className="relative inline-block">
                 {userData?.profilePic ? (
                   <img
-                    src={`${userData?.profilePic}`}
+                    src={profilePicUrl}
                     alt="Profile"
                     className="w-24 h-24 rounded-full mb-2"
                   />

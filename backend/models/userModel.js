@@ -7,7 +7,6 @@ const addressSchema = new mongoose.Schema({
     city: String,
     state: String,
     zip: String,
-    deliveryChanges : Number
 });
 
 const refferalSchema = new mongoose.Schema({
