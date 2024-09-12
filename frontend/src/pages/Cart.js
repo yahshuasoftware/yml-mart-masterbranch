@@ -52,7 +52,7 @@ const Cart = () => {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/user-details", {
+      const response = await fetch(SummaryApi.current_user.url, {
         method: "GET",
         credentials: "include", // Include cookies to send the token
         headers: {
@@ -223,9 +223,9 @@ const Cart = () => {
       alert("Add Delivery Address")
     }else{
       try {
-        // Step 1: Create an order on the backend
+        // Create an order on the backend
         const response = await fetch(
-          "http://localhost:8080/api/payment/create-order",
+          SummaryApi.createOrder.url,
           {
             method: "POST",
             headers: {
@@ -249,9 +249,9 @@ const Cart = () => {
           return;
         }
   
-        // Step 2: Open Razorpay payment gateway
+        //Open Razorpay payment gateway
         const options = {
-          key: "rzp_test_U4XuiM2cjeWzma", // Razorpay key_id
+          key: process.env.RAZARPAY_KEY, // Razorpay key_id
           amount: responseData.order.amount, // Amount in paisa
           currency: responseData.order.currency,
           name: "YML Mart",
@@ -261,7 +261,7 @@ const Cart = () => {
           handler: async function (response) {
             // Step 3: Send payment details to backend to store the order
             const paymentResponse = await fetch(
-              "http://localhost:8080/api/payment/payment-success",
+              SummaryApi.payment_Success.url,
               {
                 method: "POST",
                 headers: {
