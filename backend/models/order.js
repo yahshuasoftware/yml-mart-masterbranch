@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // Assuming you have a User model
     // name:{type:String},
-    deliveryStatus:{type: String, default:'Created'},
+    deliveryStatus:{type: String, default:'Delivered'},
     deliveryAddress:deliveryAddressSchema
     
 });

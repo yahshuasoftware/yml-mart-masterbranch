@@ -22,6 +22,7 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = useState(user?.address[0]); 
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showAllAddresses, setShowAllAddresses] = useState(false);
+  
 
   const [userData, setUserData] = useState({});
   const [address, setAddress] = useState({});
@@ -109,32 +110,24 @@ const Cart = () => {
 
   useEffect(() => {
     if (!loading && data.length > 0) {
-      // Calculate total pricei
+      // Filter out products that are out of stock or have insufficient stock
       const validProducts = data.filter(
-        (product) => product.productId.quantity > 0 && product.quantity > 0
+        (product) => 
+          product.productId.quantity > 0 && // Ensure product has stock
+          product.productId.quantity >= product.quantity // Ensure stock is enough for quantity in the cart
       );
-      
+  
+      // Calculate total price only for valid products
       const total = validProducts.reduce((previousValue, currentValue) => {
         return previousValue + (currentValue.quantity * currentValue.productId.sellingPrice);
       }, 0);
   
-      // Calculate discount
-      const discount = 0.05 * total;
-  
-      // Set states
+      // Set total price and final amount
       setTotalPrice(total);
-      if(user?.refferal?.refferredbycode){
-        setDiscountPrice(discount);
-        // alert("yes have a refferbycode")
-      }else setDiscountPrice(0);
-
-      // alert(discountPrice)
-
-      
-      setFinalAmount(total - discountPrice);
-      alert(finalAmount)
+      setFinalAmount(total);
     }
   }, [data, loading]);
+  
  
   const totalQty = data
   .filter(product => product.productId.quantity > 0 && product.quantity > 0)
@@ -148,7 +141,7 @@ const Cart = () => {
   
 
   const increaseQty = async (id, qty, prdId) => {
-    console.log(prdId)
+    console.log(prdId);
     const response = await fetch(SummaryApi.updateCartProduct.url, {
       method: SummaryApi.updateCartProduct.method,
       credentials: "include",
@@ -158,16 +151,15 @@ const Cart = () => {
       body: JSON.stringify({
         _id: id,
         quantity: qty + 1,
-        productId :prdId
-
+        productId: prdId,
       }),
     });
   
     const responseData = await response.json();
   
     if (responseData.success) {
-      if (responseData.availableStock < 1) {
-        alert('Product out of stock');
+      if (responseData.outOfStock) {
+        alert("Product out of stock");
       } else if (responseData.availableStock <= 5) {
         alert(`Only ${responseData.availableStock} item(s) left in stock`);
       }
@@ -176,6 +168,7 @@ const Cart = () => {
       alert(responseData.message); // Show error message if any
     }
   };
+  
   
   const decreaseQty = async (id, qty,prdId) => {
     if (qty > 1) { // Only allow decrease if quantity is greater than 1
@@ -423,41 +416,45 @@ const Cart = () => {
         data.map((product) => {
           // Check if product is out of stock (based on available stock)
           const isOutOfStock = product.productId.quantity === 0;
-
+          const isPartialStock = product.productId.quantity < product.quantity;
+          
           return (
             <div
               key={product._id}
-              className={`flex justify-between mb-4 p-3 border-b border-gray-200 ${isOutOfStock ? 'opacity-50' : ''}`}
+              className={`flex justify-between mb-4 p-3 border-b border-gray-200 ${isOutOfStock || isPartialStock ? 'opacity-50' : ''}`}
             >
               {/* Product Image and Quantity */}
               <div className="flex flex-col items-center w-24">
                 <div className="w-16 h-16 bg-white flex items-center justify-center border-gray-300 rounded-lg overflow-hidden">
-                <div className="relative">
-          <div className={`max-w-full max-h-full object-contain ${isOutOfStock ? 'grayscale' : ''}`}>
-            <img
-              src={product.productId.productImage[0]}
-              alt={product.productId.productName}
-              className="max-w-full max-h-full object-contain"
-            />
-          </div>
-
-               {/* Show out of stock strap if out of stock */}
-              {isOutOfStock && (
-                <div className="absolute top-0 left-0 w-full bg-red-600 text-white text-center font-bold py-1">
-                  Out of Stock
+                  <div className="relative">
+                    <div className={`max-w-full max-h-full object-contain ${isOutOfStock ? 'grayscale' : ''}`}>
+                      <img
+                        src={product.productId.productImage[0]}
+                        alt={product.productId.productName}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>
+        
+                    {/* Show out-of-stock or partial stock warning */}
+                    {isOutOfStock && (
+                      <div className="absolute top-0 left-0 w-full bg-red-600 text-white text-center font-bold py-1">
+                        Out of Stock
+                      </div>
+                    )}
+        
+                    {isPartialStock &&  !isOutOfStock && (
+                      <div className="absolute top-0 left-0 w-full bg-yellow-600 text-white text-center font-bold py-1">
+                        Only {product.productId.quantity} left
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
-
-                </div>
-
+        
                 {/* Quantity Controls */}
                 <div className="flex items-center gap-2 mt-2">
                   <button
                     className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-5 h-5 flex justify-center items-center rounded-full"
-                    onClick={() =>
-                      decreaseQty(product?._id, product?.quantity, product.productId._id)
-                    }
+                    onClick={() => decreaseQty(product?._id, product?.quantity, product.productId._id)}
                     disabled={isOutOfStock} // Disable button if out of stock
                   >
                     -
@@ -465,16 +462,14 @@ const Cart = () => {
                   <span className="text-gray-700">{product?.quantity}</span>
                   <button
                     className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-5 h-5 flex justify-center items-center rounded-full"
-                    onClick={() =>
-                      increaseQty(product?._id, product?.quantity, product.productId._id)
-                    }
-                    disabled={isOutOfStock} // Disable button if out of stock
+                    onClick={() => increaseQty(product?._id, product?.quantity, product.productId._id)}
+                    disabled={isOutOfStock || isPartialStock} // Disable button if out of stock or insufficient stock
                   >
                     +
                   </button>
                 </div>
               </div>
-
+        
               {/* Product Details and Delete Button */}
               <div className="flex flex-col flex-1 ml-4">
                 <div className="flex flex-col">
@@ -482,14 +477,10 @@ const Cart = () => {
                     {product.productId.productName}
                   </p>
                   <p className="text-sm font-semibold text-gray-500 line-through">
-                    {displayINRCurrency(
-                      product.quantity * product.productId.price
-                    )}
+                    {displayINRCurrency(product.quantity * product.productId.price)}
                   </p>
                   <p className="text-sm font-semibold text-gray-800">
-                    {displayINRCurrency(
-                      product.quantity * product.productId.sellingPrice
-                    )}
+                    {displayINRCurrency(product.quantity * product.productId.sellingPrice)}
                   </p>
                 </div>
                 {/* Delete Button */}
@@ -516,12 +507,12 @@ const Cart = () => {
       </div>
       <div className="flex justify-between mb-2 text-red-500">
         <span>Discount:</span>
-        {displayINRCurrency(discountPrice)}
+        {displayINRCurrency(0)}
       </div>
       <div className="flex justify-between font-semibold text-gray-800">
         <span>Total:</span>
         <span className="text-md">
-          {displayINRCurrency(totalPrice)} - {displayINRCurrency(discountPrice)} = {displayINRCurrency(finalAmount)}
+          {displayINRCurrency(totalPrice)}
         </span>
       </div>
     </div>

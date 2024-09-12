@@ -19,7 +19,7 @@ function App() {
   const [cartProductCount,setCartProductCount] = useState(0)
   const [totalPurchasing, setTotalPurchasing] = useState(0);
 
-
+  
   const fetchUserDetails = async()=>{
       const dataResponse = await fetch(SummaryApi.current_user.url,{
         method : SummaryApi.current_user.method,
