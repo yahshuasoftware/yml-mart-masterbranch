@@ -131,3 +131,6 @@ const SummaryApi = {
     }
 }
 
+
+export default SummaryApi
+
