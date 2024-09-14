@@ -3,13 +3,16 @@ import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
+
 import { useSelector } from "react-redux";
-import { MdModeEditOutline } from "react-icons/md";
+import { MdModeEditOutline,MdDelete } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
+import { IoIosAddCircle } from "react-icons/io";
+
 import Context from "../context/index";
 import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorcycle } from "react-icons/fa";import { MdLocalShipping, MdCancel } from "react-icons/md";
 import { RiShoppingCartFill } from "react-icons/ri"; 
@@ -22,16 +25,30 @@ import { FaStar } from 'react-icons/fa';
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const backendDomain = process.env.REACT_APP_LOCALHOST_URI;
 
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
-  const [totalPurchasing, setTotalPurchasing] = useState(0);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
+
+
 
 
   // const { totalPurchasing } = useContext(Context);
+  const handleAddNewAddress = () => {
+    // Toggle the form's visibility
+    setShowAddressForm((prevState) => !prevState);
 
+    // Reset the address only when opening the form
+    if (!showAddressForm) {
+      setAddress({ name:"", mobileNo : "",street: "", city: "", state: "", zip: "" });
+    }
+  };
 
   const [address, setAddress] = useState({
+    name:"", 
+    mobileNo : "",
     street: "",
     city: "",
     state: "",
@@ -43,8 +60,7 @@ const Profile = () => {
     setTotalPurchasing(0);
     console.log("Total purchasing reset to 0");
   };
-  //
-  
+
   
 
 
@@ -56,68 +72,6 @@ const Profile = () => {
     return firstOfNextMonth - now;
   };
 
-  const StarRating = ({ itemId, initialRating, onSave }) => {
-    const [rating, setRating] = useState(initialRating || 0);
-  
-    const handleClick = (newRating) => {
-      setRating(newRating);
-      onSave(itemId, newRating); // Trigger the save callback
-    };
-  
-    return (
-      <div className="flex items-center space-x-1"> {/* Flex container to align stars horizontally */}
-        {[...Array(5)].map((_, index) => (
-          <FaStar
-            key={index}
-            className={`cursor-pointer ${index < rating ? 'text-yellow-500' : 'text-gray-300'}`}
-            onClick={() => handleClick(index + 1)}
-          />
-        ))}
-      </div>
-    );
-  };
-  
-  const [ratedItems, setRatedItems] = useState({});
-
-  // Fetch rated items from localStorage on initial load
-  useEffect(() => {
-    const savedRatings = localStorage.getItem('ratedItems');
-    if (savedRatings) {
-      setRatedItems(JSON.parse(savedRatings));
-    }
-  }, []);
-
-  const handleSaveRating = async (itemId, rating) => {
-   try {
-      const response = await fetch(SummaryApi.saveRating.url, {
-        method: SummaryApi.saveRating.method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ itemId, rating }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to save rating');
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        const updatedRatedItems = { ...ratedItems, [itemId]: true };
-        setRatedItems(updatedRatedItems);
-        localStorage.setItem('ratedItems', JSON.stringify(updatedRatedItems)); // Save to localStorage
-        toast.success('Thanks for rating!', {
-          position: 'top-right',
-          autoClose: 3000,
-          theme: 'colored',
-        });
-      } else {
-        throw new Error(result.message || 'Failed to save rating');
-      }
-    } catch (error) {
-      console.error('Error saving rating:', error);
-      toast.error('Error saving rating. Please try again.');
-    }
-  };
 
   useEffect(() => {
     // Function to handle the monthly reset
@@ -164,9 +118,10 @@ const Profile = () => {
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    uploadAddress(address, setUserData);
+    await uploadAddress(address, setUserData); // uploadAddress updates the userData with the new address
+    setShowAddressForm(false);  // Hide form after submission
   };
 
 
@@ -188,40 +143,63 @@ const Profile = () => {
         const data = await response.json();
         console.log(data)
         setUserData(data.data);
+        console.log(data.data)
+        
+        
 
         setOrderData(data.orderDetail);
 
-        setAddress({
-          street: data.data.address?.street || "",
-          city: data.data.address?.city || "",
-          state: data.data.address?.state || "",
-          zip: data.data.address?.zip || "",
-        });
-        // console.log(orderData[0].deliveryStatus)
+        // setAddress({
+        //   name: data.data.address?.name,
+        //   mobile:data.data.address?.mobile
+        //   street: data.data.address?.street || "",
+        //   city: data.data.address?.city || "",
+        //   state: data.data.address?.state || "",
+        //   zip: data.data.address?.zip || "",
+        // });
+        console.log(orderData[0].deliveryStatus)
 
-        if (data.orderDetail) {
-          const totalAmount = data.orderDetail
-            .filter((order) => order.status === 'paid')
-            .reduce(
-              (acc, order) =>
-                acc +
-                order.products.reduce(
-                  (acc, product) => acc + product.price * product.quantity,
-                  0
-                ),
-              0
-            );
-    
-          setTotalPurchasing(totalAmount);
-        }
+     
 
       } catch (error) {
         console.error("Error:", error);
       }
     };
 
+
+
     fetchUserData();
   }, []);
+
+  const deleteAddress = async (id, userId) => {
+    try {
+      const response = await fetch(SummaryApi.deleteAddress.url, {
+        method: SummaryApi.deleteAddress.method,
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          AddressId: id,
+          userId: userId,
+        }),
+      });
+  
+      const responseData = await response.json();
+      if (responseData.success) {
+        // Ensure `address` field is correctly updated in the state
+        setUserData((prevData) => ({
+          ...prevData,
+          address: responseData.data?.address || [], // Ensure address is always an array
+        }));
+        alert("Address deleted successfully");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Failed to delete address");
+    }
+  };
+  
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -258,13 +236,13 @@ const Profile = () => {
           <div>
             <div className="flex  justify-between">
               <h1 className="text-2xl font-bold mb-4">Profile Information</h1>
-              <h3>Your total purchasing:₹{totalPurchasing} </h3>
+              {/* <h3>Your total purchasing:₹{totalPurchasing} </h3> */}
             </div>
             <div className="flex flex-col items-center mb-6">
               <div className="relative inline-block">
                 {userData?.profilePic ? (
                   <img
-                    src={`${userData?.profilePic}`}
+                    src={profilePicUrl}
                     alt="Profile"
                     className="w-24 h-24 rounded-full mb-2"
                   />
@@ -402,7 +380,60 @@ const Profile = () => {
         return (
           <div>
             <h1 className="text-2xl font-bold mb-4">Address</h1>
-            <div className="bg-white p-6 rounded-lg shadow-md">
+
+            <div className="flex items-center mt-4">
+        <IoIosAddCircle className="text-sky-500 text-xl" />
+        <button
+          className="ml-2 text-blue-500 hover:text-blue-700"
+          onClick={handleAddNewAddress}
+        >
+          {showAddressForm ? "Cancel" : "Add New Address"}
+        </button>
+      </div>           
+      {showAddressForm && (
+        <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
+          <AddressForm address={address} setAddress={setAddress} />
+          <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]">
+            Add New Address
+          </button>
+        </form>
+      )} 
+      <div className="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {userData?.address?.length > 0 ? (
+    userData.address.map((addr, index) => (
+      <div
+        key={index}
+        className="relative p-6 bg-white shadow-md rounded-lg border border-gray-300 mb-4"
+      >
+        <div className="flex justify-between">
+          <strong className="text-gray-800">{addr.name}</strong>
+          <div
+            className="absolute top-2 right-2 text-red-500 cursor-pointer p-2 hover:text-white hover:bg-red-600 hover:rounded-full"
+            onClick={() => deleteAddress(addr._id, userData._id)}
+          >
+            <MdDelete fontSize={18} />
+          </div>
+        </div>
+
+        <p className="text-gray-800 mt-4">
+          <span>{addr.mobileNo}</span>
+        </p>
+        <p className="text-gray-700 mt-2">
+          {addr.street}, {addr.city}, <br />
+          {addr.state} - <strong>{addr.zip}</strong>
+        </p>
+      </div>
+    ))
+) : (
+  <div className="flex justify-center items-center p-2">
+    <p className="text-red-500 text-md p">No addresses provided.</p>
+  </div>
+)}
+
+</div>
+
+      
+      {/* <div className="bg-white p-6 rounded-lg shadow-md">
               {userData.address ? (
                 <div className="flex flex-col lg:flex-row justify-between items-center bg-slate-50 p-4 rounded-md mb-6 shadow-sm">
                   <div className="text-lg">
@@ -438,7 +469,7 @@ const Profile = () => {
                   Update Address
                 </button>
               </form>
-            </div>
+            </div> */}
           </div>
         );
        // Inside renderContent function

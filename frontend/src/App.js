@@ -1,3 +1,4 @@
+
 import logo from './logo.svg';
 import './App.css';
 import 'animate.css';
@@ -13,12 +14,13 @@ import { useDispatch } from 'react-redux';
 import { setUserDetails } from './store/userSlice';
 import 'animate.css';
 
+
 function App() {
   const dispatch = useDispatch()
   const [cartProductCount,setCartProductCount] = useState(0)
   const [totalPurchasing, setTotalPurchasing] = useState(0);
 
-
+  
   const fetchUserDetails = async()=>{
       const dataResponse = await fetch(SummaryApi.current_user.url,{
         method : SummaryApi.current_user.method,

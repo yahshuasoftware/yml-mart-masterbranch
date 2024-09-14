@@ -5,20 +5,32 @@ async function uploadAddressController(req, res) {
         const userId = req.userId; // Assuming userId is available in req.userId
         const { address } = req.body; // Expecting address object from request body
 
-        if (!address || !address.street || !address.city || !address.state || !address.zip) {
+        if (!address || !address.name || !address.mobileNo || !address.street || !address.city || !address.state || !address.zip) {
             return res.status(400).json({
                 message: 'Incomplete address data provided',
                 error: true,
                 success: false
             });
         }
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found',
+                error: true,
+                success: false
+            });
+        }
+        
+        user.address.unshift(address);
+        // Save the updated user document
+        const updatedUser = await user.save();
 
         // Find the user by ID and update the address
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { address },
-            { new: true, useFindAndModify: false } // This option returns the updated document
-        );
+        // const updatedUser = await User.findByIdAndUpdate(
+        //     userId,
+        //     { address },
+        //     { new: true, useFindAndModify: false } // This option returns the updated document
+        // );
 
         if (!updatedUser) {
             return res.status(404).json({
@@ -29,7 +41,7 @@ async function uploadAddressController(req, res) {
         }
 
         res.json({
-            message: 'Address updated successfully! Refresh the page!',
+            message: 'Address updated successfully!',
             data: updatedUser,
             success: true,
             error: false

@@ -6,7 +6,7 @@ const ChangeDeliveryStatus = ({ _id, deliveryStatus, onClose, callFunc }) => {
 
     const handleStatusChange = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/orders/${_id}`, {
+            const response = await fetch(`http://localhost:8000/api/orders/${_id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

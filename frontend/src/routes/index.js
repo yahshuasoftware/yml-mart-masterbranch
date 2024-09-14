@@ -25,8 +25,6 @@ import AllBanners from '../pages/AllBanners'
 import BuyNow from "../pages/buyNow"
 import AllKyc from "../pages/AllKyc"
 
-
-
 const router = createBrowserRouter([
     {
         path : "/",
