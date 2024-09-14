@@ -23,7 +23,6 @@ const orderSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // Assuming you have a User model
     // name:{type:String},
     deliveryStatus:{type: String, default:'Ordered'}
-    
 });
 
 const Order = mongoose.model('Order', orderSchema);

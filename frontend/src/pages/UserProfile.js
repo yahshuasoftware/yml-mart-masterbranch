@@ -12,8 +12,8 @@ import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
 import Context from "../context/index";
 import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorcycle } from "react-icons/fa";import { MdLocalShipping, MdCancel } from "react-icons/md";
-// import { BsBagXFill } from "react-icons/bs";
 import { RiShoppingCartFill } from "react-icons/ri"; 
+import { FaStar } from 'react-icons/fa';
 
 
 
@@ -43,7 +43,8 @@ const Profile = () => {
     setTotalPurchasing(0);
     console.log("Total purchasing reset to 0");
   };
-
+  //
+  
   
 
 
@@ -55,6 +56,68 @@ const Profile = () => {
     return firstOfNextMonth - now;
   };
 
+  const StarRating = ({ itemId, initialRating, onSave }) => {
+    const [rating, setRating] = useState(initialRating || 0);
+  
+    const handleClick = (newRating) => {
+      setRating(newRating);
+      onSave(itemId, newRating); // Trigger the save callback
+    };
+  
+    return (
+      <div className="flex items-center space-x-1"> {/* Flex container to align stars horizontally */}
+        {[...Array(5)].map((_, index) => (
+          <FaStar
+            key={index}
+            className={`cursor-pointer ${index < rating ? 'text-yellow-500' : 'text-gray-300'}`}
+            onClick={() => handleClick(index + 1)}
+          />
+        ))}
+      </div>
+    );
+  };
+  
+  const [ratedItems, setRatedItems] = useState({});
+
+  // Fetch rated items from localStorage on initial load
+  useEffect(() => {
+    const savedRatings = localStorage.getItem('ratedItems');
+    if (savedRatings) {
+      setRatedItems(JSON.parse(savedRatings));
+    }
+  }, []);
+
+  const handleSaveRating = async (itemId, rating) => {
+   try {
+      const response = await fetch(SummaryApi.saveRating.url, {
+        method: SummaryApi.saveRating.method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ itemId, rating }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to save rating');
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        const updatedRatedItems = { ...ratedItems, [itemId]: true };
+        setRatedItems(updatedRatedItems);
+        localStorage.setItem('ratedItems', JSON.stringify(updatedRatedItems)); // Save to localStorage
+        toast.success('Thanks for rating!', {
+          position: 'top-right',
+          autoClose: 3000,
+          theme: 'colored',
+        });
+      } else {
+        throw new Error(result.message || 'Failed to save rating');
+      }
+    } catch (error) {
+      console.error('Error saving rating:', error);
+      toast.error('Error saving rating. Please try again.');
+    }
+  };
 
   useEffect(() => {
     // Function to handle the monthly reset
@@ -378,6 +441,93 @@ const Profile = () => {
             </div>
           </div>
         );
+       // Inside renderContent function
+       case "Delivered":
+        return (
+          <div>
+            <h1 className="text-2xl font-bold mb-4">Delivered Items</h1>
+            {orderData ? (
+              <div className="w-full max-w-3xl">
+                {orderData.filter((order) => order.deliveryStatus.toLowerCase() === "delivered").length > 0 ? (
+                  orderData
+                    .filter((order) => order.deliveryStatus.toLowerCase() === "delivered")
+                    .map((order) => (
+                      <div key={order._id} className="mb-6 relative">
+                        <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
+                          {order.products.map((product) => (
+                            <div
+                              key={product._id}
+                              className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm relative"
+                            >
+                              <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
+                                <img
+                                  src={product.image[0]}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="ml-4 flex flex-col justify-between flex-1">
+                                <h3 className="text-lg font-semibold text-gray-800">
+                                  {product.name}
+                                </h3>
+                                <p className="text-sm text-gray-700">
+                                  <strong>Total Cost:</strong>{" "}
+                                  <span className="font-bold text-gray-800">
+                                    {"₹" + product.price * product.quantity}
+                                  </span>
+                                </p>
+                                <p className="text-sm text-gray-700">
+                                  <strong>Delivered On:</strong>{" "}
+                                  {new Date(order.deliveredDate).toLocaleString("en-US", {
+                                    weekday: "long",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </p>
+                              </div>
+                              {/* Star Rating Section */}
+                              <div className="absolute top-0 right-0 mt-4 mr-4">
+                                <div className="flex items-center space-x-1">
+                                  <span className="text-sm text-gray-700 mr-2">Your Rating:</span>
+                                  {!ratedItems[product._id] ? (
+                                    <StarRating
+                                      itemId={product._id}
+                                      initialRating={product.rating}
+                                      onSave={handleSaveRating}
+                                    />
+                                  ) : (
+                                    <div className="text-green-500">Thanks for rating!</div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+                    <p>No delivered items found!</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+                <p>No delivered items found!</p>
+              </div>
+            )}
+          </div>
+        );
+      
+    
+
+    
+
       // case "Track Order":
         // return (
         //   <div>
@@ -463,6 +613,17 @@ const Profile = () => {
                 Address
               </button>
             </li>
+            <li className={activeSection === "Delivered" ? "font-bold text-sky-600" : ""}>
+    <button
+      onClick={() => {
+        setActiveSection("Delivered");
+        toggleSidebar();
+      }}
+      className="text-lg"
+    >
+      Delivered
+    </button>
+  </li>
             {/* <li
               className={
                 activeSection === "Track Order" ? "font-bold text-sky-600" : ""

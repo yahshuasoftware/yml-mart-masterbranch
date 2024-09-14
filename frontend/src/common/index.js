@@ -21,16 +21,16 @@ const SummaryApi = {
         url: `${backendDomin}/api/all-user`,
         method: 'get'
     },
-    updateUser : {
-        url : `${backendDomin}/api/update-user`,
-        method : "post"
+    updateUser: {
+        url: `${backendDomin}/api/update-user`,
+        method: "post"
     },
     uploadProduct: {
         url: `${backendDomin}/api/upload-product`,
         method: 'post'
     },
     uploadAddress: {
-        url: `${backendDomin}/api/user-details`,
+        url: `${backendDomin}/api/upload-address`,
         method: 'post'
     },
     uploadBanner: {
@@ -112,7 +112,19 @@ const SummaryApi = {
     uploadKYC: {
         url: `${backendDomin}/api/upload-kyc`,
         method: 'post'
-      }
+    },
+    getKYC: {
+        url: `${backendDomin}/api/users-with-kyc`,
+        method: 'get'
+    },
+    updateKYC: {
+        url: `${backendDomin}/api/upload-kyc`, 
+        method: 'put'
+    },
+    saveRating: {
+        url: `${backendDomin}/api/rating/saveRating`,
+        method: 'post'
+    }
 };
 
 export default SummaryApi;
