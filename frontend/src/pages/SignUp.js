@@ -14,6 +14,8 @@ const SignUp = () => {
       email : "",
       password : "",
       name : "",
+      //Hello
+      refferredbycode:"",
       confirmPassword : "",
       profilePic : "",
       mobileNo:""
@@ -44,7 +46,7 @@ const SignUp = () => {
     })
 
   }
-
+// handelsubmit
 
   const handleSubmit = async(e) =>{
       e.preventDefault()
@@ -60,6 +62,7 @@ const SignUp = () => {
           })
     
           const dataApi = await dataResponse.json()
+          console.log(dataApi.message)
 
           if(dataApi.success){
             toast.success(dataApi.message)
@@ -102,7 +105,7 @@ const SignUp = () => {
                               <div className='bg-slate-100 p-2'>
                                   <input 
                                       type='text' 
-                                      placeholder='enter your name' 
+                                      placeholder='Enter Your Name' 
                                       name='name'
                                       value={data.name}
                                       onChange={handleOnChange}
@@ -115,7 +118,7 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2'>
                                 <input 
                                     type='email' 
-                                    placeholder='enter email' 
+                                    placeholder='Enter Email' 
                                     name='email'
                                     value={data.email}
                                     onChange={handleOnChange}
@@ -129,11 +132,25 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2'>
                                 <input 
                                     type='number' 
-                                    placeholder='enter email' 
+                                    placeholder='Enter Mobile No' 
                                     name='mobileNo'
                                     value={data.mobileNo}
                                     onChange={handleOnChange}
                                     required
+                                    className='w-full h-full outline-none bg-transparent'/>
+                            </div>
+                        </div>
+
+                        <div className='grid'>
+                            <label>Refferal Code : </label>
+                            <div className='bg-slate-100 p-2'>
+                                <input 
+                                    type='text' 
+                                    placeholder='Enter Refferal Code' 
+                                    name='refferredbycode'
+                                    value={data.refferredbycode}
+                                    onChange={handleOnChange}
+                                    
                                     className='w-full h-full outline-none bg-transparent'/>
                             </div>
                         </div>
@@ -143,7 +160,7 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2 flex'>
                                 <input 
                                     type={showPassword ? "text" : "password"} 
-                                    placeholder='enter password'
+                                    placeholder='Enter Password'
                                     value={data.password}
                                     name='password' 
                                     onChange={handleOnChange}
@@ -170,9 +187,9 @@ const SignUp = () => {
                             <div className='bg-slate-100 p-2 flex'>
                                 <input 
                                     type={showConfirmPassword ? "text" : "password"} 
-                                    placeholder='enter confirm password'
+                                    placeholder='Enter Confirm password'
                                     value={data.confirmPassword}
-                                    name='confirmPassword' 
+                                    name='confirmPassword' x
                                     onChange={handleOnChange}
                                     required
                                     className='w-full h-full outline-none bg-transparent'/>
@@ -193,11 +210,11 @@ const SignUp = () => {
                             </div>
                         </div>
 
-                        <button className='bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>Sign Up</button>
+                        <button className='bg-sky-600 hover:bg-sky-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>Sign Up</button>
 
                     </form>
 
-                    <p className='my-5'>Already have account ? <Link to={"/login"} className=' text-red-600 hover:text-red-700 hover:underline'>Login</Link></p>
+                    <p className='my-5'>Already have account ? <Link to={"/login"} className=' text-sky-600 hover:text-sky-700 hover:underline'>Login</Link></p>
             </div>
 
 

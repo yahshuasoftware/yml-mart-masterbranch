@@ -3,25 +3,25 @@ import CategoryList from '../components/CategoryList'
 import BannerProduct from '../components/BannerProduct'
 import HorizontalCardProduct from '../components/HorizontalCardProduct'
 import VerticalCardProduct from '../components/VerticalCardProduct'
-
+import AdBanner from '../components/AdBannerProduct'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
     <div>
       <CategoryList/>
       <BannerProduct/>
+      <Link to={"/refer"}><AdBanner/></Link>
+      
+      <VerticalCardProduct category={"groceries"} heading={"Popular's Groceries"}/>
 
-      <HorizontalCardProduct category={"airpodes"} heading={"Top's Airpodes"}/>
-      <HorizontalCardProduct category={"watches"} heading={"Popular's Watches"}/>
-
-      <VerticalCardProduct category={"mobiles"} heading={"Mobiles"}/>
-      <VerticalCardProduct category={"Mouse"} heading={"Mouse"}/>
-      <VerticalCardProduct category={"televisions"} heading={"Televisions"}/>
-      <VerticalCardProduct category={"camera"} heading={"Camera & Photography"}/>
-      <VerticalCardProduct category={"earphones"} heading={"Wired Earphones"}/>
-      <VerticalCardProduct category={"speakers"} heading={"Bluetooth Speakers"}/>
-      <VerticalCardProduct category={"refrigerator"} heading={"Refrigerator"}/>
-      <VerticalCardProduct category={"trimmers"} heading={"Trimmers"}/>
+      <VerticalCardProduct category={"medicines"} heading={"Medicines"}/>
+      <VerticalCardProduct category={"fruits"} heading={"Fruits"}/>
+      <VerticalCardProduct category={"beauty"} heading={"Beauty"}/>
+      <VerticalCardProduct category={"stationary"} heading={"Stationary"}/>
+      <VerticalCardProduct category={"personal care"} heading={"Personal Care"}/>
+      <VerticalCardProduct category={"home decor"} heading={"Home Decor"}/>
+      <VerticalCardProduct category={"home care"} heading={"Home Care"}/>
       
     </div>
   )

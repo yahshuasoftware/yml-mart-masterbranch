@@ -1,5 +1,9 @@
 import React from "react";
 import { FaInstagram, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { IoIosCall,IoMdMail  } from "react-icons/io";
+import { IoRemoveOutline } from "react-icons/io5";
+import {Link} from "react-router-dom"
+import contact from "../pages/ContactUs"
 // import "../Footer/footer.css";
 <style>
   
@@ -9,26 +13,26 @@ const Footer = () => {
     <div className="footer">
       <div className="top">
         <div className="footer-top-img">
-          <a href="/about" >
+          <Link to={"/about"} >
             <div className="company-img">
               <img src="comp1.png" alt="" />
             </div>
             <p>About Company</p>
-          </a>
+          </Link>
 
-          <a href="contact">
+          <Link to={"/contact"}>
             <div className="company-img">
-              <img src="contact.png" alt="" />
+              <img src="support.png" alt="" />
             </div>
             <p>Contact Us</p>
-          </a>
+          </Link>
 
-          <a href="/askquestion">
+          <Link to="/askquestion">
             <div className="company-img">
-              <img src="comp2.png" alt="" />
+              <img src="question.png" alt="" />
             </div>
             <p>Ask Question</p>
-          </a>
+          </Link>
         </div>
       </div>
       <div className="bottom">
@@ -69,9 +73,9 @@ const Footer = () => {
             <p>Subscribe to our new channel to receive the latest updates.</p>
             <form action="">
               <input
-                className="text"
+                className="email text-black"
                 type="email"
-                placeholder="arjunahanwate358@gmail.com"
+                placeholder="Enter Your Email"
                 name=""
                 id=""
               />
@@ -84,12 +88,27 @@ const Footer = () => {
           <div className="left"></div>
           <div className="right">
             <div className="up">
+              <div className="conversation">
               <p>Start a conversation</p>
+              </div>
+              <div className="address">
               <p>Address</p>
+              </div>
+              
+              
             </div>
             <div className="down">
+              <div className="call">
+              <IoIosCall/>
               <p>+91-8888888888</p>
+              </div>
+
+              <div className="call">
+              <IoMdMail/>
               <p>support@ymlmart.com</p>
+              </div>
+              
+              
               <p>+91-8888888888</p>
               <p>Pune, Maharashtra</p>
             </div>

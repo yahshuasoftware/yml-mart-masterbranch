@@ -1,5 +1,5 @@
-const backendDomin = "http://localhost:8080"
-
+const backendDomin = "http://localhost:8000"
+// const backendDomin = process.env.SERVER_URI ;
 const SummaryApi = {
     signUP : {
         url : `${backendDomin}/api/signup`,
@@ -21,6 +21,10 @@ const SummaryApi = {
         url : `${backendDomin}/api/all-user`,
         method : 'get'
     },
+    referralOrders:{
+        url : `${backendDomin}/api/referralOrders`,
+        method : 'get'
+    },
     updateUser : {
         url : `${backendDomin}/api/update-user`,
         method : "post"
@@ -29,14 +33,46 @@ const SummaryApi = {
         url : `${backendDomin}/api/upload-product`,
         method : 'post'
     },
+    uploadAddress : {
+        url : `${backendDomin}/api/user-details`,
+        method : 'post'
+    },
+    uploadBanner: {
+        url : `${backendDomin}/api/upload-banner`,
+        method : 'post'
+    },
+    uploadAdBanner: {
+        url : `${backendDomin}/api/upload-adbanner`,
+        method : 'post'
+    },
+    getOrders : {
+        url : `${backendDomin}/api/dashboard`,
+        method : 'get'
+    },
     allProduct : {
         url : `${backendDomin}/api/get-product`,
+        method : 'get'
+    },
+    allBanner : {
+        url : `${backendDomin}/api/all-banner`,
+        method : 'get'
+    },
+    allAdBanner : {
+        url : `${backendDomin}/api/all-adbanner`,
         method : 'get'
     },
     updateProduct : {
         url : `${backendDomin}/api/update-product`,
         method  : 'post'
     },
+    deleteProduct: {
+        url: `${backendDomin}/api/delete-product`,
+        method: 'delete' 
+      },
+      deleteAddress:{
+        url: `${backendDomin}/api/delete-address`,
+        method: 'delete' 
+      },
     categoryProduct : {
         url : `${backendDomin}/api/get-categoryProduct`,
         method : 'get'
@@ -52,6 +88,10 @@ const SummaryApi = {
     addToCartProduct : {
         url : `${backendDomin}/api/addtocart`,
         method : 'post'
+    },
+    buyNow : {
+        url : `${backendDomin}/api/buyNow`,
+        method : "post"
     },
     addToCartProductCount : {
         url : `${backendDomin}/api/countAddToCartProduct`,
@@ -76,8 +116,19 @@ const SummaryApi = {
     filterProduct : {
         url : `${backendDomin}/api/filter-product`,
         method : 'post'
+    },
+    createOrder : {
+        url : `${backendDomin}/api/payment/create-order`,
+        method : 'post'
+    },
+    createOrder_from_buynow : {
+        url : `${backendDomin}/api/payment/create-order-buynow`,
+        method : 'post'
+    },
+    payment_Success : {
+        url : `${backendDomin}/api/payment/payment-success`,
+        method : 'post'
     }
 }
 
-
-export default SummaryApi
+export default SummaryApi;

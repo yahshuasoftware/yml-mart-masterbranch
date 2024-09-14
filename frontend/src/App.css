@@ -28,7 +28,7 @@
     color: #fff;
 }
 .top{
-    height: 80px;
+    height: 70px;
     background: #F0F4FB;
 }
 
@@ -43,7 +43,7 @@ input::placeholder {
     color: #000000;
 }
 .footer-top-img p{
-    font-size: 20px;
+    font-size: 15px;
 }
 .footer-top-img{
     width: 70%;
@@ -54,6 +54,8 @@ input::placeholder {
 
 
 h3{
+    font-size: larger;
+    font-weight: 500;
     margin-top: 0;
 
 }
@@ -73,8 +75,8 @@ h3{
 }
 
 .top img{
-    height: 60px;
-    width: 70px;
+    height: 43px;
+    width: 51px;
 }
 .company-img{
     display: flex;
@@ -101,6 +103,7 @@ a:hover{
 .logo{
     height: 50px;
     width: 120px;
+    margin-bottom: 20px;
 }
 .Download-section h2{
     margin-bottom: 0;
@@ -111,8 +114,9 @@ a:hover{
 }
 .images .img2{
     padding-bottom: 5px;
-    height: 50px;
-    width: 150px;
+    height: 53px;
+    width: 153px;
+    margin-left: -2px;
 }
 .text {
     font-size: 15px;
@@ -137,6 +141,10 @@ a:hover{
     cursor: pointer; 
     transition: background-color 0.3s ease; 
 }
+h2{
+    font-size: larger;
+    font-weight: 500;
+}
 
 
 .address{
@@ -156,8 +164,15 @@ a:hover{
 }
 .up{
     display: flex;
-    justify-content: space-around;
+  
 }
+.conversation{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 60%;
+}
+
 .up p{
 margin: 0px;
 }
@@ -182,7 +197,27 @@ margin: 0px;
 }
 .socials a{
    text-decoration: none;
-} 
+}
+
+.btn{
+    color: white;
+}
+.btn:hover{
+    background: white;
+    color: #214C69;
+}
+
+
+.email{
+    height: 50px;
+    padding:  0 10px;
+    border-radius: 10px;
+}
+.call{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .social-icons{
         display: flex;
@@ -193,10 +228,36 @@ margin: 0px;
     margin: 10px;
 }
 
+/* In your CSS file */
+/* @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @keyframes shine {
+    0% { border-color: #f0f; }
+    50% { border-color: #0ff; }
+    100% { border-color: #f0f; }
+  }
+  
+  .blink {
+    position: relative;
+    border: 2px solid #f0f;
+    padding: 10px 15px;
+    background: #ff0000;
+    color: #fff;
+    font-size: 16px;
+    animation: blink 1s infinite, shine 2s infinite;
+  }
+   */
+
 @media (max-width: 768px) {
     .footer-top-img{
         width: 100%;
     }
+
+    
 
     .top img{
         height: 40px;
@@ -219,9 +280,13 @@ margin: 0px;
         margin-bottom: 20px; /* Add spacing between sections */
     }
 
-    .vertical{
-        flex-direction: column;
-    }
+   .vertical{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   }
+  
 
     .horizantal .Special-section,
     .horizantal .Account-shipping,

@@ -2,6 +2,20 @@ import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
 
+// Assuming you have a set of images for each category
+const categoryImages = {
+    "personal care": require('../assest/Images/Personal Care/8.jpeg'),
+    "home care": require('../assest/Images/Home Care/5.jpeg'),
+    "medicines": require('../assest/Images/Medicines/7.jpeg'),
+    "fruits": require('../assest/Images/fruits/3.jpeg'),
+    "beauty": require('../assest/Images/Beauty/1.jpeg'),
+    "stationary": require('../assest/Images/Stationary/10.jpeg'),
+    "electronics": require('../assest/Images/Electronics/2.jpeg'),
+    "home decor": require('../assest/Images/Kitchen/11.jpeg'),
+    "groceries": require('../assest/Images/Groceries/4.png'),
+    //"default": require('../assets/default-image.png') // Default image if no specific category image is found
+};
+
 const CategoryList = () => {
     const [categoryProduct, setCategoryProduct] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -29,7 +43,7 @@ const CategoryList = () => {
     }, []);
 
     return (
-        <div className='container mx-auto py-5 px-8'>
+        <div className='container mx-auto pt-5 pb-8 px-8'>
             <div className='flex items-center gap-4 justify-between overflow-scroll scrollbar-none'>
                 {loading ? (
                     categoryLoading.map((_, index) => (
@@ -47,7 +61,7 @@ const CategoryList = () => {
                         >
                             <div className='w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden p-4 bg-slate-200 flex items-center justify-center'>
                                 <img
-                                    src={product?.productImage[0]}
+                                    src={categoryImages[product?.category.toLowerCase()] || categoryImages["default"]}
                                     alt={product?.productName || 'Product Image'} // More descriptive alt text
                                     className='h-full object-scale-down mix-blend-multiply hover:scale-125 transition-all'
                                 />

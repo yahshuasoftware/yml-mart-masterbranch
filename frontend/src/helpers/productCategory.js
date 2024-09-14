@@ -1,19 +1,14 @@
 const productCategory = [
 
-    { id : 1, label : "Airpodes", value : "airpodes"},
-    { id : 2, label : "Camera", value : "camera"},
-    { id : 3, label : "Earphones", value : "earphones"},
-    { id : 4, label : "Mobiles", value : "mobiles"},
-    { id : 5, label : "Mouse", value : "Mouse"},
-    { id : 6, label : "Printers", value : "printers"},
-    { id : 7, label : "Processor", value : "processor"},
-    { id : 8, label : "Refrigerator", value : "refrigerator"},
-    { id : 9, label : "Speakers", value : "speakers"},
-    { id : 10, label : "Trimmers", value : "trimmers"},
-    { id : 11, label : "Televisions", value : "televisions"},
-    { id : 12, label : "Watches", value : "watches"},
-    { id : 13, label : "Groceries", value : "Groceries"},
-
+    { id : 1, label : "Personal Care", value : "personal care"},
+    { id : 2, label : "Home Care", value : "home care"},
+    { id : 3, label : "Medicines", value : "medicines"},
+    { id : 4, label : "Fruits", value : "fruits"},
+    { id : 5, label : "Beauty", value : "beauty"},
+    { id : 6, label : "Stationary", value : "stationary"},
+    { id : 7, label : "Electronics", value : "electronics"},
+    { id : 8, label : "Home Decor", value : "home decor"},
+    { id : 9, label : "Groceries", value : "groceries"},
 ]
 
 

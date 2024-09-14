@@ -1,30 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
-
-import image1 from '../assest/banner/img1.webp';
-import image2 from '../assest/banner/img2.webp';
-import image3 from '../assest/banner/img3.jpg';
-import image4 from '../assest/banner/img4.jpg';
-import image5 from '../assest/banner/img5.webp';
-
-import image1Mobile from '../assest/banner/img1_mobile.jpg';
-import image2Mobile from '../assest/banner/img2_mobile.webp';
-import image3Mobile from '../assest/banner/img3_mobile.jpg';
-import image4Mobile from '../assest/banner/img4_mobile.jpg';
-import image5Mobile from '../assest/banner/img5_mobile.png';
-
-import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
+import 'swiper/css/autoplay';
+import 'swiper/css/effect-coverflow';
+import { Pagination, Autoplay,} from 'swiper/modules';
+import SummaryApi from '../common';
 
 const BannerProduct = () => {
-    const desktopImages = [image1, image2, image3, image4, image5];
-    const mobileImages = [image1Mobile, image2Mobile, image3Mobile, image4Mobile, image5Mobile];
+    const [bannerImages, setBannerImages] = useState([]);
+
+    useEffect(() => {
+        fetch(SummaryApi.allBanner.url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    const bannersArray = Object.values(data.data);
+                    setBannerImages(bannersArray);
+                } else {
+                    console.error('Unexpected data format:', data);
+                }
+            })
+            .catch(error => console.error('Error fetching banner images:', error));
+    }, []);
 
     return (
         <div className='container mx-auto px-4 rounded relative'>
-            <div className='h-56 md:h-72 w-full relative'>
+            <div className='h-56 md:h-72 w-full relative' style={{ height: '250px' }}>
                 
                 {/* Desktop and tablet version */}
                 <div className='hidden md:block h-full w-full relative'>
@@ -33,13 +35,14 @@ const BannerProduct = () => {
                         spaceBetween={20}
                         loop={true}
                         pagination={{ clickable: true }}
-                        autoplay={{ delay: 5000, disableOnInteraction: false }}
-                        modules={[Pagination, Autoplay, EffectCoverflow]}
+                        autoplay={{ delay: 3000, disableOnInteraction: false }} // Adjust delay as needed
+                        modules={[Pagination, Autoplay,]}
                         className='h-full'
+                        effect='coverflow'
                     >
-                        {desktopImages.map((imageURL, index) => (
-                            <SwiperSlide key={index} className='flex justify-center items-center'>
-                                <img src={imageURL} className='w-full h-full object-cover rounded-md' alt={`Banner ${index}`} />
+                        {bannerImages.map((banner, index) => (
+                            <SwiperSlide key={banner._id || index} className='flex justify-center items-center'>
+                                <img src={banner.imageUrl} className='w-full h-full object-cover rounded-md' alt={`Banner ${index}`} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
@@ -52,21 +55,16 @@ const BannerProduct = () => {
                         spaceBetween={10}
                         loop={true}
                         pagination={{ clickable: true }}
-                        autoplay={{ delay: 5000, disableOnInteraction: false }}
+                        autoplay={{ delay: 3000, disableOnInteraction: false }} // Adjust delay as needed
                         modules={[Pagination, Autoplay]}
                         className='h-full'
                     >
-                        {mobileImages.map((imageURL, index) => (
-                            <SwiperSlide key={index} className='flex justify-center items-center'>
-                                <img src={imageURL} className='w-full h-full object-cover rounded-md' alt={`Banner ${index}`} />
+                        {bannerImages.map((banner, index) => (
+                            <SwiperSlide key={banner._id || index} className='flex justify-center items-center'>
+                                <img src={banner.imageUrl} className='w-full h-full object-cover rounded-md' alt={`Banner ${index}`} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                </div>
-
-                {/* Swiper Pagination */}
-                <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2'>
-                    {/* Pagination is handled by Swiper */}
                 </div>
             </div>
         </div>
