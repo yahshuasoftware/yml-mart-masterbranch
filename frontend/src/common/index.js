@@ -1,6 +1,5 @@
 const backendDomin = "http://localhost:8000"
 // const backendDomin = process.env.SERVER_URI ;
-
 const SummaryApi = {
     signUP : {
         url : `${backendDomin}/api/signup`,
@@ -26,17 +25,17 @@ const SummaryApi = {
         url : `${backendDomin}/api/referralOrders`,
         method : 'get'
     },
-    updateUser: {
-        url: `${backendDomin}/api/update-user`,
-        method: "post"
+    updateUser : {
+        url : `${backendDomin}/api/update-user`,
+        method : "post"
     },
     uploadProduct : {
         url : `${backendDomin}/api/upload-product`,
         method : 'post'
     },
-    uploadAddress: {
-        url: `${backendDomin}/api/user-details`,
-        method: 'post'
+    uploadAddress : {
+        url : `${backendDomin}/api/user-details`,
+        method : 'post'
     },
     uploadBanner: {
         url : `${backendDomin}/api/upload-banner`,
@@ -118,12 +117,18 @@ const SummaryApi = {
         url : `${backendDomin}/api/filter-product`,
         method : 'post'
     },
-    uploadKYC: {
-        url: `${backendDomin}/api/upload-kyc`,
-        method: 'post'
-      }
-};
-
-export default SummaryApi
+    createOrder : {
+        url : `${backendDomin}/api/payment/create-order`,
+        method : 'post'
+    },
+    createOrder_from_buynow : {
+        url : `${backendDomin}/api/payment/create-order-buynow`,
+        method : 'post'
+    },
+    payment_Success : {
+        url : `${backendDomin}/api/payment/payment-success`,
+        method : 'post'
+    }
+}
 
 export default SummaryApi;

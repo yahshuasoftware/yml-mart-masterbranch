@@ -227,17 +227,17 @@ const AdminEditProduct = ({
                         className='p-2 bg-slate-100 border rounded'
                         required
                     />
-                    <label htmlFor='commissionPrice' className='mt-3'>Quantity :</label>
+                    {/* <label htmlFor='commissionPrice' className='mt-3'>Commission Price :</label>
                     <input 
-                    type='Number' 
-                    id='quantity' 
-                    placeholder='Enter quantity of product' 
-                    value={data.quantity} 
-                    name='quantity'
+                    type='number' 
+                    id='commissionPrice' 
+                    placeholder='Enter Commission price' 
+                    value={data.commissionPrice} 
+                    name='commissionPrice'
                     onChange={handleOnChange}
                     className='p-2 bg-slate-100 border rounded'
                     required
-                    />
+                    /> */}
 
                     <label htmlFor='description' className='mt-3'>Description :</label>
                     <textarea 

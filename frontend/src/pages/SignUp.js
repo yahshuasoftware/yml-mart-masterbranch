@@ -29,13 +29,13 @@ const SignUp = () => {
   };
 
   const handleUploadPic = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]; // Missing semicolon was here
     setData((prev) => ({
       ...prev,
       profilePic: file // Store the file object directly
-    }));
+    }))
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
