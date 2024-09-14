@@ -13,6 +13,7 @@ const Login = () => {
         email : "",
         password : ""
     })
+    const { saveAuthToken } = useContext(Context);
     const navigate = useNavigate()
     const { fetchUserDetails, fetchUserAddToCart } = useContext(Context)
 
@@ -44,9 +45,10 @@ const Login = () => {
 
         if(dataApi.success){
             toast.success(dataApi.message)
+            
+            const token = dataApi.token; 
+            saveAuthToken(token);
             navigate('/')
-            fetchUserDetails()
-            fetchUserAddToCart()
         }
 
         if(dataApi.error){
