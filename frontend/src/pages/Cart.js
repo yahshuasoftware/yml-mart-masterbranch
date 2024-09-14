@@ -5,7 +5,6 @@ import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Context from "../context";
-import fetchUserAddToCart from '../components/Header'
 // import { Plus, Minus } from 'react-feather';
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
@@ -23,6 +22,7 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = useState(user?.address[0]); 
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showAllAddresses, setShowAllAddresses] = useState(false);
+  
 
   const [userData, setUserData] = useState({});
   const [address, setAddress] = useState({});
@@ -93,6 +93,7 @@ const Cart = () => {
       const responseData = await response.json();
       if (responseData.success) {
         setData(responseData.data);
+        console.log(data)
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -111,30 +112,23 @@ const Cart = () => {
     if (!loading && data.length > 0) {
       // Calculate total price
       const total = data.reduce((previousValue, currentValue) => {
-        // Check if productId and sellingPrice exist
-        if (currentValue.productId && currentValue.productId.sellingPrice) {
-          return previousValue + (currentValue.quantity * currentValue.productId.sellingPrice);
-        }
-        return previousValue; // Return previous value if sellingPrice is missing
+        return previousValue + (currentValue.quantity * currentValue.productId.sellingPrice);
       }, 0);
   
-      // Calculate discount
-      const discount = 0.05 * total;
-  
-      // Set states
+      // Set total price and final amount
       setTotalPrice(total);
-  
-      if (user?.refferal?.refferredbycode) {
+      if(user?.refferal?.refferredbycode){
         setDiscountPrice(discount);
-        alert("Yes, have a referral code");
-      } else {
-        setDiscountPrice(0);
-      }
-  
+        alert("yes have a refferbycode")
+      }else setDiscountPrice(0);
+
+      // alert(discountPrice)
+
+      
       setFinalAmount(total - discountPrice);
+      alert(finalAmount)
     }
   }, [data, loading]);
-  
  
   const totalQty = data.reduce(
     (previousValue, currentValue) => previousValue + currentValue.quantity,
@@ -148,7 +142,8 @@ const Cart = () => {
 
   
 
-  const increaseQty = async (id, qty) => {
+  const increaseQty = async (id, qty, prdId) => {
+    console.log(prdId);
     const response = await fetch(SummaryApi.updateCartProduct.url, {
       method: SummaryApi.updateCartProduct.method,
       credentials: "include",
@@ -158,18 +153,27 @@ const Cart = () => {
       body: JSON.stringify({
         _id: id,
         quantity: qty + 1,
+        productId: prdId,
       }),
     });
-
+  
     const responseData = await response.json();
-
+  
     if (responseData.success) {
-      fetchData();
+      if (responseData.outOfStock) {
+        alert("Product out of stock");
+      } else if (responseData.availableStock <= 5) {
+        alert(`Only ${responseData.availableStock} item(s) left in stock`);
+      }
+      fetchData(); // Refresh the cart data
+    } else {
+      alert(responseData.message); // Show error message if any
     }
   };
-
-  const decraseQty = async (id, qty) => {
-    if (qty >= 2) {
+  
+  
+  const decreaseQty = async (id, qty,prdId) => {
+    if (qty > 1) { // Only allow decrease if quantity is greater than 1
       const response = await fetch(SummaryApi.updateCartProduct.url, {
         method: SummaryApi.updateCartProduct.method,
         credentials: "include",
@@ -179,16 +183,20 @@ const Cart = () => {
         body: JSON.stringify({
           _id: id,
           quantity: qty - 1,
+          productId :prdId
         }),
       });
-
+  
       const responseData = await response.json();
-
+  
       if (responseData.success) {
-        fetchData();
+        fetchData(); // Refresh the cart data
+      } else {
+        alert(responseData.message); // Show error message if any
       }
     }
   };
+  
 
   const deleteCartProduct = async (id) => {
     const response = await fetch(SummaryApi.deleteCartProduct.url, {
@@ -213,7 +221,7 @@ const Cart = () => {
   
   // razorepay
   const handlePayment = async (finalAddress) => {
-    if(!hasAddress){
+    if(!selectedAddress){
       alert("Add Delivery Address")
     }else{
       try {
@@ -379,130 +387,117 @@ const Cart = () => {
           </div>
         )}
       </div>
-  
-      {/* Payment Section */}
-      <div className="p-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">Payment</h3>
-        <button
-          className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"
-          onClick={() => handlePayment(selectedAddress)}
-        >
-          Proceed to Payment
-        </button>
-      </div>
+    {/* Payment Section */}
+    <div className="p-6">
+      <h3 className="text-xl font-semibold mb-4 text-gray-800">Payment</h3>
+      <button
+        className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"
+        onClick={() => handlePayment(selectedAddress)}      >
+        Proceed to Payment
+      </button>
     </div>
-  
-    {/*** Right Column - My Cart Summary ***/}
-    <div className="w-full lg:w-[30%] bg-white border border-gray-200 rounded-lg shadow-lg">
-      <div className="p-6">
-        <div className="flex justify-between mb-4">
-          <h3 className="text-xl font-semibold text-gray-800">My Cart</h3>
-          <span className="text-gray-600">{totalQty} items</span>
-        </div>
-        <div className="mb-4">
-          {loading ? (
-            <p className="text-gray-600">Loading...</p>
-          ) : (
-            data.map((product) => {
-              // Check if productId is valid
-              if (!product?.productId) {
-                return (
-                  <div key={product._id} className="text-red-500">
-                    Product data is unavailable.
-                  </div>
-                );
-              }
-  
-              return (
-                <div
-                  key={product._id}
-                  className="flex justify-between mb-4 p-3 border-b border-gray-200"
-                >
-                  {/* Product Image and Quantity */}
-                  <div className="flex flex-col items-center w-24">
-                    <div className="w-16 h-16 bg-white flex items-center justify-center  border-gray-300 rounded-lg overflow-hidden">
-                      {/* Check if productImage is available */}
-                      {product?.productId?.productImage?.[0] ? (
-                        <img
-                          src={product.productId.productImage[0]}
-                          alt={product.productId.productName}
-                          className="max-w-full max-h-full object-contain"
-                        />
-                      ) : (
-                        <p className="text-gray-500">No Image</p>
-                      )}
-                    </div>
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2 mt-2">
-                      <button
-                        className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-5 h-5  flex justify-center items-center rounded-full"
-                        onClick={() => decraseQty(product?._id, product?.quantity)}
-                      >
-                        -
-                      </button>
-                      <span className="text-gray-700">{product?.quantity}</span>
-                      <button
-                        className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-5 h-5 flex justify-center items-center rounded-full"
-                        onClick={() => increaseQty(product?._id, product?.quantity)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-  
-                  {/* Product Details and Delete Button */}
-                  <div className="flex flex-col flex-1 ml-4">
-                    <div className="flex flex-col">
-                      <p className="text-sm font-medium text-gray-800">
-                        {product.productId.productName}
-                      </p>
-                      <p className="text-sm font-semibold text-gray-500 line-through">
-                        {displayINRCurrency(
-                          product.quantity * product.productId.price
-                        )}
-                      </p>
-                      <p className="text-sm font-semibold text-gray-800">
-                        {displayINRCurrency(
-                          product.quantity * product.productId.sellingPrice
-                        )}
-                      </p>
-                    </div>
-                    {/* Delete Button */}
-                    <div className="flex justify-end mt-2">
-                      <div
-                        className="text-red-600 hover:bg-red-600 hover:text-white p-2 rounded-full cursor-pointer"
-                        onClick={() => deleteCartProduct(product?._id)}
-                      >
-                        <MdDelete />
-                      </div>
-                    </div>
-                  </div>
+  </div>
+
+  {/*** Right Column - My Cart Summary ***/}
+  <div className="w-full lg:w-[30%] bg-white border border-gray-200 rounded-lg shadow-lg">
+    <div className="p-6">
+      <div className="flex justify-between mb-4">
+        <h3 className="text-xl font-semibold text-gray-800">My Cart</h3>
+        <span className="text-gray-600">{totalQty} items</span>
+      </div>
+      <div className="mb-4">
+        {loading ? (
+          <p className="text-gray-600">Loading...</p>
+        ) : (
+          data.map((product) => (
+            
+            <div
+              key={product._id}
+              className="flex justify-between mb-4 p-3 border-b border-gray-200"
+            >
+              {/* Product Image and Quantity */}
+              <div className="flex flex-col items-center w-24">
+                <div className="w-16 h-16 bg-white flex items-center justify-center  border-gray-300 rounded-lg overflow-hidden">
+                  <img
+                    src={product.productId.productImage[0]}
+                    alt={product.productId.productName}
+                    className="max-w-full max-h-full object-contain"
+                  />
                 </div>
-              );
-            })
-          )}
+                {/* Quantity Controls */}
+                <div className="flex items-center gap-2 mt-2">
+                  <button
+                    className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-5 h-5  flex justify-center items-center rounded-full"
+                    onClick={() =>
+                      decraseQty(product?._id, product?.quantity)
+                    }
+                  >
+                    -
+                  </button>
+                  <span className="text-gray-700">{product?.quantity}</span>
+                  <button
+                    className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white w-5 h-5 flex justify-center items-center rounded-full"
+                    onClick={() =>
+                      increaseQty(product?._id, product?.quantity)
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Product Details and Delete Button */}
+              <div className="flex flex-col flex-1 ml-4">
+                <div className="flex flex-col">
+                  <p className="text-sm font-medium text-gray-800">
+                    {product.productId.productName}
+                  </p>
+                  <p className="text-sm font-semibold text-gray-500 line-through">
+                    {displayINRCurrency(
+                      product.quantity * product.productId.price
+                    )}
+                  </p>
+                  <p className="text-sm font-semibold text-gray-800">
+                    {displayINRCurrency(
+                      product.quantity * product.productId.sellingPrice
+              
+                    )}
+                    
+                  </p>
+                </div>
+                {/* Delete Button */}
+                <div className="flex justify-end mt-2">
+                  <div
+                    className="text-red-600 hover:bg-red-600 hover:text-white p-2 rounded-full cursor-pointer"
+                    onClick={() => deleteCartProduct(product?._id)}
+                  >
+                    <MdDelete />
+                  </div>
+                  
+
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+      <div className="border-t pt-4">
+        <div className="flex justify-between mb-2 text-gray-700">
+          <span>Delivery Charges:</span>
+          <span>₹0</span>
         </div>
-        <div className="border-t pt-4">
-          <div className="flex justify-between mb-2 text-gray-700">
-            <span>Delivery Charges:</span>
-            <span>₹0</span>
-          </div>
-          <div className="flex justify-between mb-2 text-red-500">
-            <span>Discount:</span>
-            {displayINRCurrency(discountPrice)}
-          </div>
-          <div className="flex justify-between font-semibold text-gray-800">
-            <span>Total:</span>
-            <span className="text-md">
-              {displayINRCurrency(totalPrice)} - {displayINRCurrency(discountPrice)} ={" "}
-              {displayINRCurrency(finalAmount)}
-            </span>
-          </div>
-        </div>
+            <div className="flex justify-between mb-2 text-red-500">
+              <span>Discount:</span>
+              {displayINRCurrency(discountPrice)}
+            </div>
+        <div className="flex justify-between  font-semibold text-gray-800">
+  <span>Total:</span>
+  <span className="text-md">{ displayINRCurrency(totalPrice)} - {displayINRCurrency(discountPrice)} = {displayINRCurrency(finalAmount)}</span>
+</div>
       </div>
     </div>
   </div>
-  
+</div>
 
   );
 };

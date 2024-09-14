@@ -234,9 +234,9 @@ const BusinessProfile = () => {
 
         </div>;
       case 'Business':
-        return <div className="p-4">Business Content...</div>;
+        return <div className="p-4 rounded-lg shadow-md">Business Content...</div>;
       case 'My Team':
-        return <div className="p-4">
+        return <div className="p-4 bg-gray-50 rounded-lg shadow-md">
         {Array.isArray(usersData) && usersData.length > 0 ? (
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-200">
@@ -325,7 +325,7 @@ const BusinessProfile = () => {
       </button>
   <div
   
-        className={`fixed top-0 left-0 h-full bg-gray-100 p-4 transition-transform transform ${
+        className={`fixed top-0 left-0 h-full  p-4 transition-transform transform ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } md:relative md:translate-x-0 md:w-64 z-40`}
       >

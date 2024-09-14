@@ -15,8 +15,8 @@ import { IoIosAddCircle } from "react-icons/io";
 
 import Context from "../context/index";
 import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorcycle } from "react-icons/fa";import { MdLocalShipping, MdCancel } from "react-icons/md";
-// import { BsBagXFill } from "react-icons/bs";
 import { RiShoppingCartFill } from "react-icons/ri"; 
+import { FaStar } from 'react-icons/fa';
 
 
 
@@ -25,10 +25,13 @@ import { RiShoppingCartFill } from "react-icons/ri";
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const backendDomain = process.env.REACT_APP_LOCALHOST_URI;
 
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
+  const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
+
 
 
 
@@ -51,6 +54,68 @@ const Profile = () => {
     state: "",
     zip: "",
   });
+
+
+  const resetTotalPurchasing = () => {
+    setTotalPurchasing(0);
+    console.log("Total purchasing reset to 0");
+  };
+
+  
+
+
+  const getTimeUntilNextFirst = () => {
+    const now = new Date();
+    const nextMonth = now.getMonth() + 1;
+    const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
+    const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
+    return firstOfNextMonth - now;
+  };
+
+
+  useEffect(() => {
+    // Function to handle the monthly reset
+    const handleMonthlyReset = () => {
+      const now = new Date();
+      const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
+
+      // Retrieve the last reset month from localStorage
+      const lastResetMonth = localStorage.getItem('lastResetMonth');
+
+      if (lastResetMonth !== currentMonthYear) {
+        if (now.getDate() === 1) {
+          resetTotalPurchasing();
+          localStorage.setItem('lastResetMonth', currentMonthYear);
+        }
+      }
+    };
+
+    // Perform the initial check on component mount
+    handleMonthlyReset();
+
+    // Schedule the next reset
+    const scheduleNextReset = () => {
+      const delay = getTimeUntilNextFirst();
+      setTimeout(() => {
+        resetTotalPurchasing();
+        const now = new Date();
+        const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
+        localStorage.setItem('lastResetMonth', currentMonthYear);
+        // Schedule the subsequent reset
+        scheduleNextReset();
+      }, delay);
+    };
+
+    scheduleNextReset();
+
+    // Cleanup function to clear timeout when component unmounts
+    return () => {
+      // If you store the timeout ID, you can clear it here
+      // Example:
+      // clearTimeout(timer);
+    };
+  }, []);
+
 
 
   const handleSubmit = async (e) => {
@@ -177,7 +242,7 @@ const Profile = () => {
               <div className="relative inline-block">
                 {userData?.profilePic ? (
                   <img
-                    src={`${userData?.profilePic}`}
+                    src={profilePicUrl}
                     alt="Profile"
                     className="w-24 h-24 rounded-full mb-2"
                   />
@@ -407,6 +472,93 @@ const Profile = () => {
             </div> */}
           </div>
         );
+       // Inside renderContent function
+       case "Delivered":
+        return (
+          <div>
+            <h1 className="text-2xl font-bold mb-4">Delivered Items</h1>
+            {orderData ? (
+              <div className="w-full max-w-3xl">
+                {orderData.filter((order) => order.deliveryStatus.toLowerCase() === "delivered").length > 0 ? (
+                  orderData
+                    .filter((order) => order.deliveryStatus.toLowerCase() === "delivered")
+                    .map((order) => (
+                      <div key={order._id} className="mb-6 relative">
+                        <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
+                          {order.products.map((product) => (
+                            <div
+                              key={product._id}
+                              className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm relative"
+                            >
+                              <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
+                                <img
+                                  src={product.image[0]}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="ml-4 flex flex-col justify-between flex-1">
+                                <h3 className="text-lg font-semibold text-gray-800">
+                                  {product.name}
+                                </h3>
+                                <p className="text-sm text-gray-700">
+                                  <strong>Total Cost:</strong>{" "}
+                                  <span className="font-bold text-gray-800">
+                                    {"₹" + product.price * product.quantity}
+                                  </span>
+                                </p>
+                                <p className="text-sm text-gray-700">
+                                  <strong>Delivered On:</strong>{" "}
+                                  {new Date(order.deliveredDate).toLocaleString("en-US", {
+                                    weekday: "long",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </p>
+                              </div>
+                              {/* Star Rating Section */}
+                              <div className="absolute top-0 right-0 mt-4 mr-4">
+                                <div className="flex items-center space-x-1">
+                                  <span className="text-sm text-gray-700 mr-2">Your Rating:</span>
+                                  {!ratedItems[product._id] ? (
+                                    <StarRating
+                                      itemId={product._id}
+                                      initialRating={product.rating}
+                                      onSave={handleSaveRating}
+                                    />
+                                  ) : (
+                                    <div className="text-green-500">Thanks for rating!</div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+                    <p>No delivered items found!</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+                <p>No delivered items found!</p>
+              </div>
+            )}
+          </div>
+        );
+      
+    
+
+    
+
       // case "Track Order":
         // return (
         //   <div>
@@ -492,6 +644,17 @@ const Profile = () => {
                 Address
               </button>
             </li>
+            <li className={activeSection === "Delivered" ? "font-bold text-sky-600" : ""}>
+    <button
+      onClick={() => {
+        setActiveSection("Delivered");
+        toggleSidebar();
+      }}
+      className="text-lg"
+    >
+      Delivered
+    </button>
+  </li>
             {/* <li
               className={
                 activeSection === "Track Order" ? "font-bold text-sky-600" : ""

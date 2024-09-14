@@ -10,6 +10,9 @@ const app = express();
 const path = require('path');
 const kycRoutes = require('./routes/index');
 
+
+
+// const uploads = multer({ dest: 'uploads/userProfilePics/' });
 const upload = multer({ dest: 'uploads/' });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -26,6 +29,8 @@ app.use('/api', kycRoutes);
 
 
 const PORT = process.env.PORT || 8080;
+
+
 
 connectDB().then(() => {
     app.listen(PORT, () => {

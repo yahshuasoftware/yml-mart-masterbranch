@@ -12,13 +12,18 @@ import SummaryApi from './common';
 import { useDispatch } from 'react-redux';
 import { setUserDetails } from './store/userSlice';
 import 'animate.css';
+<<<<<<< HEAD
 import { ContextProvider } from './context'; 
+=======
+
+
+>>>>>>> 443c980903f9467bf57a51ab19d5e9c48f8791ec
 function App() {
   const dispatch = useDispatch()
  
   const [totalPurchasing, setTotalPurchasing] = useState(0);
 
-
+  
   const fetchUserDetails = async()=>{
       const dataResponse = await fetch(SummaryApi.current_user.url,{
         method : SummaryApi.current_user.method,
