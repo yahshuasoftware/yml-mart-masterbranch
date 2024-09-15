@@ -2,12 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import SummaryApi from "../common";
 import displayINRCurrency from "../helpers/displayCurrency";
 import { MdCheckCircle, MdDelete } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
-import { Link } from "react-router-dom";
 import Context from "../context";
-// import { Plus, Minus } from 'react-feather';
-import AddressForm from "../components/AddressForm";
-import { uploadAddress } from "../helpers/uploadAddress";
 
 const Cart = () => {
   const [data, setData] = useState([]);
@@ -23,31 +18,11 @@ const Cart = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showAllAddresses, setShowAllAddresses] = useState(false);
 
-  const [userData, setUserData] = useState({});
-  const [address, setAddress] = useState({});
-
-  const handleAddNewAddress = () => {
-    // Toggle the form's visibility
-    setShowAddressForm((prevState) => !prevState);
-
-    // Reset the address only when opening the form
-    // if (!showAddressForm) {
-    //   setAddress({ street: "", city: "", state: "", zip: "" });
-    // }
-  };
 
   const handleSelectAddress = (address) => {
     setSelectedAddress(address);
     setShowAllAddresses(false); // Hide the list once an address is selected
   };
-
-
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   uploadAddress(address, setUserData, setShowAddressForm, setAddress);
-  //   setShowAddressForm(false); // Hide the form after submission
-  // };
 
   const fetchUserDetails = async () => {
     try {
@@ -135,13 +110,6 @@ const Cart = () => {
     (previousValue, currentValue) => previousValue + currentValue.quantity,
     0
   );
-  // const totalPrice = data.reduce(
-  //   (prev, curr) => (prev + curr.quantity * curr?.productId?.sellingPrice),
-    
-  //   setDiscountPrice = 0.05 * totalPrice
-  // );
-
-  
 
   const increaseQty = async (id, qty) => {
     const response = await fetch(SummaryApi.updateCartProduct.url, {
