@@ -10,14 +10,21 @@ const app = express();
 const path = require('path');
 const kycRoutes = require('./routes/index');
 
+
+
+// const uploads = multer({ dest: 'uploads/userProfilePics/' });
 const upload = multer({ dest: 'uploads/' });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://34.224.97.99:3000',"*"],
+    origin: 'http://localhost:3000',
     credentials: true,
 }));
-// app.use(cors());
+
+// app.use(cors({
+//         credentials: true,
+//     }));
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -26,6 +33,8 @@ app.use('/api', kycRoutes);
 
 
 const PORT = process.env.PORT || 8080;
+
+
 
 connectDB().then(() => {
     app.listen(PORT, () => {

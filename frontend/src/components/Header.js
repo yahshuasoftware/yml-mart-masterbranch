@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { GrSearch } from "react-icons/gr";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
@@ -20,8 +20,48 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
+  const [cartProductCount, setCartProductCount] = useState(0);
+  const { cart } = useContext(Context); // Assuming the cart is in the context
 
-  const { totalPurchasing } = useContext(Context);
+  // Function to fetch the user's cart product count from API
+  const fetchUserAddToCart = async () => {
+    try {
+      const dataResponse = await fetch(SummaryApi.addToCartProductCount.url, {
+        method: SummaryApi.addToCartProductCount.method,
+        credentials: "include",
+      });
+
+      if (!dataResponse.ok) {
+        throw new Error("Failed to fetch cart count");
+      }
+
+      const dataApi = await dataResponse.json();
+
+      if (dataApi?.data?.count !== undefined) {
+        setCartProductCount(dataApi.data.count);
+      } else {
+        console.error("Unexpected API response", dataApi);
+        setCartProductCount(0); // Fallback if API response is not as expected
+      }
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
+      setCartProductCount(0); // Fallback in case of error
+    }
+  };
+
+  // Fetch cart count when the user logs in
+  useEffect(() => {
+    if (user?._id) {
+      fetchUserAddToCart();
+    }
+  }, [user]); // Call this when the user logs in or when user state changes
+
+  // Update cart count when the cart changes
+  useEffect(() => {
+    if (cart) {
+      setCartProductCount(cart.length); // Assuming `cart` is an array
+    }
+  }, [cart]); // Re-run when `cart` changes
 
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
@@ -34,6 +74,7 @@ const Header = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(setUserDetails(null));
+      setCartProductCount(0); // Reset the cart count on logout
       navigate("/");
     } else if (data.error) {
       toast.error(data.message);
@@ -143,7 +184,7 @@ const Header = () => {
             <Link to="/cart" className="text-2xl relative">
               <FaShoppingCart className="text-gray-700 hover:text-sky-600 transition-colors duration-200" />
               <div className="bg-red-600 text-white w-5 h-5 rounded-full text-center absolute -top-2 -right-3 flex items-center justify-center">
-                <span className="text-xs">{context?.cartProductCount}</span>
+                <span className="text-xs">{cartProductCount}</span>
               </div>
             </Link>
           )}

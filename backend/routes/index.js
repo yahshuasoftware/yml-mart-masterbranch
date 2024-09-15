@@ -7,19 +7,29 @@ const orderController = require('../controller/user/orderController');
 const updateDeliveryController = require('../controller/user/updateDeliveryController');
 const referralOrderController = require('../controller/product/getReferralOrders');
 const upload = require('../config/multer'); // Import the multer configuration
+const ratingController = require('../controller/user/userProfileController'); // Import the rating controller
+const getKYCController = require('../controller/user/getKycController'); // Import the KYC controller
+const kycController = require('../controller/user/kycController'); // Import your KYC controller
+const updateKycController  = require('../controller/user/updatekyc');
+
+router.put('/upload-kyc/:userId', updateKycController);
 
 // Payment routes
 const paymentRoutes = require('../controller/payment/paymentRoutes');
 router.use('/payment', paymentRoutes);
 
-const kycController = require('../controller/user/kycController'); // Import your controller
-
-// Define route to handle KYC data and file uploads
+// Define route to handle KYC data and file uploads (POST)
 router.post('/upload-kyc', upload.fields([
   { name: 'panCardFile', maxCount: 1 },
   { name: 'aadharFile', maxCount: 1 },
   { name: 'passbookFile', maxCount: 1 }
-]), kycController.handleKYC);
+]), kycController.postKYC);
+
+// Define route to get users who have submitted KYC (GET)
+router.get('/users-with-kyc', getKYCController.getKYCController);
+
+module.exports = router;
+
 
 // User and Product routes
 router.put('/orders/:orderId', updateDeliveryController);
@@ -30,12 +40,14 @@ router.get("/userLogout", require('../controller/user/userLogout'));
 router.post('/user-details', require('../middleware/authToken'), updateAddressController);
 router.get('/dashboard', orderController);
 
+// Rating Routes
+router.post('/rating/saveRating', ratingController.saveRating);
+router.get('/rating/:itemId', ratingController.getRating);
 
 // Admin Panel Routes
 router.get("/all-user", require('../middleware/authToken'), require('../controller/user/allUsers'));
 router.post("/update-user", require('../middleware/authToken'), require('../controller/user/updateUser'));
 router.delete("/delete-user/:userId", require('../middleware/authToken'), require('../controller/user/deleteUser'));
-
 
 // Product Routes
 router.post("/upload-product", require('../middleware/authToken'), require('../controller/product/uploadProduct'));
@@ -60,7 +72,6 @@ router.get("/all-banner", require('../controller/banner/getBanner'));
 router.post("/upload-adbanner", require('../middleware/authToken'), require('../controller/adbanner/uploadBanner'));
 router.get("/all-adbanner", require('../controller/adbanner/getBanner'));
 
-
 // User Cart Routes
 router.post("/addtocart", require('../middleware/authToken'), require('../controller/user/addToCartController'));
 router.post("/buyNow", require('../middleware/authToken'), require('../controller/user/buyNowController'));
@@ -69,6 +80,5 @@ router.get("/countAddToCartProduct", require('../middleware/authToken'), require
 router.get("/view-card-product", require('../middleware/authToken'), require('../controller/user/addToCartViewProduct'));
 router.post("/update-cart-product", require('../middleware/authToken'), require('../controller/user/updateAddToCartProduct'));
 router.post("/delete-cart-product", require('../middleware/authToken'), require('../controller/user/deleteAddToCartProduct'));
-// router.get("/user-profile", require('../middleware/authToken'), require('../controller/user/userProfileController'));
 
 module.exports = router;

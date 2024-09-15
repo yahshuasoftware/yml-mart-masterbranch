@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 async function authToken(req, res, next) {
+    console.log("authToken middleware is running");
     try {
-        const token = req.cookies?.token;
+        const token = req.cookies?.token || req.headers?.authorization?.split(' ')[1];
+        console.log("usertoken: ", token);
+        console.log("Request headers: ", req.headers);
 
         if (!token) {
             return res.status(401).json({
@@ -15,8 +18,9 @@ async function authToken(req, res, next) {
 
         jwt.verify(token, process.env.TOKEN_SECRET_KEY, function(err, decoded) {
             if (err) {
+                console.log("error" , err)
                 return res.status(401).json({
-                    message: "Invalid or expired token. Please login again.",
+                    message: "Please login..!",
                     error: true,
                     success: false,
                     redirectToLogin: true
