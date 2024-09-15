@@ -4,7 +4,7 @@ import displayINRCurrency from "../helpers/displayCurrency";
 import { MdCheckCircle, MdDelete } from "react-icons/md";
 import Context from "../context";
 
-const Cart = () => {
+const Cart = ({authToken}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -24,7 +24,7 @@ const Cart = () => {
     setShowAllAddresses(false); // Hide the list once an address is selected
   };
 
-  const fetchUserDetails = async ({authToken}) => {
+  const fetchUserDetails = async () => {
     try {
       const response = await fetch(SummaryApi.current_user.url, {
         method: "GET",
@@ -55,7 +55,7 @@ const Cart = () => {
 
 
 
-  const fetchData = async ({authToken}) => {
+  const fetchData = async () => {
     try {
       const response = await fetch(SummaryApi.addToCartProductView.url, {
         method: SummaryApi.addToCartProductView.method,
