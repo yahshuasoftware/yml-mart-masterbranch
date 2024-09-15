@@ -8,11 +8,12 @@ import StarRatings from 'react-star-ratings';
 
 const VerticalCard = ({ loading, data = [] }) => {
     const loadingList = new Array(13).fill(null);
-    const { fetchUserAddToCart } = useContext(Context);
-
+    // const { fetchUserAddToCart } = useContext(Context);
+    const { authToken } = useContext(Context);
     const handleAddToCart = async (e, id) => {
-        await addToCart(e, id);
-        fetchUserAddToCart();
+        await addToCart(e, id,authToken);
+       
+        // fetchUserAddToCart();
     };
 
     return (

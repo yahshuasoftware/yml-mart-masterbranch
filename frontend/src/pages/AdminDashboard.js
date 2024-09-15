@@ -70,7 +70,7 @@ const Dashboard = () => {
                 </div>
                 <div className="bg-white p-4 rounded shadow">
                     <h3 className="text-lg font-semibold">Total Revenue</h3>
-                    <p>₹{totalRevenue}</p>
+                    <p>₹{totalRevenue.toFixed(2)}</p>
                 </div>
             </div>
         </div>

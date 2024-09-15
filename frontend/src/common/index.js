@@ -132,4 +132,4 @@ const SummaryApi = {
     }
 }
 
-export default SummaryApi
+export default SummaryApi;

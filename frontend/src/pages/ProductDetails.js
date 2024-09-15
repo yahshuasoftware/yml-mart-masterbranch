@@ -199,7 +199,7 @@ const ProductDetails = () => {
                 </div>
 
                 <div className='flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1'>
-                  <p className='text-red-600'>{displayINRCurrency(data.sellingPrice)}</p>
+                  <p className='text-green-600'>{displayINRCurrency(data.sellingPrice)}</p>
                   <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
                 </div>
 
