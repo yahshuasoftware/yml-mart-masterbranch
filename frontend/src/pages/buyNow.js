@@ -7,7 +7,7 @@ import { uploadAddress } from "../helpers/uploadAddress";
 import SummaryApi from '../common';
 
 
-const BuyNow = () => {
+const BuyNow = ({authToken}) => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,7 +22,7 @@ const BuyNow = () => {
 
   
 
-    const fetchUserDetails = async ({authToken}) => {
+    const fetchUserDetails = async () => {
         try {
           const response = await fetch(SummaryApi.current_user.url, {
             method: "GET",
