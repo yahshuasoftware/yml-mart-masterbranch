@@ -126,19 +126,11 @@ const Cart = () => {
   
       if (user?.refferal?.refferredbycode) {
         setDiscountPrice(discount);
-<<<<<<< HEAD
       }else setDiscountPrice(0);
 
       // alert(discountPrice)
 
       
-=======
-        alert("Yes, have a referral code");
-      } else {
-        setDiscountPrice(0);
-      }
-  
->>>>>>> 8c9a7b951a9b8c4cc1f40fded44884e3cabb00cf
       setFinalAmount(total - discountPrice);
     }
   }, [data, loading]);
