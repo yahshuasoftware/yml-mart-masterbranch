@@ -10,7 +10,8 @@ import {toast} from 'react-toastify'
 
 const UploadProduct = ({
     onClose,
-    fetchData
+    fetchData,
+    authToken
 }) => {
   const [data,setData] = useState({
     productName : "",
@@ -72,9 +73,10 @@ const UploadProduct = ({
     const response = await fetch(SummaryApi.uploadProduct.url,{
       method : SummaryApi.uploadProduct.method,
       credentials : 'include',
-      headers : {
-        "content-type" : "application/json"
-      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`, 
+    },
       body : JSON.stringify(data)
     })
 

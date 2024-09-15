@@ -24,14 +24,15 @@ const Cart = () => {
     setShowAllAddresses(false); // Hide the list once an address is selected
   };
 
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = async ({authToken}) => {
     try {
       const response = await fetch(SummaryApi.current_user.url, {
         method: "GET",
         credentials: "include", // Include cookies to send the token
         headers: {
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`, 
+      },
       });
       const result = await response.json();
       if (result.success) {
@@ -54,14 +55,15 @@ const Cart = () => {
 
 
 
-  const fetchData = async () => {
+  const fetchData = async ({authToken}) => {
     try {
       const response = await fetch(SummaryApi.addToCartProductView.url, {
         method: SummaryApi.addToCartProductView.method,
         credentials: "include",
         headers: {
-          "content-type": "application/json",
-        },
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`, 
+      },
       });
 
       const responseData = await response.json();
@@ -115,13 +117,14 @@ const Cart = () => {
     0
   );
 
-  const increaseQty = async (id, qty) => {
+  const increaseQty = async (id, qty,authToken) => {
     const response = await fetch(SummaryApi.updateCartProduct.url, {
       method: SummaryApi.updateCartProduct.method,
       credentials: "include",
       headers: {
-        "content-type": "application/json",
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`, 
+    },
       body: JSON.stringify({
         _id: id,
         quantity: qty + 1,
@@ -135,14 +138,15 @@ const Cart = () => {
     }
   };
 
-  const decraseQty = async (id, qty) => {
+  const decraseQty = async (id, qty,authToken) => {
     if (qty >= 2) {
       const response = await fetch(SummaryApi.updateCartProduct.url, {
         method: SummaryApi.updateCartProduct.method,
         credentials: "include",
         headers: {
-          "content-type": "application/json",
-        },
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`, 
+      },
         body: JSON.stringify({
           _id: id,
           quantity: qty - 1,
@@ -157,13 +161,14 @@ const Cart = () => {
     }
   };
 
-  const deleteCartProduct = async (id) => {
+  const deleteCartProduct = async (id,authToken) => {
     const response = await fetch(SummaryApi.deleteCartProduct.url, {
       method: SummaryApi.deleteCartProduct.method,
       credentials: "include",
       headers: {
-        "content-type": "application/json",
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`, 
+    },
       body: JSON.stringify({
         _id: id,
       }),

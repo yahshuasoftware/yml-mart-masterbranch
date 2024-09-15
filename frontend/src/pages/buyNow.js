@@ -19,15 +19,17 @@ const BuyNow = () => {
     const [data, setData] = useState([]);
 
 
+
   
 
-    const fetchUserDetails = async () => {
+    const fetchUserDetails = async ({authToken}) => {
         try {
           const response = await fetch(SummaryApi.current_user.url, {
             method: "GET",
             credentials: "include", // Include cookies to send the token
             headers: {
-              "Content-Type": "application/json",
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
             },
           });
           const result = await response.json();
@@ -81,7 +83,7 @@ const BuyNow = () => {
     //   }, []);
 console.log(product)
 
-   const handlePayment = async () => {
+   const handlePayment = async ({authToken}) => {
     if (!hasAddress) {
         alert("Add Delivery Address");
         return;
@@ -92,7 +94,8 @@ console.log(product)
         const response = await fetch(SummaryApi.createOrder_from_buynow.url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
             },
             body: JSON.stringify({
                 amount: product.sellingPrice, // in INR
@@ -128,10 +131,11 @@ console.log(product)
             order_id: responseData.order.order_id, // order_id returned from backend
             handler: async function (response) {
                 // Step 3: Send payment details to backend to store the order
-                const paymentResponse = await fetch("http://localhost:8000/api/payment/payment-success", {
+                const paymentResponse = await fetch(SummaryApi.payment_Success.url, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`, 
                     },
                     body: JSON.stringify({
                         order_id: response.razorpay_order_id,

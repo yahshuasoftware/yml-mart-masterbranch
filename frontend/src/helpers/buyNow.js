@@ -2,15 +2,16 @@ import { redirect } from "react-router-dom"
 import SummaryApi from "../common"
 import { toast } from 'react-toastify'
 
-const buyNow = async(e,id) =>{
+const buyNow = async(e,id,authToken) =>{
     e?.stopPropagation()
     e?.preventDefault()
 
     const response = await fetch(SummaryApi.buyNow.url,{
         method : SummaryApi.buyNow.method,
         credentials : 'include',
-        headers : {
-            "content-type" : 'application/json'
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
         },
         body : JSON.stringify(
        

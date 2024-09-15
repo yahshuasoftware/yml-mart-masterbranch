@@ -7,10 +7,6 @@ const AddToCart = async (e, id,authToken) => {
     e?.stopPropagation();
     e?.preventDefault();
 
-    // Get the authToken from context
-    // const { authToken } = useContext(Context);
-
-    // Perform the API request with the token in the header
     const response = await fetch(SummaryApi.addToCartProduct.url, {
         method: SummaryApi.addToCartProduct.method,
         credentials: 'include',

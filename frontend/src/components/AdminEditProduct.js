@@ -11,7 +11,8 @@ import { toast } from 'react-toastify';
 const AdminEditProduct = ({
     onClose,
     productData,
-    fetchdata
+    fetchdata,
+    authToken
 }) => {
     const [data, setData] = useState({
         ...productData,
@@ -66,7 +67,8 @@ const AdminEditProduct = ({
             method: SummaryApi.updateProduct.method,
             credentials: 'include',
             headers: {
-                "content-type": "application/json"
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
             },
             body: JSON.stringify(data)
         });
@@ -94,6 +96,7 @@ const AdminEditProduct = ({
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`, 
                 },
                 body: JSON.stringify({ _id: data._id }),
             });
@@ -227,18 +230,7 @@ const AdminEditProduct = ({
                         className='p-2 bg-slate-100 border rounded'
                         required
                     />
-                    {/* <label htmlFor='commissionPrice' className='mt-3'>Commission Price :</label>
-                    <input 
-                    type='number' 
-                    id='commissionPrice' 
-                    placeholder='Enter Commission price' 
-                    value={data.commissionPrice} 
-                    name='commissionPrice'
-                    onChange={handleOnChange}
-                    className='p-2 bg-slate-100 border rounded'
-                    required
-                    /> */}
-
+    
                     <label htmlFor='description' className='mt-3'>Description :</label>
                     <textarea 
                         className='h-28 bg-slate-100 border resize-none p-1' 

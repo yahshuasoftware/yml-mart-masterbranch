@@ -18,14 +18,15 @@ const ReferCard = () => {
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (authToken) => {
       try {
         const response = await fetch(SummaryApi.current_user.url, {
           method: "GET",
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
-          },
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
+        },
         });
 
         if (!response.ok) {

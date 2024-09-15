@@ -29,14 +29,15 @@ const Login = () => {
     }
 
 
-    const handleSubmit = async(e) =>{
+    const handleSubmit = async(e,authToken) =>{
         e.preventDefault()
 
         const dataResponse = await fetch(SummaryApi.signIn.url,{
             method : SummaryApi.signIn.method,
             credentials : 'include',
-            headers : {
-                "content-type" : "application/json"
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
             },
             body : JSON.stringify(data)
         })

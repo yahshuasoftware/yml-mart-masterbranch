@@ -1,13 +1,14 @@
 import { toast } from 'react-toastify';
 import SummaryApi from '../common';
-export const uploadAddress = async (address, setUserData, setHasAddress, setShowAddressForm) => {
+export const uploadAddress = async (address, setUserData, setHasAddress, setShowAddressForm, authToken) => {
   try {
     const response = await fetch(SummaryApi.uploadAddress.url, {  
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-      },
+        'Authorization': `Bearer ${authToken}`, 
+    },
       body: JSON.stringify({ address }),
     });
 

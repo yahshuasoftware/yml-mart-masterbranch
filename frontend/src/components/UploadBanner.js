@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import uploadImage from '../helpers/uploadImage';
 import SummaryApi from '../common';
 
-const UploadBannerForm = ({ userId }) => { // Assuming userId is passed as a prop
+const UploadBannerForm = ({ authToken }) => { // Assuming userId is passed as a prop
     const [image, setImage] = useState(null);
 
     const handleImageChange = (e) => {
@@ -29,6 +29,7 @@ const handleSubmit = async (e) => {
             credentials : 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
             },
             body: JSON.stringify({ userId, imageUrl: uploadedImage.secure_url }),
         });
