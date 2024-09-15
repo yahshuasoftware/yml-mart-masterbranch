@@ -120,14 +120,12 @@ const Cart = () => {
       setTotalPrice(total);
       if(user?.refferal?.refferredbycode){
         setDiscountPrice(discount);
-        alert("yes have a refferbycode")
       }else setDiscountPrice(0);
 
       // alert(discountPrice)
 
       
       setFinalAmount(total - discountPrice);
-      alert(finalAmount)
     }
   }, [data, loading]);
  

@@ -1,5 +1,6 @@
 const backendDomin = "http://localhost:8000"
 // const backendDomin = process.env.SERVER_URI ;
+// const backendDomin = "http://ymlmart.com:8080"
 const SummaryApi = {
     signUP : {
         url : `${backendDomin}/api/signup`,

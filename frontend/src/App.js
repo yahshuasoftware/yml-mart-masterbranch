@@ -23,7 +23,7 @@ function App() {
   const fetchUserDetails = async()=>{
       const dataResponse = await fetch(SummaryApi.current_user.url,{
         method : SummaryApi.current_user.method,
-        credentials : 'include'
+        credentials : 'include',
       })
 
       const dataApi = await dataResponse.json()
@@ -43,44 +43,6 @@ function App() {
 
     setCartProductCount(dataApi?.data?.count)
   }
-
-
-
-
-  // const fetchTotalPurchasing = async () => {
-  //   const dataResponse = await fetch(SummaryApi.current_user.url, {
-  //     method: SummaryApi.current_user.method,
-  //     credentials: 'include',
-  //   });
-  
-  //   const data = await dataResponse.json();
-  
-  //   // Check if orderDetail exists and is an array
-  //   if (data && Array.isArray(data.orderDetail)) {
-  //     const totalAmount = data.orderDetail
-  //       .filter((order) => order.status === 'paid')
-  //       .reduce(
-  //         (acc, order) =>
-  //           acc +
-  //           order.products.reduce(
-  //             (acc, product) => acc + product.price * product.quantity,
-  //             0
-  //           ),
-  //         0
-  //       );
-  
-  //     setTotalPurchasing(totalAmount);
-  //   } else {
-  //     // Handle case when orderDetail is not available or not an array
-  //     setTotalPurchasing(0);
-  //     console.error("Order details not available or invalid format");
-  //   }
-  // };
-  
-
-
-
-
 
   useEffect(()=>{
     /**user Details */
