@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { GrSearch } from "react-icons/gr";
+import profile from "../assest/loginProfile1.png"
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -24,7 +25,7 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
-  const profilePicUrl = user?.profilePic ? `${backendDomain}/${user.profilePic}` : 'defaultProfilePicUrl';
+ // const profilePicUrl = user?.profilePic ? `${backendDomain}/${user.profilePic}` : 'defaultProfilePicUrl';
 
   const { totalPurchasing } = useContext(Context);
 
@@ -100,7 +101,7 @@ const Header = () => {
               >
                 {user?.profilePic ? (
                   <img
-                  src={profilePicUrl}
+                  src={profile}
                   className="w-10 h-10 rounded-full object-cover"
                   alt={user?.name}
                 />

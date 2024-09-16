@@ -61,11 +61,14 @@ const CategoryList = () => {
                     ))
                 ) : (
                     categoryProduct.map((product) => (
+                        
                         <Link
                             to={"/product-category?category=" + product?.category}
+                            
                             className='cursor-pointer'
                             key={product?.category || product?._id} // Use a unique key if possible
                         >
+                            
                             <div className='w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden p-4 bg-slate-200 flex items-center justify-center'>
                                 <img
                                     src={categoryImages[product?.category.toLowerCase()] || categoryImages["default"]}

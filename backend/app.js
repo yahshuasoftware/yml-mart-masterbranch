@@ -12,8 +12,8 @@ const kycRoutes = require('./routes/index');
 
 
 
-// const uploads = multer({ dest: 'uploads/userProfilePics/' });
-const upload = multer({ dest: 'uploads/' });
+// const uploads = multer({ dest: 'uploads/poductImages/' });
+// const upload = multer({ dest: 'uploads/' });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({

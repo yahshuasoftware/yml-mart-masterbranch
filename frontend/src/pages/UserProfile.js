@@ -3,6 +3,8 @@ import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
+import profile from "../assest/loginProfile1.png"
+
 
 import { useSelector } from "react-redux";
 import { MdModeEditOutline,MdDelete } from "react-icons/md";
@@ -30,7 +32,7 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
+  // const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
 
 
 
@@ -180,14 +182,14 @@ const Profile = () => {
               <div className="relative inline-block">
                 {userData?.profilePic ? (
                   <img
-                    src={profilePicUrl}
+                    src={profile}
                     alt="Profile"
                     className="w-24 h-24 rounded-full mb-2"
                   />
                 ) : (
                   <FaRegCircleUser size={70} className="text-gray-500" />
                 )}
-                <MdModeEditOutline className="bg-sky-600 text-white rounded-full p-1 text-3xl absolute bottom-3 right-5 transform translate-x-1/2 translate-y-1/2" />
+                {/* <MdModeEditOutline className="bg-sky-600 text-white rounded-full p-1 text-3xl absolute bottom-3 right-5 transform translate-x-1/2 translate-y-1/2" /> */}
               </div>
 
               <h2 className="text-xl font-semibold">

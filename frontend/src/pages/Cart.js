@@ -219,28 +219,42 @@ const Cart = () => {
   
   // razorepay
   const handlePayment = async (finalAddress) => {
-    if(!selectedAddress){
-      alert("Add Delivery Address")
-    }else{
+    if (!selectedAddress) {
+      alert("Add Delivery Address");
+    } else {
       try {
-        // Create an order on the backend
-        const response = await fetch(
-          SummaryApi.createOrder.url,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              amount: finalAmount, // in INR
-              currency: "INR",
-              receipt: `receipt_${Date.now()}`,
-              products: data,
-              userId: data[0].userId,
-              deliveryAddress : finalAddress
-            }),
-          }
+        // Filter out products that are out of stock or have insufficient stock
+        const validProducts = data.filter(
+          (product) =>
+            product.productId.quantity > 0 && // Product is not out of stock
+            product.productId.quantity >= product.quantity // Product has sufficient stock for the requested quantity
         );
+  
+        if (validProducts.length === 0) {
+          alert("No valid products in your cart. Some items may be out of stock or have insufficient stock.");
+          return;
+        }
+  
+        // Calculate the total amount for valid products
+        const totalAmount = validProducts.reduce((prev, curr) => {
+          return prev + (curr.quantity * curr.productId.sellingPrice);
+        }, 0);
+  
+        // Create an order on the backend
+        const response = await fetch(SummaryApi.createOrder.url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: totalAmount, // Total for valid products
+            currency: "INR",
+            receipt: `receipt_${Date.now()}`,
+            products: validProducts, // Only valid products
+            userId: data[0].userId,
+            deliveryAddress: finalAddress,
+          }),
+        });
   
         const responseData = await response.json();
   
@@ -249,7 +263,7 @@ const Cart = () => {
           return;
         }
   
-        //Open Razorpay payment gateway
+        // Open Razorpay payment gateway
         const options = {
           key: process.env.RAZARPAY_KEY, // Razorpay key_id
           amount: responseData.order.amount, // Amount in paisa
@@ -259,34 +273,29 @@ const Cart = () => {
           image: "/logo.png",
           order_id: responseData.order.id, // order_id returned from backend
           handler: async function (response) {
-            // Step 3: Send payment details to backend to store the order
-            const paymentResponse = await fetch(
-              SummaryApi.payment_Success.url,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  order_id: response.razorpay_order_id,
-                  payment_id: response.razorpay_payment_id,
-                  signature: response.razorpay_signature,
-                  userId: data[0].userId,
-                  products: data,
-                  amount: finalAmount,
-                  currency: "INR",
-                }),
-              }
-            );
+            // Send payment details to backend to store the order
+            const paymentResponse = await fetch(SummaryApi.payment_Success.url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                order_id: response.razorpay_order_id,
+                payment_id: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+                userId: data[0].userId,
+                products: validProducts, // Ensure only valid products are saved in the final order
+                amount: totalAmount,
+                currency: "INR",
+              }),
+            });
   
             const paymentResult = await paymentResponse.json();
   
             if (paymentResult.success) {
               alert("Payment Successful! Order has been stored.");
             } else {
-              alert(
-                "Payment was successful, but there was an issue storing the order. Please contact support."
-              );
+              alert("Payment was successful, but there was an issue storing the order. Please contact support.");
             }
           },
           prefill: {
@@ -310,9 +319,9 @@ const Cart = () => {
         console.error("Payment error:", error);
       }
     }
-   
-    
   };
+  
+  
 
   return (
    <div className="container mx-auto flex flex-col lg:flex-row gap-8 p-6 lg:p-8">

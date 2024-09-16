@@ -5,7 +5,7 @@ const path = require('path');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Specify the directory to save uploaded files
-    cb(null, 'uploads');
+    cb(null, 'uploads/productImages');
   },
   filename: (req, file, cb) => {
     // Define the file name to be saved

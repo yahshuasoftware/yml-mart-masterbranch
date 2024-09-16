@@ -5,6 +5,8 @@ import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
+import profile from "../assest/loginProfile1.png"
+
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +49,7 @@ const SignUp = () => {
       formData.append('name', data.name);
       formData.append('refferredbycode', data.refferredbycode);
       formData.append('mobileNo', data.mobileNo);
-      formData.append('profilePic', data.profilePic); // Append the file
+      // formData.append('profilePic', data.profilePic); // Append the file
 
       const dataResponse = await fetch(SummaryApi.signUP.url, {
         method: SummaryApi.signUP.method,
@@ -75,16 +77,18 @@ const SignUp = () => {
         <div className='bg-white p-5 w-full max-w-sm mx-auto'>
           <div className='w-20 h-20 mx-auto relative overflow-hidden rounded-full'>
             <div>
-              <img src={data.profilePic ? URL.createObjectURL(data.profilePic) : loginIcons} alt='login icons' />
+              {/* <img src={data.profilePic ? URL.createObjectURL(data.profilePic) : loginIcons} alt='login icons' /> */}
+              <img src={profile} alt='login icons' />
+
             </div>
-            <form>
+            {/* <form>
               <label>
                 <div className='text-xs bg-opacity-80 bg-slate-200 pb-4 pt-2 cursor-pointer text-center absolute bottom-0 w-full'>
                   Upload Photo
                 </div>
                 <input type='file' className='hidden' onChange={handleUploadPic} />
               </label>
-            </form>
+            </form> */}
           </div>
 
           <form className='pt-6 flex flex-col gap-2' onSubmit={handleSubmit}>
