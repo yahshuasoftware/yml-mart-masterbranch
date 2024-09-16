@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GrSearch } from "react-icons/gr";
-import profile from "../assest/loginProfile1.png"
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -21,13 +20,49 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
-  const [cartProductCount, setCartProductCount] = useState(0);  // const profilePicUrl = user?.profilePic ? `${backendDomain}/${user.profilePic}` : 'defaultProfilePicUrl';
+  const [cartProductCount, setCartProductCount] = useState(0);
+  const { cart } = useContext(Context); // Assuming the cart is in the context
 
-  const { totalPurchasing } = useContext(Context);
+  // Function to fetch the user's cart product count from API
+  const fetchUserAddToCart = async () => {
+    try {
+      const dataResponse = await fetch(SummaryApi.addToCartProductCount.url, {
+        method: SummaryApi.addToCartProductCount.method,
+        credentials: "include",
+      });
 
+      if (!dataResponse.ok) {
+        throw new Error("Failed to fetch cart count");
+      }
 
+      const dataApi = await dataResponse.json();
 
-  
+      if (dataApi?.data?.count !== undefined) {
+        setCartProductCount(dataApi.data.count);
+      } else {
+        console.error("Unexpected API response", dataApi);
+        setCartProductCount(0); // Fallback if API response is not as expected
+      }
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
+      setCartProductCount(0); // Fallback in case of error
+    }
+  };
+
+  // Fetch cart count when the user logs in
+  useEffect(() => {
+    if (user?._id) {
+      fetchUserAddToCart();
+    }
+  }, [user]); // Call this when the user logs in or when user state changes
+
+  // Update cart count when the cart changes
+  useEffect(() => {
+    if (cart) {
+      setCartProductCount(cart.length); // Assuming cart is an array
+    }
+  }, [cart]); // Re-run when cart changes
+
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
       method: SummaryApi.logout_user.method,
@@ -56,7 +91,7 @@ const Header = () => {
     <header className="h-16 shadow-md bg-white fixed w-full z-40">
       <div className="h-full container mx-auto flex items-center px-6 justify-between">
         <Link to="/">
-          <img src="logo.png" alt="Logo" className="w-32" />
+          <img src="ymllogo.jpg" alt="Logo" className="w-48" />
         </Link>
 
         <div className="hidden lg:flex items-center w-full max-w-md border border-gray-300 rounded-md pl-4 focus-within:shadow-md">
@@ -98,10 +133,10 @@ const Header = () => {
               >
                 {user?.profilePic ? (
                   <img
-                  src=""
-                  className="w-10 h-10 rounded-full object-cover"
-                  alt={user?.name}
-                />
+                    src={user?.profilePic}
+                    className="w-10 h-10 rounded-full object-cover"
+                    alt={user?.name}
+                  />
                 ) : (
                   <FaRegCircleUser className="text-gray-700" />
                 )}
