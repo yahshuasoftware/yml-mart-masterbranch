@@ -14,13 +14,17 @@ const VerticalCardProduct = ({ category, heading }) => {
 
     const scrollElement = useRef();
 
-    // const { fetchUserAddToCart } = useContext(Context);
+    const { fetchUserAddToCart } = useContext(Context);
 
     const handleAddToCart = async (e, id) => {
         e.stopPropagation();  // Stop event propagation to prevent Link navigation
         await addToCart(e, id);
-        fetchUserAddToCart();
-    };
+        if (fetchUserAddToCart) {
+          fetchUserAddToCart(); // Call fetchUserAddToCart after adding the product to the cart
+        } else {
+          console.error('fetchUserAddToCart is not available in context');
+        }
+      };
 
     const fetchData = async () => {
         setLoading(true);

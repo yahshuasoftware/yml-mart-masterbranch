@@ -5,65 +5,32 @@ import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Context from "../context";
+import { useUser } from '../context/userContext'; // Import the useUser hook
+import { useCart } from '../context/CartContext';
+
 
 const Cart = ({authToken}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const { user } = useUser(); // Get the user details from UserContext
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
-  const context = useContext(Context);
   const [finalAmount, setFinalAmount] = useState(0);
   const [discountPrice, setDiscountPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0); 
   const [selectedAddress, setSelectedAddress] = useState(user?.address[0]); 
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showAllAddresses, setShowAllAddresses] = useState(false);
-  
-
-  const [userData, setUserData] = useState({});
-  const [address, setAddress] = useState({});
+  const context = useContext(Context);
+  const { updateCartProductCount } = useCart();
 
   const handleAddNewAddress = () => {
-    // Toggle the form's visibility
     setShowAddressForm((prevState) => !prevState);
-
-    // Reset the address only when opening the form
-    // if (!showAddressForm) {
-    //   setAddress({ street: "", city: "", state: "", zip: "" });
-    // }
   };
 
   const handleSelectAddress = (address) => {
     setSelectedAddress(address);
     setShowAllAddresses(false); // Hide the list once an address is selected
-  };
-
-  const fetchUserDetails = async () => {
-    try {
-      const response = await fetch(SummaryApi.current_user.url, {
-        method: "GET",
-        credentials: "include", // Include cookies to send the token
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = await response.json();
-      if (result.success) {
-        setUser(result.data);
-
-        setIsLoggedIn(true);
-        setHasAddress(!!result.data.address);
-        setSelectedAddress(result.data.address[0])
-      } else {
-        setIsLoggedIn(false);
-        setHasAddress(false);
-      }
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-      setIsLoggedIn(false);
-      setHasAddress(false);
-    }
   };
 
   const fetchData = async () => {
@@ -79,7 +46,6 @@ const Cart = ({authToken}) => {
       const responseData = await response.json();
       if (responseData.success) {
         setData(responseData.data);
-        console.log(data)
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -89,44 +55,34 @@ const Cart = ({authToken}) => {
   };
 
   useEffect(() => {
-    fetchUserDetails(); // Fetch user details including address
+    if (user) {
+      setIsLoggedIn(true);
+      setHasAddress(!!user.address);
+      setSelectedAddress(user?.address[0]);
+    }
     fetchData(); // Fetch cart data
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (!loading && data.length > 0) {
-      // Filter out products that are out of stock or have insufficient stock
       const validProducts = data.filter(
         (product) => 
-          product.productId.quantity > 0 && // Ensure product has stock
-          product.productId.quantity >= product.quantity // Ensure stock is enough for quantity in the cart
+          product.productId.quantity > 0 &&
+          product.productId.quantity >= product.quantity
       );
-  
-      // Calculate total price only for valid products
       const total = validProducts.reduce((previousValue, currentValue) => {
         return previousValue + (currentValue.quantity * currentValue.productId.sellingPrice);
       }, 0);
-  
-      // Set total price and final amount
       setTotalPrice(total);
       setFinalAmount(total);
     }
   }, [data, loading]);
   
- 
   const totalQty = data
-  .filter(product => product.productId.quantity > 0 && product.quantity > 0)
-  .reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
-  // const totalPrice = data.reduce(
-  //   (prev, curr) => (prev + curr.quantity * curr?.productId?.sellingPrice),
-    
-  //   setDiscountPrice = 0.05 * totalPrice
-  // );
-
-  
+    .filter(product => product.productId.quantity > 0 && product.quantity > 0)
+    .reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
 
   const increaseQty = async (id, qty, prdId) => {
-    console.log(prdId);
     const response = await fetch(SummaryApi.updateCartProduct.url, {
       method: SummaryApi.updateCartProduct.method,
       credentials: "include",
@@ -141,22 +97,15 @@ const Cart = ({authToken}) => {
     });
   
     const responseData = await response.json();
-  
     if (responseData.success) {
-      if (responseData.outOfStock) {
-        alert("Product out of stock");
-      } else if (responseData.availableStock <= 5) {
-        alert(`Only ${responseData.availableStock} item(s) left in stock`);
-      }
       fetchData(); // Refresh the cart data
     } else {
-      alert(responseData.message); // Show error message if any
+      alert(responseData.message);
     }
   };
   
-  
-  const decreaseQty = async (id, qty,prdId) => {
-    if (qty > 1) { // Only allow decrease if quantity is greater than 1
+  const decreaseQty = async (id, qty, prdId) => {
+    if (qty > 1) {
       const response = await fetch(SummaryApi.updateCartProduct.url, {
         method: SummaryApi.updateCartProduct.method,
         credentials: "include",
@@ -166,20 +115,18 @@ const Cart = ({authToken}) => {
         body: JSON.stringify({
           _id: id,
           quantity: qty - 1,
-          productId :prdId
+          productId: prdId,
         }),
       });
-  
+
       const responseData = await response.json();
-  
       if (responseData.success) {
         fetchData(); // Refresh the cart data
       } else {
-        alert(responseData.message); // Show error message if any
+        alert(responseData.message);
       }
     }
   };
-  
 
   const deleteCartProduct = async (id) => {
     const response = await fetch(SummaryApi.deleteCartProduct.url, {
@@ -194,71 +141,62 @@ const Cart = ({authToken}) => {
     });
 
     const responseData = await response.json();
-
     if (responseData.success) {
       fetchData();
-      // context.fetchUserAddToCart();
+      updateCartProductCount();
     }
   };
 
-  
-  // razorepay
   const handlePayment = async (finalAddress) => {
     if (!selectedAddress) {
       alert("Add Delivery Address");
     } else {
       try {
-        // Filter out products that are out of stock or have insufficient stock
         const validProducts = data.filter(
           (product) =>
-            product.productId.quantity > 0 && // Product is not out of stock
-            product.productId.quantity >= product.quantity // Product has sufficient stock for the requested quantity
+            product.productId.quantity > 0 &&
+            product.productId.quantity >= product.quantity
         );
-  
+
         if (validProducts.length === 0) {
-          alert("No valid products in your cart. Some items may be out of stock or have insufficient stock.");
+          alert("No valid products in your cart.");
           return;
         }
-  
-        // Calculate the total amount for valid products
+
         const totalAmount = validProducts.reduce((prev, curr) => {
           return prev + (curr.quantity * curr.productId.sellingPrice);
         }, 0);
-  
-        // Create an order on the backend
+
         const response = await fetch(SummaryApi.createOrder.url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: totalAmount, // Total for valid products
+            amount: totalAmount,
             currency: "INR",
             receipt: `receipt_${Date.now()}`,
-            products: validProducts, // Only valid products
+            products: validProducts,
             userId: data[0].userId,
             deliveryAddress: finalAddress,
           }),
         });
-  
+
         const responseData = await response.json();
-  
         if (!responseData.success) {
-          alert("Unable to create order. Please try again.");
+          alert("Unable to create order.");
           return;
         }
-  
-        // Open Razorpay payment gateway
+
         const options = {
-          key: process.env.RAZARPAY_KEY, // Razorpay key_id
-          amount: responseData.order.amount, // Amount in paisa
+          key: process.env.RAZARPAY_KEY,
+          amount: responseData.order.amount,
           currency: responseData.order.currency,
           name: "YML Mart",
           description: "Payment for Order",
           image: "/logo.png",
-          order_id: responseData.order.id, // order_id returned from backend
+          order_id: responseData.order.id,
           handler: async function (response) {
-            // Send payment details to backend to store the order
             const paymentResponse = await fetch(SummaryApi.payment_Success.url, {
               method: "POST",
               headers: {
@@ -269,44 +207,40 @@ const Cart = ({authToken}) => {
                 payment_id: response.razorpay_payment_id,
                 signature: response.razorpay_signature,
                 userId: data[0].userId,
-                products: validProducts, // Ensure only valid products are saved in the final order
+                products: validProducts,
                 amount: totalAmount,
                 currency: "INR",
               }),
             });
-  
+
             const paymentResult = await paymentResponse.json();
-  
             if (paymentResult.success) {
-              alert("Payment Successful! Order has been stored.");
+              alert("Payment Successful!");
             } else {
-              alert("Payment was successful, but there was an issue storing the order. Please contact support.");
+              alert("Payment successful, but order storing failed.");
             }
           },
           prefill: {
             name: user?.name || "Your Name",
-            email: user?.email || "Your Email Id",
+            email: user?.email || "Your Email",
             contact: user?.contact || "0000000000",
           },
           theme: {
             color: "#3399cc",
           },
         };
-  
+
         const rzp = new window.Razorpay(options);
         rzp.open();
-  
         rzp.on("payment.failed", function (response) {
           alert("Payment Failed");
-          console.error("Payment Failed:", response.error);
         });
       } catch (error) {
         console.error("Payment error:", error);
       }
     }
   };
-  
-  
+
 
   return (
    <div className="container mx-auto flex flex-col lg:flex-row gap-8 p-6 lg:p-8">
