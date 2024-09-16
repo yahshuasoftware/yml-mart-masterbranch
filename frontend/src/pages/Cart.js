@@ -5,11 +5,8 @@ import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Context from "../context";
-import { Plus, Minus } from 'react-feather';
-import AddressForm from "../components/AddressForm";
-import { uploadAddress } from "../helpers/uploadAddress";
 
-const Cart = () => {
+const Cart = ({authToken}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -41,14 +38,6 @@ const Cart = () => {
     setSelectedAddress(address);
     setShowAllAddresses(false); // Hide the list once an address is selected
   };
-
-
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   uploadAddress(address, setUserData, setShowAddressForm, setAddress);
-  //   setShowAddressForm(false); // Hide the form after submission
-  // };
 
   const fetchUserDetails = async () => {
     try {
@@ -212,7 +201,7 @@ const Cart = () => {
 
     if (responseData.success) {
       fetchData();
-      context.fetchUserAddToCart();
+      // context.fetchUserAddToCart();
     }
   };
 

@@ -35,14 +35,15 @@ const BusinessProfile = () => {
   useEffect(() => {
     
 
-    const fetchOrderData = async () => {
+    const fetchOrderData = async (authToken) => {
       try {
         const response = await fetch(SummaryApi.referralOrders.url,{
           method : SummaryApi.referralOrders.method,
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
-          },
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
+        },
         });
     
         if (!response.ok) {
@@ -91,73 +92,15 @@ const BusinessProfile = () => {
 
     };
 
-  //   const resetTotalPurchasing = () => {
-  //     setTotalPurchasing(0);
-  //     console.log("Total purchasing reset to 0");
-  //   };
-
-    
-  // const getTimeUntilNextFirst = () => {
-  //   const now = new Date();
-  //   const nextMonth = now.getMonth() + 1;
-  //   const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
-  //   const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
-  //   return firstOfNextMonth - now;
-  // };
-
-
-  // useEffect(() => {
-  //   // Function to handle the monthly reset
-  //   const handleMonthlyReset = () => {
-  //     const now = new Date();
-  //     const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
-
-  //     // Retrieve the last reset month from localStorage
-  //     const lastResetMonth = localStorage.getItem('lastResetMonth');
-
-  //     if (lastResetMonth !== currentMonthYear) {
-  //       if (now.getDate() === 1) {
-  //         resetTotalPurchasing();
-  //         localStorage.setItem('lastResetMonth', currentMonthYear);
-  //       }
-  //     }
-  //   };
-
-  //   // Perform the initial check on component mount
-  //   handleMonthlyReset();
-
-  //   // Schedule the next reset
-  //   const scheduleNextReset = () => {
-  //     const delay = getTimeUntilNextFirst();
-  //     setTimeout(() => {
-  //       resetTotalPurchasing();
-  //       const now = new Date();
-  //       const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
-  //       localStorage.setItem('lastResetMonth', currentMonthYear);
-  //       // Schedule the subsequent reset
-  //       scheduleNextReset();
-  //     }, delay);
-  //   };
-
-  //   scheduleNextReset();
-
-  //   // Cleanup function to clear timeout when component unmounts
-  //   return () => {
-  //     // If you store the timeout ID, you can clear it here
-  //     // Example:
-  //     // clearTimeout(timer);
-  //   };
-  // }, []);
-
-
-    const fetchUserData = async () => {
+    const fetchUserData = async (authToken) => {
       try {
         const response = await fetch(SummaryApi.current_user.url,{
           method : SummaryApi.current_user.method,
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
-          },
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
+        },
         });
 
         if (!response.ok) {
@@ -234,9 +177,9 @@ const BusinessProfile = () => {
 
         </div>;
       case 'Business':
-        return <div className="p-4 rounded-lg shadow-md">Business Content...</div>;
+        return <div className="p-4">Business Content...</div>;
       case 'My Team':
-        return <div className="p-4 bg-gray-50 rounded-lg shadow-md">
+        return <div className="p-4">
         {Array.isArray(usersData) && usersData.length > 0 ? (
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-200">
@@ -325,7 +268,7 @@ const BusinessProfile = () => {
       </button>
   <div
   
-        className={`fixed top-0 left-0 h-full  p-4 transition-transform transform ${
+        className={`fixed top-0 left-0 h-full bg-gray-100 p-4 transition-transform transform ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } md:relative md:translate-x-0 md:w-64 z-40`}
       >

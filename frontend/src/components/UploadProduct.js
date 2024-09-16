@@ -8,9 +8,11 @@ import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 
-const UploadProduct = ({ onClose, fetchData }) => {
-
-  
+const UploadProduct = ({
+    onClose,
+    fetchData,
+    authToken
+}) => {
   const [data, setData] = useState({
     productName: "",
     brandName: "",
@@ -22,6 +24,7 @@ const UploadProduct = ({ onClose, fetchData }) => {
     sellingPrice: "",
     quantity: ""
   });
+  
   const [subcategories, setSubcategories] = useState([]);
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
@@ -70,11 +73,13 @@ const UploadProduct = ({ onClose, fetchData }) => {
       method: SummaryApi.uploadProduct.method,
       credentials: 'include',
       headers: {
-        "content-type": "application/json"
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`, 
       },
       body: JSON.stringify(data)
     });
     const responseData = await response.json();
+
     if (responseData.success) {
       toast.success(responseData?.message);
       onClose();
@@ -230,10 +235,6 @@ const UploadProduct = ({ onClose, fetchData }) => {
 
           <button className='px-3 py-2 bg-sky-600 text-white mb-10 hover:bg-sky-700'>Upload Product</button>
         </form>
-
-        {openFullScreenImage && (
-          <DisplayImage onClose={() => setOpenFullScreenImage(false)} imgUrl={fullScreenImage} />
-        )}
       </div>
     </div>
   );

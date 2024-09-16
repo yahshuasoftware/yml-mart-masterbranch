@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import SummaryApi from '../../common'; // Adjust the import path if necessary
+import React, { useState, useEffect } from 'react';
+import SummaryApi from '../../common/index'; // Adjust the import path if necessary
 
 const KYCPage = () => {
   const [selectedPanCard, setSelectedPanCard] = useState(false);
   const [selectedAadharCard, setSelectedAadharCard] = useState(false);
   const [selectedAccountDetails, setSelectedAccountDetails] = useState(false);
+  const [user, setUser] = useState(null); // Change initial value to null
+  const [userId, setUserId] = useState(''); // Initialize userId with an empty string
   const [kycDetails, setKycDetails] = useState({
     panNumber: '',
     panName: '',
@@ -18,7 +20,61 @@ const KYCPage = () => {
     passbookFile: null,
   });
   const [submissionStatus, setSubmissionStatus] = useState('');
-  const [formVisible, setFormVisible] = useState(true); 
+  const [formVisible, setFormVisible] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async (authToken) => {
+      try {
+        const response = await fetch(SummaryApi.current_user.url, {
+          method: SummaryApi.current_user.method,
+          credentials: "include",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
+        },
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setUser(data.data);
+        setUserId(data.data._id); // Set the user ID
+
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    const fetchKYCStatus = async () => {
+      if (!userId) return; // Ensure userId is set before making the request
+
+      try {
+        const response = await fetch(SummaryApi.getKYC.url(userId), { // Dynamic URL with userId
+          method: SummaryApi.getKYC.method,
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          setKycDetails(result.data);
+          setFormVisible(false); // Hide form if KYC is already filled
+          setSubmissionStatus('Your KYC is already submitted and verification is pending.');
+        } else {
+          setSubmissionStatus(result.message || 'Error fetching KYC details.');
+        }
+      } catch (error) {
+        console.error('Error fetching KYC status:', error);
+        setSubmissionStatus('Error fetching KYC details.');
+      }
+    };
+
+    fetchUserData(); // Fetch user data first to get userId
+    fetchKYCStatus(); // Fetch KYC status after fetching user data
+
+  }, [userId]); // Re-run useEffect whenever userId changes
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -51,7 +107,6 @@ const KYCPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate the form
     const validationError = validateForm();
     if (validationError) {
       alert(validationError);
@@ -59,6 +114,7 @@ const KYCPage = () => {
     }
 
     const formData = new FormData();
+    formData.append('userId', userId);
 
     if (selectedPanCard) {
       formData.append('panNumber', kycDetails.panNumber);
@@ -88,21 +144,20 @@ const KYCPage = () => {
       const result = await response.json();
       if (result.success) {
         setSubmissionStatus('Verification is pending.');
-        setFormVisible(false); // Hide the form
+        setFormVisible(false);
       } else {
         alert('Submission failed: ' + result.message);
-        setSubmissionStatus('');
+        setSubmissionStatus('Submission failed.');
       }
     } catch (error) {
       console.error('Error:', error);
       alert('Submission failed');
-      setSubmissionStatus('');
+      setSubmissionStatus('Submission failed.');
     }
   };
-
+  
   return (
     <div className="relative container mx-auto p-6 mt-3 bg-white shadow-md rounded-md max-w-3xl">
-      {/* Display submission status at the top of the page */}
       {submissionStatus && !formVisible && (
         <div className="absolute top-0 left-0 w-full bg-green-100 text-green-800 p-4 rounded-md shadow-md flex items-center justify-center">
           <div className="flex items-center">
@@ -115,7 +170,7 @@ const KYCPage = () => {
       )}
 
       {formVisible && (
-        <div className="pt-16"> {/* Add padding to push content below the status message */}
+        <div className="pt-16">
           <h2 className="text-2xl font-bold mb-6">KYC Information</h2>
           <div className="overflow-y-scroll max-h-[70vh]">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -260,7 +315,6 @@ const KYCPage = () => {
                   </div>
                 </div>
               )}
-
               <button
                 type="submit"
                 className="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"

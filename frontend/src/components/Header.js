@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { GrSearch } from "react-icons/gr";
 import profile from "../assest/loginProfile1.png"
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -9,13 +9,9 @@ import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
-
 import Context from "../context";
 
 const Header = () => {
-  const backendDomain = process.env.REACT_APP_LOCALHOST_URI;
-
-  
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
   const [menuDisplay, setMenuDisplay] = useState(false);
@@ -25,7 +21,7 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
- // const profilePicUrl = user?.profilePic ? `${backendDomain}/${user.profilePic}` : 'defaultProfilePicUrl';
+  const [cartProductCount, setCartProductCount] = useState(0);  // const profilePicUrl = user?.profilePic ? `${backendDomain}/${user.profilePic}` : 'defaultProfilePicUrl';
 
   const { totalPurchasing } = useContext(Context);
 
@@ -43,6 +39,7 @@ const Header = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(setUserDetails(null));
+      setCartProductCount(0); // Reset the cart count on logout
       navigate("/");
     } else if (data.error) {
       toast.error(data.message);
@@ -101,16 +98,14 @@ const Header = () => {
               >
                 {user?.profilePic ? (
                   <img
-                  src={profile}
+                  src=""
                   className="w-10 h-10 rounded-full object-cover"
                   alt={user?.name}
                 />
                 ) : (
                   <FaRegCircleUser className="text-gray-700" />
                 )}
-                
               </div>
-              
             )}
 
             <div
@@ -154,7 +149,7 @@ const Header = () => {
             <Link to="/cart" className="text-2xl relative">
               <FaShoppingCart className="text-gray-700 hover:text-sky-600 transition-colors duration-200" />
               <div className="bg-red-600 text-white w-5 h-5 rounded-full text-center absolute -top-2 -right-3 flex items-center justify-center">
-                <span className="text-xs">{context?.cartProductCount}</span>
+                <span className="text-xs">{cartProductCount}</span>
               </div>
             </Link>
           )}

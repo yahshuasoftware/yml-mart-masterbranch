@@ -13,8 +13,9 @@ const Login = () => {
         email : "",
         password : ""
     })
+    const { saveAuthToken } = useContext(Context);
     const navigate = useNavigate()
-    const { fetchUserDetails, fetchUserAddToCart } = useContext(Context)
+    // const { fetchUserDetails, fetchUserAddToCart } = useContext(Context)
 
     const handleOnChange = (e) =>{
         const { name , value } = e.target
@@ -28,14 +29,15 @@ const Login = () => {
     }
 
 
-    const handleSubmit = async(e) =>{
+    const handleSubmit = async(e,authToken) =>{
         e.preventDefault()
 
         const dataResponse = await fetch(SummaryApi.signIn.url,{
             method : SummaryApi.signIn.method,
             credentials : 'include',
-            headers : {
-                "content-type" : "application/json"
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
             },
             body : JSON.stringify(data)
         })
@@ -44,9 +46,10 @@ const Login = () => {
 
         if(dataApi.success){
             toast.success(dataApi.message)
+            
+            const token = dataApi.token; 
+            saveAuthToken(token);
             navigate('/')
-            fetchUserDetails()
-            fetchUserAddToCart()
         }
 
         if(dataApi.error){

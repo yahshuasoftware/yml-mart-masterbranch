@@ -27,8 +27,6 @@ import { RiShoppingCartFill } from "react-icons/ri";
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const backendDomain = process.env.REACT_APP_LOCALHOST_URI;
-
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
@@ -37,12 +35,8 @@ const Profile = () => {
 
 
 
-  // const { totalPurchasing } = useContext(Context);
   const handleAddNewAddress = () => {
-    // Toggle the form's visibility
     setShowAddressForm((prevState) => !prevState);
-
-    // Reset the address only when opening the form
     if (!showAddressForm) {
       setAddress({ name:"", mobileNo : "",street: "", city: "", state: "", zip: "" });
     }
@@ -60,20 +54,21 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await uploadAddress(address, setUserData); // uploadAddress updates the userData with the new address
-    setShowAddressForm(false);  // Hide form after submission
+    await uploadAddress(address, setUserData);
+    setShowAddressForm(false);
   };
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (authToken) => {
       try {
         const response = await fetch(SummaryApi.current_user.url,{
           method : SummaryApi.current_user.method,
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
-          },
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
+        },
         });
 
         if (!response.ok) {
@@ -88,37 +83,23 @@ const Profile = () => {
         
 
         setOrderData(data.orderDetail);
-
-        // setAddress({
-        //   name: data.data.address?.name,
-        //   mobile:data.data.address?.mobile
-        //   street: data.data.address?.street || "",
-        //   city: data.data.address?.city || "",
-        //   state: data.data.address?.state || "",
-        //   zip: data.data.address?.zip || "",
-        // });
         console.log(orderData[0].deliveryStatus)
-
-     
-
       } catch (error) {
         console.error("Error:", error);
       }
     };
-
-
-
     fetchUserData();
   }, []);
 
-  const deleteAddress = async (id, userId) => {
+  const deleteAddress = async (id, userId,authToken) => {
     try {
       const response = await fetch(SummaryApi.deleteAddress.url, {
         method: SummaryApi.deleteAddress.method,
         credentials: "include",
         headers: {
-          "content-type": "application/json",
-        },
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`, 
+      },
         body: JSON.stringify({
           AddressId: id,
           userId: userId,
@@ -182,7 +163,7 @@ const Profile = () => {
               <div className="relative inline-block">
                 {userData?.profilePic ? (
                   <img
-                    src={profile}
+                    src=""
                     alt="Profile"
                     className="w-24 h-24 rounded-full mb-2"
                   />
