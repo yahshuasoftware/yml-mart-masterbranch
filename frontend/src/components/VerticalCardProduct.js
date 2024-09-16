@@ -19,7 +19,7 @@ const VerticalCardProduct = ({ category, heading }) => {
     const handleAddToCart = async (e, id) => {
         e.stopPropagation();  // Stop event propagation to prevent Link navigation
         await addToCart(e, id);
-        // fetchUserAddToCart();
+        fetchUserAddToCart();
     };
 
     const fetchData = async () => {

@@ -91,7 +91,7 @@ const Header = () => {
     <header className="h-16 shadow-md bg-white fixed w-full z-40">
       <div className="h-full container mx-auto flex items-center px-6 justify-between">
         <Link to="/">
-          <img src="logo.png" alt="Logo" className="w-32" />
+          <img src="ymllogo.jpg" alt="Logo" className="w-48" />
         </Link>
 
         <div className="hidden lg:flex items-center w-full max-w-md border border-gray-300 rounded-md pl-4 focus-within:shadow-md">

@@ -201,7 +201,7 @@ const Cart = ({authToken}) => {
 
     if (responseData.success) {
       fetchData();
-      context.fetchUserAddToCart();
+      // context.fetchUserAddToCart();
     }
   };
 
