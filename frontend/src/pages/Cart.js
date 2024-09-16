@@ -66,9 +66,6 @@ const Cart = ({authToken}) => {
     }
   };
 
-
-
-
   const fetchData = async () => {
     try {
       const response = await fetch(SummaryApi.addToCartProductView.url, {
@@ -90,7 +87,6 @@ const Cart = ({authToken}) => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchUserDetails(); // Fetch user details including address
