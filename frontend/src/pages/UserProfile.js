@@ -4,7 +4,6 @@ import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
 import ProfileIcons from '../assest/loginProfile1.png'
-import ReactPaginate from 'react-paginate';
 
 
 

@@ -1,12 +1,11 @@
+// userContext.js
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { useDispatch } from 'react-redux';
 import { setUserDetails } from '../store/userSlice';
 
-// Create the context
 const UserContext = createContext();
 
-// Create a provider component
 export const UserProvider = ({ children }) => {
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
@@ -33,13 +32,10 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user }}>
+    <UserContext.Provider value={{ user, fetchUserDetails }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-// Custom hook to use the UserContext
-export const useUser = () => {
-  return useContext(UserContext);
-};
+export const useUser = () => useContext(UserContext);
