@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-const ChangeKycStatus = ({ _id, kycStatus, callFunc, onClose }) => {
+const ChangeKycStatus = ({ _id, kycStatus, callFunc, onClose, setGlobalKycStatus }) => {
     const [newStatus, setNewStatus] = useState(kycStatus);
 
     // Log _id and kycStatus for debugging
@@ -20,7 +20,7 @@ const ChangeKycStatus = ({ _id, kycStatus, callFunc, onClose }) => {
             // Log the status and KYC ID before making the request
             console.log(`Updating KYC ID: ${_id} with Status: ${newStatus}`);
 
-            const response = await fetch(`http://localhost:8080/api/upload-kyc/${_id}`, {
+            const response = await fetch(`http://localhost:8000/api/upload-kyc/${_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,14 +36,16 @@ const ChangeKycStatus = ({ _id, kycStatus, callFunc, onClose }) => {
                 alert('Failed to update KYC status.');
                 throw new Error('Failed to update KYC status');
             }
-
-            const data = await response.json();
-            console.log('KYC status updated:', data);
-            callFunc(); // Refresh the KYC list
-            onClose(); // Close the modal
+            if (response.ok) {
+                const data = await response.json();
+                callFunc(); 
+                setGlobalKycStatus(newStatus); // Set the new status globally
+                onClose(); 
+            } else {
+                console.error('Failed to update KYC status.');
+            }
         } catch (error) {
             console.error('Error updating KYC status:', error);
-            alert('Failed to update KYC status. Please try again.');
         }
     };
 

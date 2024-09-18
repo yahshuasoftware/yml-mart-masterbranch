@@ -3,20 +3,18 @@ import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
-
 import { useSelector } from "react-redux";
-import { MdModeEditOutline,MdDelete } from "react-icons/md";
+import { MdModeEditOutline } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
-import SummaryApi from "../common";
+import SummaryApi from "../common/index";
 import { toast } from "react-toastify";
 import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
-import { IoIosAddCircle } from "react-icons/io";
-
 import Context from "../context/index";
 import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorcycle } from "react-icons/fa";import { MdLocalShipping, MdCancel } from "react-icons/md";
 import { RiShoppingCartFill } from "react-icons/ri"; 
 import { FaStar } from 'react-icons/fa';
+
 
 
 
@@ -56,67 +54,130 @@ const Profile = () => {
   });
 
 
-  const resetTotalPurchasing = () => {
-    setTotalPurchasing(0);
-    console.log("Total purchasing reset to 0");
-  };
+  // const resetTotalPurchasing = () => {
+  //  // setTotalPurchasing(0);
+  //   console.log("Total purchasing reset to 0");
+  // };
 
   
+  
+
+  // const getTimeUntilNextFirst = () => {
+  //   const now = new Date();
+  //   const nextMonth = now.getMonth() + 1;
+  //   const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
+  //   const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
+  //   return firstOfNextMonth - now;
+  // };
 
 
-  const getTimeUntilNextFirst = () => {
-    const now = new Date();
-    const nextMonth = now.getMonth() + 1;
-    const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
-    const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
-    return firstOfNextMonth - now;
+  // useEffect(() => {
+  //   // Function to handle the monthly reset
+  //   const handleMonthlyReset = () => {
+  //     const now = new Date();
+  //     const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
+
+  //     // Retrieve the last reset month from localStorage
+  //     const lastResetMonth = localStorage.getItem('lastResetMonth');
+
+  //     if (lastResetMonth !== currentMonthYear) {
+  //       if (now.getDate() === 1) {
+  //        // resetTotalPurchasing();
+  //         localStorage.setItem('lastResetMonth', currentMonthYear);
+  //       }
+  //     }
+  //   };
+
+  //   // Perform the initial check on component mount
+  //   handleMonthlyReset();
+
+  //   // Schedule the next reset
+  //   const scheduleNextReset = () => {
+  //     const delay = getTimeUntilNextFirst();
+  //     setTimeout(() => {
+  //       resetTotalPurchasing();
+  //       const now = new Date();
+  //       const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
+  //       localStorage.setItem('lastResetMonth', currentMonthYear);
+  //       // Schedule the subsequent reset
+  //       scheduleNextReset();
+  //     }, delay);
+  //   };
+
+  //   scheduleNextReset();
+
+  //   // Cleanup function to clear timeout when component unmounts
+  //   return () => {
+  //     // If you store the timeout ID, you can clear it here
+  //     // Example:
+  //     // clearTimeout(timer);
+  //   };
+  // }, []);
+
+  const StarRating = ({ itemId, initialRating, onSave }) => {
+    const [rating, setRating] = useState(initialRating || 0);
+  
+    const handleClick = (newRating) => {
+      setRating(newRating);
+      onSave(itemId, newRating); // Trigger the save callback
+    };
+  
+    return (
+      <div className="flex items-center space-x-1"> {/* Flex container to align stars horizontally */}
+        {[...Array(5)].map((_, index) => (
+          <FaStar
+            key={index}
+            className={`cursor-pointer ${index < rating ? 'text-yellow-500' : 'text-gray-300'}`}
+            onClick={() => handleClick(index + 1)}
+          />
+        ))}
+      </div>
+    );
   };
+  
+  
+  const [ratedItems, setRatedItems] = useState({});
 
-
+  // Fetch rated items from localStorage on initial load
   useEffect(() => {
-    // Function to handle the monthly reset
-    const handleMonthlyReset = () => {
-      const now = new Date();
-      const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
-
-      // Retrieve the last reset month from localStorage
-      const lastResetMonth = localStorage.getItem('lastResetMonth');
-
-      if (lastResetMonth !== currentMonthYear) {
-        if (now.getDate() === 1) {
-          resetTotalPurchasing();
-          localStorage.setItem('lastResetMonth', currentMonthYear);
-        }
-      }
-    };
-
-    // Perform the initial check on component mount
-    handleMonthlyReset();
-
-    // Schedule the next reset
-    const scheduleNextReset = () => {
-      const delay = getTimeUntilNextFirst();
-      setTimeout(() => {
-        resetTotalPurchasing();
-        const now = new Date();
-        const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
-        localStorage.setItem('lastResetMonth', currentMonthYear);
-        // Schedule the subsequent reset
-        scheduleNextReset();
-      }, delay);
-    };
-
-    scheduleNextReset();
-
-    // Cleanup function to clear timeout when component unmounts
-    return () => {
-      // If you store the timeout ID, you can clear it here
-      // Example:
-      // clearTimeout(timer);
-    };
+    const savedRatings = localStorage.getItem('ratedItems');
+    if (savedRatings) {
+      setRatedItems(JSON.parse(savedRatings));
+    }
   }, []);
 
-
+  const handleSaveRating = async (itemId, rating) => {
+    try {
+       const response = await fetch(SummaryApi.saveRating.url, {
+         method: SummaryApi.saveRating.method,
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({ itemId, rating }),
+       });
+       if (!response.ok) {
+         throw new Error('Failed to save rating');
+       }
+ 
+       const result = await response.json();
+       if (result.success) {
+         const updatedRatedItems = { ...ratedItems, [itemId]: true };
+         setRatedItems(updatedRatedItems);
+         localStorage.setItem('ratedItems', JSON.stringify(updatedRatedItems)); // Save to localStorage
+         toast.success('Thanks for rating!', {
+           position: 'top-right',
+           autoClose: 3000,
+           theme: 'colored',
+         });
+       } else {
+         throw new Error(result.message || 'Failed to save rating');
+       }
+     } catch (error) {
+       console.error('Error saving rating:', error);
+       toast.error('Error saving rating. Please try again.');
+     }
+   };
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -376,55 +437,31 @@ const Profile = () => {
       )}
     </div>
         );
-      case "Address":
-        return (
-          <div>
-            <h1 className="text-2xl font-bold mb-4">Address</h1>
-
-            <div className="flex items-center mt-4">
-        <IoIosAddCircle className="text-sky-500 text-xl" />
-        <button
-          className="ml-2 text-blue-500 hover:text-blue-700"
-          onClick={handleAddNewAddress}
-        >
-          {showAddressForm ? "Cancel" : "Add New Address"}
-        </button>
-      </div>           
-      {showAddressForm && (
-        <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
-          <AddressForm address={address} setAddress={setAddress} />
-          <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]">
-            Add New Address
-          </button>
-        </form>
-      )} 
-      <div className="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {userData?.address?.length > 0 ? (
-    userData.address.map((addr, index) => (
-      <div
-        key={index}
-        className="relative p-6 bg-white shadow-md rounded-lg border border-gray-300 mb-4"
-      >
-        <div className="flex justify-between">
-          <strong className="text-gray-800">{addr.name}</strong>
-          <div
-            className="absolute top-2 right-2 text-red-500 cursor-pointer p-2 hover:text-white hover:bg-red-600 hover:rounded-full"
-            onClick={() => deleteAddress(addr._id, userData._id)}
-          >
-            <MdDelete fontSize={18} />
-          </div>
-        </div>
-
-        <p className="text-gray-800 mt-4">
-          <span>{addr.mobileNo}</span>
-        </p>
-        <p className="text-gray-700 mt-2">
-          {addr.street}, {addr.city}, <br />
-          {addr.state} - <strong>{addr.zip}</strong>
-        </p>
-      </div>
-    ))
-) : (
+        case "Address":
+          return (
+            <div>
+              <h1 className="text-2xl font-bold mb-4">Address</h1>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                {userData.address ? (
+                  <div className="flex flex-col lg:flex-row justify-between items-center bg-slate-50 p-4 rounded-md mb-6 shadow-sm">
+                    <div className="text-lg">
+                      <p className="mb-2">
+                        <strong>Street:</strong> {userData.address.street}
+                      </p>
+                      <p className="mb-2">
+                        <strong>City:</strong> {userData.address.city}
+                      </p>
+                    </div>
+                    <div className="text-lg">
+                      <p className="mb-2">
+                        <strong>State:</strong> {userData.address.state}
+                      </p>
+                      <p>
+                        <strong>ZIP Code:</strong> {userData.address.zip}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
   <div className="flex justify-center items-center p-2">
     <p className="text-red-500 text-md p">No addresses provided.</p>
   </div>

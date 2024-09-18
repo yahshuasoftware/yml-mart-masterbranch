@@ -11,6 +11,10 @@ const ratingController = require('../controller/user/userProfileController'); //
 const getKYCController = require('../controller/user/getKycController'); // Import the KYC controller
 const kycController = require('../controller/user/kycController'); // Import your KYC controller
 const updateKycController  = require('../controller/user/updatekyc');
+//const getkyc = require('../controller/user/getkyc');
+
+
+//router.get('/user-kyc/:userId',getkyc.getkyc);
 
 router.put('/upload-kyc/:userId', updateKycController);
 

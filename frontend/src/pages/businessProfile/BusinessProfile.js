@@ -5,7 +5,7 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import moment from 'moment';
 import SummaryApi from '../../common';
 
-const BusinessProfile = () => {
+const BusinessProfile = ({ globalKycStatus }) => {
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [activeSection, setActiveSection] = useState("My Team");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -18,6 +18,38 @@ const BusinessProfile = () => {
   const [totalBusiness, setTotalBusiness] = useState(0);
   const [totalIntensive, setTotalIntensive] = useState(0);
 
+  const [kycStatus, setKycStatus] = useState(globalKycStatus || "Pending");
+
+    useEffect(() => {
+        if (globalKycStatus) {
+            setKycStatus(globalKycStatus); // Update the status when it changes
+        }
+    }, [globalKycStatus]);
+
+  
+    //   const handleKycStatus = async () => {
+    //     console.log(userData.data._id)
+    //     try {
+    //         const response = await fetch(SummaryApi.getmyKyc.url);
+
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+
+
+    //         const data = await response.json();
+    //         console.log(data.data); 
+    //     } catch (error) {
+    //         console.error('Error fetching KYC details:', error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //   handleKycStatus();
+    // }, []);
+
+    
+  
 
   const handleProfileClick = () => {
     setShowProfileForm(!showProfileForm);
@@ -31,6 +63,8 @@ const BusinessProfile = () => {
     
     alert("Complete KYC!!")
   }
+
+
 
   useEffect(() => {
     
@@ -166,6 +200,8 @@ const BusinessProfile = () => {
 
         const data = await response.json();
         console.log(data)
+        setUserData(data)
+        console.log(userData.name)
        
 
         if (data.orderDetail) {
@@ -371,6 +407,17 @@ const BusinessProfile = () => {
             >
               Transactions
             </button>
+          </li>
+          <li>
+          <li>
+    {/* <button
+        className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+        onClick={handleKycStatus}
+    >
+        Show KYC Status
+    </button> */}
+</li>
+
           </li>
         </ul>
       </div>
