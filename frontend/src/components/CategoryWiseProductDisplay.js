@@ -16,7 +16,7 @@ const CategroyWiseProductDisplay = ({category, heading}) => {
 
     const handleAddToCart = async(e,id)=>{
        await addToCart(e,id)
-       fetchUserAddToCart()
+      //  fetchUserAddToCart()
     }
 
 
@@ -39,7 +39,7 @@ const CategroyWiseProductDisplay = ({category, heading}) => {
 
 
   return (
-    <div className="container mx-auto px-4 my-6 relative">
+    <div className="container mx-auto px-4 my-6 relative px-6">
     <h2 className="text-2xl font-semibold py-4">{heading}</h2>
   
     {loading ? (
@@ -104,8 +104,9 @@ const CategroyWiseProductDisplay = ({category, heading}) => {
 )}
 
 
-  </div>
-  
+            
+
+    </div>
   )
 }
 

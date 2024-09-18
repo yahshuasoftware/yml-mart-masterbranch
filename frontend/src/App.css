@@ -19,6 +19,40 @@
     display: none;
 }
 
+/* Add these styles to your CSS file */
+/* Add these styles to your CSS file */
+/* 
+ */
+
+ /* Add these styles to your CSS file */
+.hover-card, .click-dropdown {
+    position: absolute;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 10px;
+    display: none;
+    z-index: 1000;
+    top: 100%; /* Position it below the hovered item */
+    left: 0; /* Adjust as needed */
+}
+
+.hover-card.visible, .click-dropdown.visible {
+    display: block;
+}
+
+.sidebar {
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
+
+  
+
 
 
 .footer{

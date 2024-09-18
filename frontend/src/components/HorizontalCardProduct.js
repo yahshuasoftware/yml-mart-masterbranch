@@ -17,7 +17,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
     const scrollElement = useRef();
     const navigate = useNavigate(); // Initialize useNavigate
 
-    const { fetchUserAddToCart } = useContext(Context);
+    // const { fetchUserAddToCart } = useContext(Context);
 
     // In HorizontalCardProduct component
 const handleAddToCart = async (e, id) => {
@@ -26,7 +26,7 @@ const handleAddToCart = async (e, id) => {
         if (response?.redirectToLogin) {
             navigate('/login'); // Redirect to login page
         } else {
-            fetchUserAddToCart(); // Otherwise, fetch the updated cart
+            // fetchUserAddToCart(); // Otherwise, fetch the updated cart
         }
     } catch (error) {
         console.error("Error adding to cart:", error);

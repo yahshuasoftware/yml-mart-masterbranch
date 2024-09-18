@@ -3,6 +3,8 @@ import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
+import ProfileIcons from '../assest/loginProfile1.png'
+
 import { useSelector } from "react-redux";
 import { MdModeEditOutline } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -12,9 +14,9 @@ import AddressForm from "../components/AddressForm";
 import { uploadAddress } from "../helpers/uploadAddress";
 import Context from "../context/index";
 import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorcycle } from "react-icons/fa";import { MdLocalShipping, MdCancel } from "react-icons/md";
+// import { BsBagXFill } from "react-icons/bs";
 import { RiShoppingCartFill } from "react-icons/ri"; 
 import { FaStar } from 'react-icons/fa';
-
 
 
 
@@ -23,96 +25,12 @@ import { FaStar } from 'react-icons/fa';
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const backendDomain = process.env.REACT_APP_LOCALHOST_URI;
-
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
-
-
-
-
-  // const { totalPurchasing } = useContext(Context);
-  const handleAddNewAddress = () => {
-    // Toggle the form's visibility
-    setShowAddressForm((prevState) => !prevState);
-
-    // Reset the address only when opening the form
-    if (!showAddressForm) {
-      setAddress({ name:"", mobileNo : "",street: "", city: "", state: "", zip: "" });
-    }
-  };
-
-  const [address, setAddress] = useState({
-    name:"", 
-    mobileNo : "",
-    street: "",
-    city: "",
-    state: "",
-    zip: "",
-  });
-
-
-  // const resetTotalPurchasing = () => {
-  //  // setTotalPurchasing(0);
-  //   console.log("Total purchasing reset to 0");
-  // };
-
   
-  
+  // const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
 
-  // const getTimeUntilNextFirst = () => {
-  //   const now = new Date();
-  //   const nextMonth = now.getMonth() + 1;
-  //   const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
-  //   const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
-  //   return firstOfNextMonth - now;
-  // };
-
-
-  // useEffect(() => {
-  //   // Function to handle the monthly reset
-  //   const handleMonthlyReset = () => {
-  //     const now = new Date();
-  //     const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
-
-  //     // Retrieve the last reset month from localStorage
-  //     const lastResetMonth = localStorage.getItem('lastResetMonth');
-
-  //     if (lastResetMonth !== currentMonthYear) {
-  //       if (now.getDate() === 1) {
-  //        // resetTotalPurchasing();
-  //         localStorage.setItem('lastResetMonth', currentMonthYear);
-  //       }
-  //     }
-  //   };
-
-  //   // Perform the initial check on component mount
-  //   handleMonthlyReset();
-
-  //   // Schedule the next reset
-  //   const scheduleNextReset = () => {
-  //     const delay = getTimeUntilNextFirst();
-  //     setTimeout(() => {
-  //       resetTotalPurchasing();
-  //       const now = new Date();
-  //       const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
-  //       localStorage.setItem('lastResetMonth', currentMonthYear);
-  //       // Schedule the subsequent reset
-  //       scheduleNextReset();
-  //     }, delay);
-  //   };
-
-  //   scheduleNextReset();
-
-  //   // Cleanup function to clear timeout when component unmounts
-  //   return () => {
-  //     // If you store the timeout ID, you can clear it here
-  //     // Example:
-  //     // clearTimeout(timer);
-  //   };
-  // }, []);
 
   const StarRating = ({ itemId, initialRating, onSave }) => {
     const [rating, setRating] = useState(initialRating || 0);
@@ -179,22 +97,102 @@ const Profile = () => {
    };
  
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await uploadAddress(address, setUserData); // uploadAddress updates the userData with the new address
-    setShowAddressForm(false);  // Hide form after submission
+  const handleAddNewAddress = () => {
+    setShowAddressForm((prevState) => !prevState);
+    if (!showAddressForm) {
+      setAddress({ name:"", mobileNo : "",street: "", city: "", state: "", zip: "" });
+    }
+  };
+  
+
+  const [address, setAddress] = useState({
+    name:"", 
+    mobileNo : "",
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+  });
+
+  const resetTotalPurchasing = () => {
+    //setTotalPurchasing(0);
+    console.log("Total purchasing reset to 0");
+  };
+
+  
+
+
+  const getTimeUntilNextFirst = () => {
+    const now = new Date();
+    const nextMonth = now.getMonth() + 1;
+    const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
+    const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
+    return firstOfNextMonth - now;
   };
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    // Function to handle the monthly reset
+    const handleMonthlyReset = () => {
+      const now = new Date();
+      const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
+
+      // Retrieve the last reset month from localStorage
+      const lastResetMonth = localStorage.getItem('lastResetMonth');
+
+      if (lastResetMonth !== currentMonthYear) {
+        if (now.getDate() === 1) {
+          resetTotalPurchasing();
+          localStorage.setItem('lastResetMonth', currentMonthYear);
+        }
+      }
+    };
+
+    // Perform the initial check on component mount
+    handleMonthlyReset();
+
+    // Schedule the next reset
+    const scheduleNextReset = () => {
+      const delay = getTimeUntilNextFirst();
+      setTimeout(() => {
+        resetTotalPurchasing();
+        const now = new Date();
+        const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
+        localStorage.setItem('lastResetMonth', currentMonthYear);
+        // Schedule the subsequent reset
+        scheduleNextReset();
+      }, delay);
+    };
+
+    scheduleNextReset();
+
+    // Cleanup function to clear timeout when component unmounts
+    return () => {
+      // If you store the timeout ID, you can clear it here
+      // Example:
+      // clearTimeout(timer);
+    };
+  }, []);
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await uploadAddress(address, setUserData);
+    setShowAddressForm(false);
+  };
+
+
+  useEffect(() => {
+    const fetchUserData = async (authToken) => {
       try {
         const response = await fetch(SummaryApi.current_user.url,{
           method : SummaryApi.current_user.method,
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
-          },
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
+        },
         });
 
         if (!response.ok) {
@@ -209,37 +207,23 @@ const Profile = () => {
         
 
         setOrderData(data.orderDetail);
-
-        // setAddress({
-        //   name: data.data.address?.name,
-        //   mobile:data.data.address?.mobile
-        //   street: data.data.address?.street || "",
-        //   city: data.data.address?.city || "",
-        //   state: data.data.address?.state || "",
-        //   zip: data.data.address?.zip || "",
-        // });
         console.log(orderData[0].deliveryStatus)
-
-     
-
       } catch (error) {
         console.error("Error:", error);
       }
     };
-
-
-
     fetchUserData();
   }, []);
 
-  const deleteAddress = async (id, userId) => {
+  const deleteAddress = async (id, userId,authToken) => {
     try {
       const response = await fetch(SummaryApi.deleteAddress.url, {
         method: SummaryApi.deleteAddress.method,
         credentials: "include",
         headers: {
-          "content-type": "application/json",
-        },
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`, 
+      },
         body: JSON.stringify({
           AddressId: id,
           userId: userId,
@@ -301,16 +285,14 @@ const Profile = () => {
             </div>
             <div className="flex flex-col items-center mb-6">
               <div className="relative inline-block">
-                {userData?.profilePic ? (
+
                   <img
-                    src={profilePicUrl}
+                    src={ProfileIcons}
                     alt="Profile"
                     className="w-24 h-24 rounded-full mb-2"
                   />
-                ) : (
-                  <FaRegCircleUser size={70} className="text-gray-500" />
-                )}
-                <MdModeEditOutline className="bg-sky-600 text-white rounded-full p-1 text-3xl absolute bottom-3 right-5 transform translate-x-1/2 translate-y-1/2" />
+                
+                {/* <MdModeEditOutline className="bg-sky-600 text-white rounded-full p-1 text-3xl absolute bottom-3 right-5 transform translate-x-1/2 translate-y-1/2" /> */}
               </div>
 
               <h2 className="text-xl font-semibold">
@@ -470,46 +452,10 @@ const Profile = () => {
 </div>
 
       
-      {/* <div className="bg-white p-6 rounded-lg shadow-md">
-              {userData.address ? (
-                <div className="flex flex-col lg:flex-row justify-between items-center bg-slate-50 p-4 rounded-md mb-6 shadow-sm">
-                  <div className="text-lg">
-                    <p className="mb-2">
-                      <strong>Street:</strong> {userData.address.street}
-                    </p>
-                    <p className="mb-2">
-                      <strong>City:</strong> {userData.address.city}
-                    </p>
-                  </div>
-                  <div className="text-lg">
-                    <p className="mb-2">
-                      <strong>State:</strong> {userData.address.state}
-                    </p>
-                    <p>
-                      <strong>ZIP Code:</strong> {userData.address.zip}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center text-center bg-slate-50 p-6 rounded-md shadow-sm">
-                  <MdLocationOff
-                    style={{ fontSize: "6rem" }}
-                    className="text-sky-600 mb-3"
-                  />
-                  <p className="text-gray-600">No address is saved</p>
-                </div>
-              )}
-
-              <form className="grid gap-4" onSubmit={handleSubmit}>
-                <AddressForm address={address} setAddress={setAddress} />
-                <button className="mt-4 py-3 bg-sky-600 text-white font-medium rounded-md hover:bg-sky-600 transition duration-200">
-                  Update Address
-                </button>
-              </form>
-            </div> */}
+      
           </div>
         );
-       // Inside renderContent function
+         // Inside renderContent function
        case "Delivered":
         return (
           <div>
@@ -592,10 +538,6 @@ const Profile = () => {
           </div>
         );
       
-    
-
-    
-
       // case "Track Order":
         // return (
         //   <div>
@@ -692,6 +634,7 @@ const Profile = () => {
       Delivered
     </button>
   </li>
+            
             {/* <li
               className={
                 activeSection === "Track Order" ? "font-bold text-sky-600" : ""

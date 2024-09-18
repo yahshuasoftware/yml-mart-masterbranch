@@ -11,6 +11,7 @@ const ChangeUserRole = ({
     userId,
     onClose,
     callFunc,
+    authToken,
 }) => {
     const [userRole,setUserRole] = useState(role)
 
@@ -24,8 +25,9 @@ const ChangeUserRole = ({
         const fetchResponse = await fetch(SummaryApi.updateUser.url,{
             method : SummaryApi.updateUser.method,
             credentials : 'include',
-            headers : {
-                "content-type" : "application/json"
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
             },
             body : JSON.stringify({
                 userId : userId,

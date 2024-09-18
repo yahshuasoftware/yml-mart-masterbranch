@@ -1,12 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 async function authToken(req, res, next) {
-    console.log("authToken middleware is running");
     try {
         const token = req.cookies?.token || req.headers?.authorization?.split(' ')[1];
-        console.log("usertoken: ", token);
-        console.log("Request headers: ", req.headers);
-
+       
         if (!token) {
             return res.status(401).json({
                 message: "Please Login...!",
