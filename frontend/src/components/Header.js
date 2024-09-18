@@ -1,65 +1,31 @@
-import React, { useContext, useState, useEffect } from "react";
+// src/components/Header.js
+import React, { useState, useEffect } from "react";
 import { GrSearch } from "react-icons/gr";
-import { FaRegCircleUser, FaShoppingCart } from "react-icons/fa";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { FaShoppingCart } from "react-icons/fa";
+import SummaryApi from "../common";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
-import Context from "../context";
-import ProfileIcons from '../assest/loginProfile1.png';
+import { useCart } from "../context/CartContext";
+import ProfileIcon from "../assest/loginProfile1.png"
 
 const Header = () => {
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
-  const [menuDisplay, setMenuDisplay] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State for mobile menu
-  const context = useContext(Context);
+  // const context = useContext(Context);
   const navigate = useNavigate();
   const searchInput = useLocation();
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
-  const [cartProductCount, setCartProductCount] = useState(0);
-  const { cart } = useContext(Context); // Assuming the cart is in the context
+  const [menuDisplay, setMenuDisplay] = useState(false);
 
-  const fetchUserAddToCart = async () => {
-    try {
-      const dataResponse = await fetch(SummaryApi.addToCartProductCount.url, {
-        method: SummaryApi.addToCartProductCount.method,
-        credentials: "include",
-      });
-
-      if (!dataResponse.ok) {
-        throw new Error("Failed to fetch cart count");
-      }
-
-      const dataApi = await dataResponse.json();
-
-      if (dataApi?.data?.count !== undefined) {
-        setCartProductCount(dataApi.data.count);
-      } else {
-        console.error("Unexpected API response", dataApi);
-        setCartProductCount(0); // Fallback if API response is not as expected
-      }
-    } catch (error) {
-      console.error("Error fetching cart count:", error);
-      setCartProductCount(0); // Fallback in case of error
-    }
-  };
-
-  useEffect(() => {
-    if (user?._id) {
-      fetchUserAddToCart();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (cart) {
-      setCartProductCount(cart.length);
-    }
-  }, [cart]);
+  // Use cart context
+  const { cartProductCount } = useCart();
 
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
@@ -72,7 +38,6 @@ const Header = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(setUserDetails(null));
-      setCartProductCount(0); // Reset the cart count on logout
       navigate("/");
     } else if (data.error) {
       toast.error(data.message);
@@ -122,7 +87,7 @@ const Header = () => {
                 onClick={() => setMenuDisplay((prev) => !prev)}
               >
                 <img
-                  src={ProfileIcons}
+                  src={ProfileIcon}
                   className="w-10 h-10 rounded-full object-cover"
                   alt={user?.name}
                 />
@@ -253,7 +218,7 @@ const Header = () => {
                 onClick={() => setMenuDisplay((prev) => !prev)}
               >
                 <img
-                  src={ProfileIcons}
+                  src={ProfileIcon}
                   className="w-10 h-10 rounded-full object-cover"
                   alt={user?.name}
                 />

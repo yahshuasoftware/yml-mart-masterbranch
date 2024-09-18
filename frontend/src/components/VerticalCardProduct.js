@@ -14,13 +14,17 @@ const VerticalCardProduct = ({ category, heading }) => {
 
     const scrollElement = useRef();
 
-    // const { fetchUserAddToCart } = useContext(Context);
+    const { fetchUserAddToCart } = useContext(Context);
 
     const handleAddToCart = async (e, id) => {
         e.stopPropagation();  // Stop event propagation to prevent Link navigation
         await addToCart(e, id);
-        // fetchUserAddToCart();
-    };
+        if (fetchUserAddToCart) {
+          fetchUserAddToCart(); // Call fetchUserAddToCart after adding the product to the cart
+        } else {
+          console.error('fetchUserAddToCart is not available in context');
+        }
+      };
 
     const fetchData = async () => {
         setLoading(true);
@@ -61,14 +65,12 @@ const VerticalCardProduct = ({ category, heading }) => {
             <button
                 className='bg-white shadow-md rounded-full p-2 absolute left-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
                 onClick={scrollLeft}
-                disabled={scrollElement.current && scrollElement.current.scrollLeft <= 0} // Disable left button if at start
             >
                 <FaAngleLeft />
             </button>
             <button
                 className='bg-white shadow-md rounded-full p-2 absolute right-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
                 onClick={scrollRight}
-                disabled={scrollElement.current && scrollElement.current.scrollLeft + scrollElement.current.offsetWidth >= scrollElement.current.scrollWidth} // Disable right button if at the end
             >
                 <FaAngleRight />
             </button>
