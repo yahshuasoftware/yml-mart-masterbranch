@@ -11,6 +11,7 @@ const ratingController = require('../controller/user/userProfileController'); //
 const getKYCController = require('../controller/user/getKycController'); // Import the KYC controller
 const kycController = require('../controller/user/kycController'); // Import your KYC controller
 const updateKycController  = require('../controller/user/updatekyc');
+const businessPrices = require("../controller/user/businessPrices")
 
 router.put('/upload-kyc/:userId', updateKycController);
 
@@ -39,6 +40,9 @@ router.get("/user-details", require('../middleware/authToken'), userDetailsContr
 router.get("/userLogout", require('../controller/user/userLogout'));
 router.post('/user-details', require('../middleware/authToken'), updateAddressController);
 router.get('/dashboard', orderController);
+
+
+router.post('/businessPrices', businessPrices)
 
 // Rating Routes
 router.post('/rating/saveRating', ratingController.saveRating);

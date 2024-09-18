@@ -129,7 +129,11 @@ const SummaryApi = {
     payment_Success : {
         url : `${backendDomin}/api/payment/payment-success`,
         method : 'post'
-    }
+    },
+    pushAllPricesInDb : {
+        url : `${backendDomin}/api/businessPrices`,
+        method : 'post'
+    },
 }
 
 export default SummaryApi;

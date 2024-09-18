@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GrSearch } from "react-icons/gr";
-import { FaRegCircleUser } from "react-icons/fa6";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaRegCircleUser, FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SummaryApi from "../common";
@@ -9,11 +8,13 @@ import { toast } from "react-toastify";
 import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
 import Context from "../context";
+import ProfileIcons from '../assest/loginProfile1.png';
 
 const Header = () => {
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
   const [menuDisplay, setMenuDisplay] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State for mobile menu
   const context = useContext(Context);
   const navigate = useNavigate();
   const searchInput = useLocation();
@@ -23,7 +24,6 @@ const Header = () => {
   const [cartProductCount, setCartProductCount] = useState(0);
   const { cart } = useContext(Context); // Assuming the cart is in the context
 
-  // Function to fetch the user's cart product count from API
   const fetchUserAddToCart = async () => {
     try {
       const dataResponse = await fetch(SummaryApi.addToCartProductCount.url, {
@@ -49,19 +49,17 @@ const Header = () => {
     }
   };
 
-  // Fetch cart count when the user logs in
   useEffect(() => {
     if (user?._id) {
       fetchUserAddToCart();
     }
-  }, [user]); // Call this when the user logs in or when user state changes
+  }, [user]);
 
-  // Update cart count when the cart changes
   useEffect(() => {
     if (cart) {
-      setCartProductCount(cart.length); // Assuming cart is an array
+      setCartProductCount(cart.length);
     }
-  }, [cart]); // Re-run when cart changes
+  }, [cart]);
 
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
@@ -87,6 +85,10 @@ const Header = () => {
     navigate(value ? `/search?q=${value}` : "/search");
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
+
   return (
     <header className="h-16 shadow-md bg-white fixed w-full z-40">
       <div className="h-full container mx-auto flex items-center px-6 justify-between">
@@ -94,6 +96,7 @@ const Header = () => {
           <img src="ymllogo.jpg" alt="Logo" className="w-48" />
         </Link>
 
+        {/* Desktop Search Bar */}
         <div className="hidden lg:flex items-center w-full max-w-md border border-gray-300 rounded-md pl-4 focus-within:shadow-md">
           <input
             type="text"
@@ -107,7 +110,125 @@ const Header = () => {
           </button>
         </div>
 
-        <div className="flex items-center gap-6">
+        {/* Mobile Menu Icon */}
+        <div className="lg:hidden flex items-cente gap-3">
+
+
+
+<div className="relative">
+            {user?._id && (
+              <div
+                className="text-3xl cursor-pointer flex items-center justify-center"
+                onClick={() => setMenuDisplay((prev) => !prev)}
+              >
+                <img
+                  src={ProfileIcons}
+                  className="w-10 h-10 rounded-full object-cover"
+                  alt={user?.name}
+                />
+              </div>
+            )}
+
+            <div
+              className={`absolute bg-white left-1/2 transform -translate-x-1/2 mt-2 p-2 shadow-lg rounded z-10 transition-transform duration-300 ease-out origin-top ${
+                menuDisplay ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
+              }`}
+            >
+              <nav>
+                {user?.role === ROLE.SUPER_ADMIN && (
+                  <Link
+                    to="/super-admin-panel/all-users"
+                    className="block whitespace-nowrap hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(false)}
+                  >
+                    Super Admin Panel
+                  </Link>
+                )}
+                {user?.role === ROLE.ADMIN && (
+                  <Link
+                    to="/admin-panel/all-products"
+                    className="block whitespace-nowrap hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(false)}
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                {user?.role === ROLE.GENERAL && (
+                  <Link
+                    to="/user-details"
+                    className="block whitespace-nowrap hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(false)}
+                  >
+                    Profile
+                  </Link>
+                )}
+              </nav>
+            </div>
+          </div>
+            {user?._id && (
+              <Link to="/cart" className="text-2xl relative">
+                <FaShoppingCart className="text-gray-700 hover:text-sky-600 transition-colors duration-200" />
+                <div className="bg-red-600 text-white w-5 h-5 text-xs rounded-full absolute -top-2 -right-2 flex items-center justify-center">
+                  {cartProductCount}
+                </div>
+              </Link>
+            )}
+          <button onClick={toggleMobileMenu} className="text-3xl">
+            ☰
+          </button>
+
+          
+        </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden fixed top-16 left-0 w-full bg-white shadow-lg z-50">
+            <nav className="flex flex-col p-4">
+              {user?._id && (
+                <>
+                  <Link
+                    to="/businessprofile"
+                    className="py-2 text-lg text-sky-600 hover:bg-sky-600 hover:text-white transition-colors duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    B Profile
+                  </Link>
+                  <Link
+                    to="/refer"
+                    className="py-2 text-lg text-sky-600 hover:bg-sky-600 hover:text-white transition-colors duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Refer
+                  </Link>
+                </>
+              )}
+              {user?._id ? (
+                <button
+                  onClick={handleLogout}
+                  className="py-2 text-lg text-white bg-sky-600 hover:bg-sky-700 transition-colors duration-300"
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="py-2 text-lg text-white bg-red-600 hover:bg-red-700 transition-colors duration-300"
+                  onClick={toggleMobileMenu}
+                >
+                  Login
+                </Link>
+              )}
+              
+            </nav>
+            
+          </div>
+          
+
+
+        )}
+
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex items-center gap-6">
           {user?._id && (
             <>
               <Link
@@ -131,15 +252,11 @@ const Header = () => {
                 className="text-3xl cursor-pointer flex items-center justify-center"
                 onClick={() => setMenuDisplay((prev) => !prev)}
               >
-                {user?.profilePic ? (
-                  <img
-                    src={user?.profilePic}
-                    className="w-10 h-10 rounded-full object-cover"
-                    alt={user?.name}
-                  />
-                ) : (
-                  <FaRegCircleUser className="text-gray-700" />
-                )}
+                <img
+                  src={ProfileIcons}
+                  className="w-10 h-10 rounded-full object-cover"
+                  alt={user?.name}
+                />
               </div>
             )}
 
@@ -183,8 +300,8 @@ const Header = () => {
           {user?._id && (
             <Link to="/cart" className="text-2xl relative">
               <FaShoppingCart className="text-gray-700 hover:text-sky-600 transition-colors duration-200" />
-              <div className="bg-red-600 text-white w-5 h-5 rounded-full text-center absolute -top-2 -right-3 flex items-center justify-center">
-                <span className="text-xs">{cartProductCount}</span>
+              <div className="bg-red-600 text-white w-5 h-5 text-xs rounded-full absolute -top-2 -right-2 flex items-center justify-center">
+                {cartProductCount}
               </div>
             </Link>
           )}

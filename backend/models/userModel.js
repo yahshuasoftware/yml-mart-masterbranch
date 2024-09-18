@@ -9,6 +9,12 @@ const addressSchema = new mongoose.Schema({
     zip: String,
 });
 
+// const businessSchema = new mongoose.Schema({
+//     myPurchase: { type: Number, default: 0 },
+//     totalPurchase: { type: Number, default: 0 },
+//     totalIncentive: { type: Number, default: 0 }
+// });
+
 const refferalSchema = new mongoose.Schema({
     refferalcode: String,
     refferredbycode: String,
@@ -42,8 +48,12 @@ const userSchema = new mongoose.Schema({
     password : String,
     profilePic : String,
     role : String,
-    refferal:refferalSchema
-},{
+    refferal:refferalSchema,
+    businessPrices: {
+        myPurchase: { type: Number, default: 0 },
+        totalPurchase: { type: Number, default: 0 },
+        totalIncentive: { type: Number, default: 0 }
+    }},{
     timestamps : true
 })
 

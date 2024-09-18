@@ -12,8 +12,6 @@ const BusinessProfile = () => {
   const [userData, setUserData] = useState(null);
   const [usersData, setUsersData] = useState(null);
   const [totalPurchasing, setTotalPurchasing] = useState(0);
-
-
   const [orderData, setOrderData] = useState([]);
   const [totalBusiness, setTotalBusiness] = useState(0);
   const [totalIntensive, setTotalIntensive] = useState(0);
@@ -32,110 +30,140 @@ const BusinessProfile = () => {
     alert("Complete KYC!!")
   }
 
+
+
+
   useEffect(() => {
+      fetchUserData(); // Fetch user data
+      fetchOrderData(); // Fetch order data
     
-
-    const fetchOrderData = async (authToken) => {
-      try {
-        const response = await fetch(SummaryApi.referralOrders.url,{
-          method : SummaryApi.referralOrders.method,
-          credentials: "include",
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`, 
-        },
-        });
-    
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-    
-        const data = await response.json();
-    
-        // Log the entire response data
-        console.log("Order Data:", data);
-
-    
-
-
-        let totalBusiness = 0;
-
-        if (Array.isArray(data.orders) && data.orders.length > 0) {
-          data.orders.forEach((order) => {
-            if (Array.isArray(order.products) && order.products.length > 0) {
-              order.products.forEach((product) => {
-                // console.log(product.price)
-                if (product.price) {
-                  totalBusiness += product.price;
-
-                }
-              });
-            }
-          });
-  
-          setOrderData(data.orders);
-          setUserData(data.user) // Store order data in state
-          setUsersData(data.users)
-          setTotalBusiness(totalBusiness.toFixed(2));  
-          console.log(totalBusiness)
-          setTotalIntensive(0.05 * totalBusiness)// Store total Intensive in state
-  
-        } else {
-          console.log("No orders found.");
-        }
-
-    
-      } catch (error) {
-        console.error("Error fetching order data:", error);
-      }
-
-
-    };
-
-    const fetchUserData = async (authToken) => {
-      try {
-        const response = await fetch(SummaryApi.current_user.url,{
-          method : SummaryApi.current_user.method,
-          credentials: "include",
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`, 
-        },
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const data = await response.json();
-        console.log(data)
-       
-
-        if (data.orderDetail) {
-          const totalAmount = data.orderDetail
-            .filter((order) => order.status === 'paid')
-            .reduce(
-              (acc, order) =>
-                acc +
-                order.products.reduce(
-                  (acc, product) => acc + product.price * product.quantity,
-                  0
-                ),
-              0
-            );
-    
-          setTotalPurchasing(totalAmount);
-        }
-
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    
-
-    fetchUserData();
-    fetchOrderData();
   }, []);
+  
+  useEffect(() => {
+    if (totalBusiness && totalIntensive && totalPurchasing && userData) {
+      pushAllPricesInDb(totalBusiness, totalIntensive, totalPurchasing);
+    }
+  }, [totalBusiness, totalIntensive, totalPurchasing]);
+  
+  const fetchOrderData = async (authToken) => {
+    alert(authToken)
+    try {
+      const response = await fetch(SummaryApi.referralOrders.url, {
+        method: SummaryApi.referralOrders.method,
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const data = await response.json();
+  
+      let totalBusinesss = 0;
+  
+      if (Array.isArray(data.orders) && data.orders.length > 0) {
+        data.orders.forEach((order) => {
+          if (Array.isArray(order.products) && order.products.length > 0) {
+            order.products.forEach((product) => {
+              if (product.price) {
+                totalBusinesss += product.price;
+              }
+            });
+          }
+        });
+  
+        setOrderData(data.orders);
+        // setUserData(data.user);
+        setUsersData(data.users);
+        setTotalBusiness(totalBusinesss.toFixed(2));
+        setTotalIntensive((0.05 * totalBusinesss).toFixed(2));
+      } else {
+        console.log("No orders found.");
+      }
+    } catch (error) {
+      console.error("Error fetching order data:", error);
+    }
+  };
+  
+  const fetchUserData = async (authToken) => {
+    try {
+      // alert(authToken)
+      const response = await fetch(SummaryApi.current_user.url, {
+        method: SummaryApi.current_user.method,
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const data = await response.json();
+      console.log(data);
+      setUserData(data);
+  
+      if (data.orderDetail) {
+        const totalAmount = data.orderDetail
+          .filter((order) => order.status === 'paid')
+          .reduce(
+            (acc, order) =>
+              acc +
+              order.products.reduce(
+                (acc, product) => acc + product.price * product.quantity,
+                0
+              ),
+            0
+          );
+  
+        setTotalPurchasing(totalAmount.toFixed(2));
+        
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
+  const pushAllPricesInDb = async (totalBusiness, totalIntensive, totalPurchasing) => {
+    try {
+
+      const response = await fetch(SummaryApi.pushAllPricesInDb.url, {
+        method: SummaryApi.pushAllPricesInDb.method,
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          totalBusiness,
+          totalIntensive,
+          totalPurchasing,
+          userId: userData.data._id // Ensure you pass the correct userId
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      
+      
+      const data = await response.json();
+        // setTotalBusiness(0)
+        // setTotalPurchasing(0)
+        // setTotalIntensive(0)
+        // console.log(totalBusiness)
+      console.log('Response from server:', data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
 
 
 
@@ -231,7 +259,7 @@ const BusinessProfile = () => {
                   <FaRegCircleUser size={70} className="text-gray-500" />
                 )}
           </div>
-          <div className="ml-4 text-2xl font-bold">{userData && <div>Welcome, {userData.name}!</div>}</div>
+          <div className="ml-4 text-2xl font-bold">{userData && <div>Welcome, {userData.data.name}!</div>}</div>
         </div>
         <button
           className="px-4 py-2 bg-sky-600 z-30 text-white rounded-md hover:bg-sky-700"

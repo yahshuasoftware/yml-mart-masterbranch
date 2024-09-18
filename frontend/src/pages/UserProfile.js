@@ -3,7 +3,9 @@ import { MdLocationOff } from "react-icons/md";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
-import profile from "../assest/loginProfile1.png"
+import ProfileIcons from '../assest/loginProfile1.png'
+import ReactPaginate from 'react-paginate';
+
 
 
 import { useSelector } from "react-redux";
@@ -41,6 +43,7 @@ const Profile = () => {
       setAddress({ name:"", mobileNo : "",street: "", city: "", state: "", zip: "" });
     }
   };
+  
 
   const [address, setAddress] = useState({
     name:"", 
@@ -161,15 +164,13 @@ const Profile = () => {
             </div>
             <div className="flex flex-col items-center mb-6">
               <div className="relative inline-block">
-                {userData?.profilePic ? (
+
                   <img
-                    src=""
+                    src={ProfileIcons}
                     alt="Profile"
                     className="w-24 h-24 rounded-full mb-2"
                   />
-                ) : (
-                  <FaRegCircleUser size={70} className="text-gray-500" />
-                )}
+                
                 {/* <MdModeEditOutline className="bg-sky-600 text-white rounded-full p-1 text-3xl absolute bottom-3 right-5 transform translate-x-1/2 translate-y-1/2" /> */}
               </div>
 
@@ -354,43 +355,7 @@ const Profile = () => {
 </div>
 
       
-      {/* <div className="bg-white p-6 rounded-lg shadow-md">
-              {userData.address ? (
-                <div className="flex flex-col lg:flex-row justify-between items-center bg-slate-50 p-4 rounded-md mb-6 shadow-sm">
-                  <div className="text-lg">
-                    <p className="mb-2">
-                      <strong>Street:</strong> {userData.address.street}
-                    </p>
-                    <p className="mb-2">
-                      <strong>City:</strong> {userData.address.city}
-                    </p>
-                  </div>
-                  <div className="text-lg">
-                    <p className="mb-2">
-                      <strong>State:</strong> {userData.address.state}
-                    </p>
-                    <p>
-                      <strong>ZIP Code:</strong> {userData.address.zip}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center text-center bg-slate-50 p-6 rounded-md shadow-sm">
-                  <MdLocationOff
-                    style={{ fontSize: "6rem" }}
-                    className="text-sky-600 mb-3"
-                  />
-                  <p className="text-gray-600">No address is saved</p>
-                </div>
-              )}
-
-              <form className="grid gap-4" onSubmit={handleSubmit}>
-                <AddressForm address={address} setAddress={setAddress} />
-                <button className="mt-4 py-3 bg-sky-600 text-white font-medium rounded-md hover:bg-sky-600 transition duration-200">
-                  Update Address
-                </button>
-              </form>
-            </div> */}
+      
           </div>
         );
       // case "Track Order":

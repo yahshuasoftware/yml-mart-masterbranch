@@ -6,6 +6,8 @@ async function userDetailsController(req,res){
         const userId = req.userId;
         const user = await userModel.findById(userId)
         const order = await orderModel.find({userId: userId})
+        .sort({ createdAt: -1 }) // Sorting in descending order (newest first)
+        .exec();
         
         console.log('User Data:', user); // Log user data
         console.log('Order Data:', order)
