@@ -136,7 +136,15 @@ const router = createBrowserRouter([
                     {
                         path : "all=kyc",
                         element : <AllKyc/>
-                    }
+                    },
+                    {
+                        path : "all-banners", // Move the All Users route here
+                        element : <AllBanners/>
+                    },
+                    {
+                        path : "all-adbanners", // Move the All Users route here
+                        element : <AllAdBanners/>
+                    },
                 ]
             },
         ]
