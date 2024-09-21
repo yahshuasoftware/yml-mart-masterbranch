@@ -5,7 +5,7 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import moment from 'moment';
 import SummaryApi from '../../common';
 
-const BusinessProfile = () => {
+const BusinessProfile = ({ globalKycStatus }) => {
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [activeSection, setActiveSection] = useState("My Team");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,6 +16,38 @@ const BusinessProfile = () => {
   const [totalBusiness, setTotalBusiness] = useState(0);
   const [totalIntensive, setTotalIntensive] = useState(0);
 
+  const [kycStatus, setKycStatus] = useState(globalKycStatus || "Pending");
+
+    useEffect(() => {
+        if (globalKycStatus) {
+            setKycStatus(globalKycStatus); // Update the status when it changes
+        }
+    }, [globalKycStatus]);
+
+  
+    //   const handleKycStatus = async () => {
+    //     console.log(userData.data._id)
+    //     try {
+    //         const response = await fetch(SummaryApi.getmyKyc.url);
+
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+
+
+    //         const data = await response.json();
+    //         console.log(data.data); 
+    //     } catch (error) {
+    //         console.error('Error fetching KYC details:', error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //   handleKycStatus();
+    // }, []);
+
+    
+  
 
   const handleProfileClick = () => {
     setShowProfileForm(!showProfileForm);
@@ -29,9 +61,6 @@ const BusinessProfile = () => {
     
     alert("Complete KYC!!")
   }
-
-
-
 
   useEffect(() => {
       fetchUserData(); // Fetch user data
@@ -76,95 +105,156 @@ const BusinessProfile = () => {
           }
         });
   
-        setOrderData(data.orders);
-        // setUserData(data.user);
-        setUsersData(data.users);
-        setTotalBusiness(totalBusinesss.toFixed(2));
-        setTotalIntensive((0.05 * totalBusinesss).toFixed(2));
-      } else {
-        console.log("No orders found.");
+          setOrderData(data.orders);
+          setUserData(data.user) // Store order data in state
+          setUsersData(data.users)
+          setTotalBusiness(totalBusiness.toFixed(2));  
+          console.log(totalBusiness)
+          setTotalIntensive(0.05 * totalBusiness)// Store total Intensive in state
+  
+        } else {
+          console.log("No orders found.");
+        }
+
+    
+      } catch (error) {
+        console.error("Error fetching order data:", error);
       }
-    } catch (error) {
-      console.error("Error fetching order data:", error);
-    }
-  };
-  
-  const fetchUserData = async (authToken) => {
-    try {
-      // alert(authToken)
-      const response = await fetch(SummaryApi.current_user.url, {
-        method: SummaryApi.current_user.method,
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+
+
+    };
+
+  //   const resetTotalPurchasing = () => {
+  //     setTotalPurchasing(0);
+  //     console.log("Total purchasing reset to 0");
+  //   };
+
+    
+  // const getTimeUntilNextFirst = () => {
+  //   const now = new Date();
+  //   const nextMonth = now.getMonth() + 1;
+  //   const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
+  //   const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
+  //   return firstOfNextMonth - now;
+  // };
+
+
+  // useEffect(() => {
+  //   // Function to handle the monthly reset
+  //   const handleMonthlyReset = () => {
+  //     const now = new Date();
+  //     const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
+
+  //     // Retrieve the last reset month from localStorage
+  //     const lastResetMonth = localStorage.getItem('lastResetMonth');
+
+  //     if (lastResetMonth !== currentMonthYear) {
+  //       if (now.getDate() === 1) {
+  //         resetTotalPurchasing();
+  //         localStorage.setItem('lastResetMonth', currentMonthYear);
+  //       }
+  //     }
+  //   };
+
+  //   // Perform the initial check on component mount
+  //   handleMonthlyReset();
+
+  //   // Schedule the next reset
+  //   const scheduleNextReset = () => {
+  //     const delay = getTimeUntilNextFirst();
+  //     setTimeout(() => {
+  //       resetTotalPurchasing();
+  //       const now = new Date();
+  //       const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
+  //       localStorage.setItem('lastResetMonth', currentMonthYear);
+  //       // Schedule the subsequent reset
+  //       scheduleNextReset();
+  //     }, delay);
+  //   };
+
+  //   scheduleNextReset();
+
+  //   // Cleanup function to clear timeout when component unmounts
+  //   return () => {
+  //     // If you store the timeout ID, you can clear it here
+  //     // Example:
+  //     // clearTimeout(timer);
+  //   };
+  // }, []);
+
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(SummaryApi.current_user.url,{
+          method : SummaryApi.current_user.method,
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log(data)
+       
+
+        if (data.orderDetail) {
+          const totalAmount = data.orderDetail
+            .filter((order) => order.status === 'paid')
+            .reduce(
+              (acc, order) =>
+                acc +
+                order.products.reduce(
+                  (acc, product) => acc + product.price * product.quantity,
+                  0
+                ),
+              0
+            );
+    
+          setTotalPurchasing(totalAmount);
+        }
+
+      } catch (error) {
+        console.error("Error:", error);
       }
+    };
+    
+    const pushAllPricesInDb = async (totalBusiness, totalIntensive, totalPurchasing) => {
+      try {
   
-      const data = await response.json();
-      console.log(data);
-      setUserData(data);
-  
-      if (data.orderDetail) {
-        const totalAmount = data.orderDetail
-          .filter((order) => order.status === 'paid')
-          .reduce(
-            (acc, order) =>
-              acc +
-              order.products.reduce(
-                (acc, product) => acc + product.price * product.quantity,
-                0
-              ),
-            0
-          );
-  
-        setTotalPurchasing(totalAmount.toFixed(2));
+        const response = await fetch(SummaryApi.pushAllPricesInDb.url, {
+          method: SummaryApi.pushAllPricesInDb.method,
+          credentials: "include",
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': Bearer ${authToken},
+          },
+          body: JSON.stringify({
+            totalBusiness,
+            totalIntensive,
+            totalPurchasing,
+            userId: userData.data._id // Ensure you pass the correct userId
+          }),
+        });
+    
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         
+        
+        const data = await response.json();
+          // setTotalBusiness(0)
+          // setTotalPurchasing(0)
+          // setTotalIntensive(0)
+          // console.log(totalBusiness)
+        console.log('Response from server:', data);
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  
-  const pushAllPricesInDb = async (totalBusiness, totalIntensive, totalPurchasing) => {
-    try {
-
-      const response = await fetch(SummaryApi.pushAllPricesInDb.url, {
-        method: SummaryApi.pushAllPricesInDb.method,
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-          totalBusiness,
-          totalIntensive,
-          totalPurchasing,
-          userId: userData.data._id // Ensure you pass the correct userId
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      
-      
-      const data = await response.json();
-        // setTotalBusiness(0)
-        // setTotalPurchasing(0)
-        // setTotalIntensive(0)
-        // console.log(totalBusiness)
-      console.log('Response from server:', data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  
-
+    };
 
 
 
@@ -342,6 +432,17 @@ const BusinessProfile = () => {
             >
               Transactions
             </button>
+          </li>
+          <li>
+          <li>
+    {/* <button
+        className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+        onClick={handleKycStatus}
+    >
+        Show KYC Status
+    </button> */}
+</li>
+
           </li>
         </ul>
       </div>

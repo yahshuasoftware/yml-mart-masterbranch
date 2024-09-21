@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import ChangeKycStatus from '../components/ChangeKyc';
 
-const AllKyc = () => {
+const AllKyc = ({ setGlobalKycStatus }) => {
     const [kycData, setKycData] = useState([]);
     const [openDropdown, setOpenDropdown] = useState(false);
     const [updateKycDetails, setUpdateKycDetails] = useState({
@@ -13,14 +13,14 @@ const AllKyc = () => {
     // Fetch all KYC details for users who have submitted
     const fetchAllKyc = async () => {
         try {
-            const response = await fetch(SummaryApi.getKYC.url);
+            const response = await fetch(SummaryApi. getKYC.url);
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
 
             const data = await response.json();
-            setKycData(data.data); // Adjust according to your API response structure
+            setKycData(data.data); 
         } catch (error) {
             console.error('Error fetching KYC details:', error);
         }
@@ -33,6 +33,11 @@ const AllKyc = () => {
     const handleStatusChangeClick = (kyc) => {
         setUpdateKycDetails(kyc);
         setOpenDropdown(true);
+    };
+
+    const updateGlobalKycStatus = (status) => {
+        // Set globally or using context
+        setGlobalKycStatus(status); 
     };
 
     return (
@@ -77,7 +82,8 @@ const AllKyc = () => {
                     onClose={() => setOpenDropdown(false)}
                     _id={updateKycDetails._id}
                     kycStatus={updateKycDetails.kycStatus}
-                    callFunc={fetchAllKyc} // Pass the fetchAllKyc function as a prop
+                    callFunc={fetchAllKyc}
+                    setGlobalKycStatus={updateGlobalKycStatus} // Pass the global setter function
                 />
             )}
         </div>

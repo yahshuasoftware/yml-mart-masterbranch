@@ -26,6 +26,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.14",
     "nodemon": "^3.1.4",
-    "razorpay": "^2.9.4"
+    "razorpay": "^2.9.4",
+    "react-cron": "^0.0.1"
   }
 }

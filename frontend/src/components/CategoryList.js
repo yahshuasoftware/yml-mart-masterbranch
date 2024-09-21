@@ -9,6 +9,7 @@ const CategoryList = () => {
     const [hoveredCategory, setHoveredCategory] = useState(null); // To track the hovered category
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 }); // Position for the dropdown
     const [isDropdownVisible, setIsDropdownVisible] = useState(false); // To manage dropdown visibility
+    const [lastScrollY, setLastScrollY] = useState(0); // Track the last scroll position
 
     const categoryLoading = new Array(13).fill(null);
 
@@ -65,17 +66,39 @@ const CategoryList = () => {
 
     // Handle mouse leave from category or dropdown
     const handleMouseLeave = () => {
-        // Wait a little to ensure the user can interact with the dropdown
         setTimeout(() => {
             if (!dropdownElementHovered && !categoryElementHovered) {
                 setIsDropdownVisible(false);
                 setHoveredCategory(null);
             }
-        }, [100]);
+        }, 100);
     };
 
     let dropdownElementHovered = false;
     let categoryElementHovered = false;
+
+    // Scroll event listener to show/hide the dropdown based on scroll direction
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            // If scrolling down, hide the dropdown
+            if (currentScrollY > lastScrollY) {
+                setIsDropdownVisible(false);
+            }
+
+            // Save the current scroll position
+            setLastScrollY(currentScrollY);
+        };
+
+        // Add the scroll event listener
+        window.addEventListener('scroll', handleScroll);
+
+        // Clean up the scroll event listener on component unmount
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [lastScrollY]);
 
     return (
         <div className="container mx-auto pt-5 pb-8 px-6">
@@ -95,7 +118,6 @@ const CategoryList = () => {
                             onMouseEnter={(e) => handleMouseEnter(e, product?.category)}
                             onMouseLeave={() => {
                                 categoryElementHovered = false;
-                                // handleMouseLeave();
                             }}
                         >
                             <Link
