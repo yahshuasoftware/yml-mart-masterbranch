@@ -124,11 +124,22 @@ const router = createBrowserRouter([
                         path : "all-users", // Move the All Users route here
                         element : <AllUsers/>
                     },
-                    
+                    {
+                        path : "order-list", // Move the All Users route here
+                        element : <OrderList/>
+                    },
                     {
                         path : "all-products",
                         element : <AllProducts/>
-                    }
+                    },
+                    {
+                        path : "all-banners", // Move the All Users route here
+                        element : <AllBanners/>
+                    },
+                    {
+                        path : "all-adbanners", // Move the All Users route here
+                        element : <AllAdBanners/>
+                    },
                 ]
             },
         ]
