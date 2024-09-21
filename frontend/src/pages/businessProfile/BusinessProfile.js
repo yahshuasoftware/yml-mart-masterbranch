@@ -40,23 +40,23 @@ const BusinessProfile = () => {
   }, []);
   
   useEffect(() => {
-    if (totalBusiness && totalIntensive && totalPurchasing && userData) {
-      pushAllPricesInDb(totalBusiness, totalIntensive, totalPurchasing);
-    }
-  }, [totalBusiness, totalIntensive, totalPurchasing]);
-  
-  const fetchOrderData = async (authToken) => {
-    alert(authToken)
-    try {
-      const response = await fetch(SummaryApi.referralOrders.url, {
-        method: SummaryApi.referralOrders.method,
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        },
-      });
-  
+        if (totalBusiness && totalIntensive && totalPurchasing && userData) {
+          pushAllPricesInDb(totalBusiness, totalIntensive, totalPurchasing);
+        }
+      }, [totalBusiness, totalIntensive, totalPurchasing]);
+      
+      const fetchOrderData = async (authToken) => {
+        alert(authToken)
+        try {
+          const response = await fetch(SummaryApi.referralOrders.url, {
+            method: SummaryApi.referralOrders.method,
+            credentials: "include",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${authToken}`,
+            },
+          });
+      
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

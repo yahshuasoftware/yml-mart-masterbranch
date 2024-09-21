@@ -1,5 +1,5 @@
 const Razorpay = require('razorpay');
-const Order = require('../../models/order'); // Import the Order model
+const Order = require('../../models/order');
 const userModel = require("../../models/userModel");
 const productModel = require('../../models/productModel');
 
@@ -9,7 +9,7 @@ const razorpay = new Razorpay({
 });
 
 const createOrder = async (req, res) => {
-    const { amount, currency, receipt, userId, products,order_id, deliveryAddress } = req.body;
+    const { amount, currency, receipt, userId, products, deliveryAddress } = req.body;
 
     try {
         const options = {
@@ -29,28 +29,21 @@ const createOrder = async (req, res) => {
                 quantity: product.quantity,
                 price: product.productId.sellingPrice,
                 image: product.productId.productImage,
-                // commissionPrice: product.productId.commissionPrice * product.quantity
             })),
             amount: order.amount / 100,
             currency: order.currency,
             receipt: order.receipt,
             userId: userId,
-            deliveryAddress : deliveryAddress
+            deliveryAddress: deliveryAddress
         });
         
         await newOrder.save();
-
-        
-        
-
         res.status(200).json({ success: true, order });
     } catch (error) {
         console.error("Error creating Razorpay order", error);
         res.status(500).json({ success: false, message: "Server Error", error });
     }
 };
-
-
 
 const handlePaymentSuccess = async (req, res) => {
     const { order_id, payment_id, signature, userId } = req.body;
@@ -74,6 +67,7 @@ const handlePaymentSuccess = async (req, res) => {
             if (product) {
                 if (product.quantity >= item.quantity) {
                     product.quantity -= item.quantity; // Reduce product quantity by the ordered amount
+                    product.purchaseCount = (product.purchaseCount || 0) + item.quantity; // Update purchase count
                     await product.save();
                 } else {
                     return res.status(400).json({
@@ -87,31 +81,25 @@ const handlePaymentSuccess = async (req, res) => {
         // Save the updated order
         await order.save();
 
-        // Handle referral system (as in your original code)
+        // Handle referral system (if applicable)
         const user = await userModel.findById(userId);
-
         if (user && user.refferal.refferredbycode) {
             // Find the referrer using the referral code
             const referrer = await userModel.findOne({ 'refferal.refferalcode': user.refferal.refferredbycode });
-
             if (referrer) {
-                // Add order details to the referrer's referral orders
                 referrer.refferal.myrefferalorders.push({
                     'userId': user._id,
                     "order_id": order._id,
                 });
-
-                // Save the referrer with updated referral orders
                 await referrer.save();
             }
         }
 
-        res.status(200).json({ success: true, message: "Payment successful, order updated, stock adjusted" });
+        res.status(200).json({ success: true, message: "Payment successful, order updated, stock and purchase count adjusted" });
     } catch (error) {
         console.error("Error updating order after payment", error);
         res.status(500).json({ success: false, message: "Server Error", error });
     }
 };
-
 
 module.exports = { createOrder, handlePaymentSuccess };

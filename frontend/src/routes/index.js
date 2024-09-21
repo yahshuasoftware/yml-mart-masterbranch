@@ -23,6 +23,7 @@ import BusinessProfile from '../pages/businessProfile/BusinessProfile'
 import AllAdBanners from '../pages/AllAdBanners'
 import AllBanners from '../pages/AllBanners'
 import BuyNow from "../pages/buyNow"
+import AllKyc from '../pages/AllKyc'
 
 const router = createBrowserRouter([
     {
@@ -124,15 +125,18 @@ const router = createBrowserRouter([
                         path : "all-users", // Move the All Users route here
                         element : <AllUsers/>
                     },
-                    
+                    {
+                        path : "order-list", // Move the All Users route here
+                        element : <OrderList/>
+                    },
                     {
                         path : "all-products",
                         element : <AllProducts/>
                     },
                     {
-                        path : "order-list", // Move the All Users route here
-                        element : <OrderList/>
-                    },
+                        path : "all=kyc",
+                        element : <AllKyc/>
+                    }
                 ]
             },
         ]

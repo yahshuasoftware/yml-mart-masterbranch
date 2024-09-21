@@ -9,7 +9,7 @@ const uploadProductPermission = async (userId) => {
             return false; // User not found, return false
         }
 
-        if (user.role === 'ADMIN') {
+        if (user.role === 'ADMIN' || 'SUPER_ADMIN') {
             return true;
         }
 
