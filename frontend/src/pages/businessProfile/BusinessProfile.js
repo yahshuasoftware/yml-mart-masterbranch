@@ -14,7 +14,7 @@ const BusinessProfile = () => {
   const [totalPurchasing, setTotalPurchasing] = useState(0);
   const [orderData, setOrderData] = useState([]);
   const [totalBusiness, setTotalBusiness] = useState(0);
-  const [totalIntensive, setTotalIntensive] = useState(0);
+  const [totalInsentive, setTotalInsentive] = useState(0);
 
 
   const handleProfileClick = () => {
@@ -40,13 +40,13 @@ const BusinessProfile = () => {
   }, []);
   
   useEffect(() => {
-        if (totalBusiness && totalIntensive && totalPurchasing && userData) {
-          pushAllPricesInDb(totalBusiness, totalIntensive, totalPurchasing);
+        if (totalBusiness && totalInsentive && totalPurchasing && userData) {
+          pushAllPricesInDb(totalBusiness, totalInsentive, totalPurchasing);
         }
-      }, [totalBusiness, totalIntensive, totalPurchasing]);
+      }, [totalBusiness, totalInsentive, totalPurchasing]);
       
       const fetchOrderData = async (authToken) => {
-        alert(authToken)
+        // alert(authToken)
         try {
           const response = await fetch(SummaryApi.referralOrders.url, {
             method: SummaryApi.referralOrders.method,
@@ -80,7 +80,7 @@ const BusinessProfile = () => {
         // setUserData(data.user);
         setUsersData(data.users);
         setTotalBusiness(totalBusinesss.toFixed(2));
-        setTotalIntensive((0.05 * totalBusinesss).toFixed(2));
+        setTotalInsentive((0.05 * totalBusinesss).toFixed(2));
       } else {
         console.log("No orders found.");
       }
@@ -130,7 +130,7 @@ const BusinessProfile = () => {
     }
   };
   
-  const pushAllPricesInDb = async (totalBusiness, totalIntensive, totalPurchasing) => {
+  const pushAllPricesInDb = async (totalBusiness, totalInsentive, totalPurchasing) => {
     try {
 
       const response = await fetch(SummaryApi.pushAllPricesInDb.url, {
@@ -142,7 +142,7 @@ const BusinessProfile = () => {
         },
         body: JSON.stringify({
           totalBusiness,
-          totalIntensive,
+          totalInsentive,
           totalPurchasing,
           userId: userData.data._id // Ensure you pass the correct userId
         }),
@@ -156,7 +156,7 @@ const BusinessProfile = () => {
       const data = await response.json();
         // setTotalBusiness(0)
         // setTotalPurchasing(0)
-        // setTotalIntensive(0)
+        // setTotalInsentive(0)
         // console.log(totalBusiness)
       console.log('Response from server:', data);
     } catch (error) {
@@ -275,8 +275,8 @@ const BusinessProfile = () => {
           <p className="text-xl">₹{(totalBusiness)}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h3 className="text-lg font-semibold">Business Intensive(Income)</h3>
-          <p className="text-xl">₹{totalIntensive}</p>
+          <h3 className="text-lg font-semibold">Business Insentive(Income)</h3>
+          <p className="text-xl">₹{totalInsentive}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold">My Purchasing</h3>

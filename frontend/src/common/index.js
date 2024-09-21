@@ -135,6 +135,19 @@ const SummaryApi = {
         url: `${backendDomin}/api/rating/:itemId`,
         method: 'get'
     },
+    createOrder : {
+        url : `${backendDomin}/api/payment/create-order`,
+        method : 'post'
+    },
+  
+    payment_Success : {
+        url : `${backendDomin}/api/payment/payment-success`,
+        method : 'post'
+    },
+    pushAllPricesInDb : {
+        url : `${backendDomin}/api/businessPrices`,
+        method : 'post'
+    },
     // getmyKyc: {
     //     url: `${backendDomin}/api/user-kyc/:userId`,
     //     method : 'get'
