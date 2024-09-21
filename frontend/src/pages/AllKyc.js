@@ -13,7 +13,7 @@ const AllKyc = ({ setGlobalKycStatus }) => {
     // Fetch all KYC details for users who have submitted
     const fetchAllKyc = async () => {
         try {
-            const response = await fetch(SummaryApi.getmyKYC.url);
+            const response = await fetch(SummaryApi. getKYC.url);
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');

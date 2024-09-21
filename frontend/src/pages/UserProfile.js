@@ -17,6 +17,10 @@ import { FaTruck, FaBox, FaTimesCircle, FaCheckCircle, FaHourglassHalf, FaMotorc
 // import { BsBagXFill } from "react-icons/bs";
 import { RiShoppingCartFill } from "react-icons/ri"; 
 import { FaStar } from 'react-icons/fa';
+import { MdDelete } from "react-icons/md";
+import { IoIosAddCircle } from "react-icons/io";
+
+
 
 
 
@@ -420,41 +424,63 @@ const Profile = () => {
     </div>
         );
         case "Address":
-          return (
-            <div>
-              <h1 className="text-2xl font-bold mb-4">Address</h1>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                {userData.address ? (
-                  <div className="flex flex-col lg:flex-row justify-between items-center bg-slate-50 p-4 rounded-md mb-6 shadow-sm">
-                    <div className="text-lg">
-                      <p className="mb-2">
-                        <strong>Street:</strong> {userData.address.street}
-                      </p>
-                      <p className="mb-2">
-                        <strong>City:</strong> {userData.address.city}
-                      </p>
-                    </div>
-                    <div className="text-lg">
-                      <p className="mb-2">
-                        <strong>State:</strong> {userData.address.state}
-                      </p>
-                      <p>
-                        <strong>ZIP Code:</strong> {userData.address.zip}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
+        return (
+          <div>
+            <h1 className="text-2xl font-bold mb-4">Address</h1>
+
+            <div className="flex items-center mt-4">
+        <IoIosAddCircle className="text-sky-500 text-xl" />
+        <button
+          className="ml-2 text-blue-500 hover:text-blue-700"
+          onClick={handleAddNewAddress}
+        >
+          {showAddressForm ? "Cancel" : "Add New Address"}
+        </button>
+      </div>           
+      {showAddressForm && (
+        <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
+          <AddressForm address={address} setAddress={setAddress} />
+          <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]">
+            Add New Address
+          </button>
+        </form>
+      )} 
+<div className="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {userData?.address?.length > 0 ? (
+    userData.address.map((addr, index) => (
+      <div
+        key={index}
+        className="relative p-6 bg-white shadow-md rounded-lg border border-gray-300 mb-4"
+      >
+        <div className="flex justify-between">
+          <strong className="text-gray-800">{addr.name}</strong>
+          <div
+            className="absolute top-2 right-2 text-red-500 cursor-pointer p-2 hover:text-white hover:bg-red-600 hover:rounded-full"
+            onClick={() => deleteAddress(addr._id, userData._id)}
+          >
+            <MdDelete fontSize={18} />
+          </div>
+        </div>
+
+        <p className="text-gray-800 mt-4">
+          <span>{addr.mobileNo}</span>
+        </p>
+        <p className="text-gray-700 mt-2">
+          {addr.street}, {addr.city}, <br />
+          {addr.state} - <strong>{addr.zip}</strong>
+        </p>
+      </div>
+    ))
+) : (
   <div className="flex justify-center items-center p-2">
     <p className="text-red-500 text-md p">No addresses provided.</p>
   </div>
 )}
 
 </div>
-
-      
-      
-          </div>
+</div>
         );
+
          // Inside renderContent function
        case "Delivered":
         return (
