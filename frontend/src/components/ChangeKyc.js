@@ -20,7 +20,7 @@ const ChangeKycStatus = ({ _id, kycStatus, callFunc, onClose, setGlobalKycStatus
             // Log the status and KYC ID before making the request
             console.log(`Updating KYC ID: ${_id} with Status: ${newStatus}`);
 
-            const response = await fetch(`http://100.26.48.11:8000/api/upload-kyc/${_id}`, {
+            const response = await fetch(`http://localhost:8000/api/upload-kyc/${_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
