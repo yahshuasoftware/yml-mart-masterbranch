@@ -1,89 +1,62 @@
-// Frontend/components/UploadBannerForm.js
-
 import React, { useState } from 'react';
 import uploadImage from '../helpers/uploadImage';
 import SummaryApi from '../common';
+import { useUser } from '../context/userContext'; // Import UserContext to get user details
+import ROLE from '../common/role'; // Import roles
 
 const UploadBannerForm = ({ authToken }) => {
-    const [image, setImage] = useState(null);
-    const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+  const { user } = useUser(); // Get user details from context
+  const [image, setImage] = useState(null);
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-        setUploadedImageUrl(null); // Reset uploaded image URL if a new image is selected
-    };
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!image) {
-            alert('Please select an image');
-            return;
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!image) {
+      alert('Please select an image');
+      return;
+    }
+    
+    if (!user || (user.role !== ROLE.ADMIN && user.role !== ROLE.SUPER_ADMIN)) {
+      return <p>You do not have permission to upload banners.</p>;
+    }
 
-        try {
-            const uploadedImage = await uploadImage(image);
+    try {
+      const uploadedImage = await uploadImage(image);
+      
 
-            // Assuming you have access to the user's ID from context or props
-            const userId = "66d42c2761d50fc1400a33ec";  // Replace with actual user ID
+      const response = await fetch(SummaryApi.uploadAdBanner.url, {
+        method: SummaryApi.uploadAdBanner.method,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ imageUrl: uploadedImage.secure_url }),
+      });
 
-            const response = await fetch(SummaryApi.uploadBanner.url, {
-                method: SummaryApi.uploadBanner.method,
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authToken}`, 
-                },
-                body: JSON.stringify({ userId, imageUrl: uploadedImage.secure_url }),
-            });
+      if (response.ok) {
+        alert('Banner uploaded successfully!');
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Error uploading banner');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error uploading image');
+    }
+  };
 
-            if (response.ok) {
-                setUploadedImageUrl(uploadedImage.secure_url); // Update state with uploaded image URL
-                alert('Banner uploaded successfully!');
-            } else {
-                const errorData = await response.json();
-                alert(errorData.message || 'Error uploading banner');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error uploading image');
-        }
-    };
+  // Only allow users with ADMIN or SUPER_ADMIN roles to see the form
 
-    return (
-        <div className="flex flex-col items-center justify-center space-y-6 p-4">
-            <form 
-                onSubmit={handleSubmit} 
-                className="flex flex-col items-center space-y-4 p-4 border border-gray-300 rounded-lg shadow-md bg-white"
-            >
-                <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleImageChange} 
-                    className="block w-full text-sm text-gray-500 
-                               file:mr-4 file:py-2 file:px-4 
-                               file:rounded-full file:border-0 
-                               file:text-sm file:font-semibold 
-                               file:bg-blue-50 file:text-blue-700 
-                               hover:file:bg-blue-100"
-                />
-                <button 
-                    type="submit" 
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                    Upload Banner
-                </button>
-            </form>
-            {uploadedImageUrl && (
-                <div className="mt-6">
-                    <img 
-                        src={uploadedImageUrl} 
-                        alt="Uploaded Banner" 
-                        className="w-full max-w-lg rounded-lg shadow-lg"
-                    />
-                </div>
-            )}
-        </div>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <button type="submit">Upload Banner</button>
+    </form>
+  );
 };
 
 export default UploadBannerForm;
