@@ -1,5 +1,5 @@
-const backendDomin = "http://localhost:8000";
-// const backendDomin = process.env.SERVER_URI ;
+// const backendDomin = "http://localhost:8000";
+const backendDomin = process.env.SERVER_URI;
 
 const SummaryApi = {
     signUP: {
