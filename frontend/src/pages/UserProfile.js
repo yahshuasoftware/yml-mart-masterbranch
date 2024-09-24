@@ -4,6 +4,7 @@ import { FaTimes, FaBars } from "react-icons/fa";
 import { BsBagXFill } from "react-icons/bs";
 import { CgTrack } from "react-icons/cg";
 import ProfileIcons from '../assest/loginProfile1.png'
+import axios from "axios";
 
 import { useSelector } from "react-redux";
 import { MdModeEditOutline } from "react-icons/md";
@@ -25,15 +26,136 @@ import { IoIosAddCircle } from "react-icons/io";
 
 
 
-
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
-  
-  // const profilePicUrl = userData?.profilePic ? `${backendDomain}/${userData.profilePic}` : 'defaultProfilePicUrl';
+
+  const [address, setAddress] = useState({
+    name: "", 
+    mobileNo: "",
+    street: "",
+    city: "",
+    state: "Maharashtra", // Pre-fill with "Maharashtra"
+    zip: "",
+  });
+
+  const [streetSuggestions, setStreetSuggestions] = useState([]);
+  const [citySuggestions, setCitySuggestions] = useState([]);
+
+  const handleAddNewAddress = () => {
+    setShowAddressForm((prevState) => !prevState);
+    if (!showAddressForm) {
+      setAddress({ name: "", mobileNo: "", street: "", city: "", state: "Maharashtra", zip: "" });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (address.state !== "Maharashtra") {
+      alert("Please enter an address in Maharashtra");
+      return;
+    }
+    await uploadAddress(address, setUserData);
+    setShowAddressForm(false);
+  };
+
+  // Fetch street suggestions from Nominatim for Maharashtra
+  const fetchStreetSuggestions = async (query) => {
+    if (query.length < 3) return; // Avoid too many API calls for short queries
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?street=${query}&state=Maharashtra&countrycodes=IN&format=json`
+      );
+      setStreetSuggestions(response.data.map((item) => item.display_name));
+    } catch (error) {
+      console.error("Error fetching street suggestions:", error);
+    }
+  };
+
+  // Fetch city suggestions for Maharashtra only
+  const fetchCitySuggestions = async (query) => {
+    if (query.length < 3) return;
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?city=${query}&state=Maharashtra&countrycodes=IN&format=json`
+      );
+      setCitySuggestions(response.data.map((item) => item.display_name));
+    } catch (error) {
+      console.error("Error fetching city suggestions:", error);
+    }
+  };
+
+  // Update street input and fetch suggestions
+  const handleStreetChange = (e) => {
+    const { value } = e.target;
+    setAddress((prevAddress) => ({ ...prevAddress, street: value }));
+    fetchStreetSuggestions(value);
+  };
+
+  // Update city input and fetch suggestions
+  const handleCityChange = (e) => {
+    const { value } = e.target;
+    setAddress((prevAddress) => ({ ...prevAddress, city: value }));
+    fetchCitySuggestions(value);
+  };
+
+  useEffect(() => {
+    const fetchUserData = async (authToken) => {
+      try {
+        const response = await fetch(SummaryApi.current_user.url, {
+          method: SummaryApi.current_user.method,
+          credentials: "include",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`, 
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setUserData(data.data);
+        setOrderData(data.orderDetail);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const deleteAddress = async (id, userId, authToken) => {
+    try {
+      const response = await fetch(SummaryApi.deleteAddress.url, {
+        method: SummaryApi.deleteAddress.method,
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`, 
+        },
+        body: JSON.stringify({
+          AddressId: id,
+          userId: userId,
+        }),
+      });
+
+      const responseData = await response.json();
+      if (responseData.success) {
+        setUserData((prevData) => ({
+          ...prevData,
+          address: responseData.data?.address || [], // Ensure address is always an array
+        }));
+        alert("Address deleted successfully");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Failed to delete address");
+    }
+  };
 
 
   const StarRating = ({ itemId, initialRating, onSave }) => {
@@ -101,22 +223,6 @@ const Profile = () => {
    };
  
 
-  const handleAddNewAddress = () => {
-    setShowAddressForm((prevState) => !prevState);
-    if (!showAddressForm) {
-      setAddress({ name:"", mobileNo : "",street: "", city: "", state: "", zip: "" });
-    }
-  };
-  
-
-  const [address, setAddress] = useState({
-    name:"", 
-    mobileNo : "",
-    street: "",
-    city: "",
-    state: "",
-    zip: "",
-  });
 
   const resetTotalPurchasing = () => {
     //setTotalPurchasing(0);
@@ -180,75 +286,6 @@ const Profile = () => {
 
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await uploadAddress(address, setUserData);
-    setShowAddressForm(false);
-  };
-
-
-  useEffect(() => {
-    const fetchUserData = async (authToken) => {
-      try {
-        const response = await fetch(SummaryApi.current_user.url,{
-          method : SummaryApi.current_user.method,
-          credentials: "include",
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`, 
-        },
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const data = await response.json();
-        console.log(data)
-        setUserData(data.data);
-        console.log(data.data)
-        
-        
-
-        setOrderData(data.orderDetail);
-        console.log(orderData[0].deliveryStatus)
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  const deleteAddress = async (id, userId,authToken) => {
-    try {
-      const response = await fetch(SummaryApi.deleteAddress.url, {
-        method: SummaryApi.deleteAddress.method,
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`, 
-      },
-        body: JSON.stringify({
-          AddressId: id,
-          userId: userId,
-        }),
-      });
-  
-      const responseData = await response.json();
-      if (responseData.success) {
-        // Ensure `address` field is correctly updated in the state
-        setUserData((prevData) => ({
-          ...prevData,
-          address: responseData.data?.address || [], // Ensure address is always an array
-        }));
-        alert("Address deleted successfully");
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Failed to delete address");
-    }
-  };
-  
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -423,63 +460,164 @@ const Profile = () => {
       )}
     </div>
         );
+
+
         case "Address":
-        return (
-          <div>
-            <h1 className="text-2xl font-bold mb-4">Address</h1>
-
-            <div className="flex items-center mt-4">
-        <IoIosAddCircle className="text-sky-500 text-xl" />
-        <button
-          className="ml-2 text-blue-500 hover:text-blue-700"
-          onClick={handleAddNewAddress}
-        >
-          {showAddressForm ? "Cancel" : "Add New Address"}
-        </button>
-      </div>           
-      {showAddressForm && (
-        <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
-          <AddressForm address={address} setAddress={setAddress} />
-          <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]">
-            Add New Address
-          </button>
-        </form>
-      )} 
-<div className="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {userData?.address?.length > 0 ? (
-    userData.address.map((addr, index) => (
-      <div
-        key={index}
-        className="relative p-6 bg-white shadow-md rounded-lg border border-gray-300 mb-4"
-      >
-        <div className="flex justify-between">
-          <strong className="text-gray-800">{addr.name}</strong>
-          <div
-            className="absolute top-2 right-2 text-red-500 cursor-pointer p-2 hover:text-white hover:bg-red-600 hover:rounded-full"
-            onClick={() => deleteAddress(addr._id, userData._id)}
-          >
-            <MdDelete fontSize={18} />
-          </div>
-        </div>
-
-        <p className="text-gray-800 mt-4">
-          <span>{addr.mobileNo}</span>
-        </p>
-        <p className="text-gray-700 mt-2">
-          {addr.street}, {addr.city}, <br />
-          {addr.state} - <strong>{addr.zip}</strong>
-        </p>
-      </div>
-    ))
-) : (
-  <div className="flex justify-center items-center p-2">
-    <p className="text-red-500 text-md p">No addresses provided.</p>
-  </div>
-)}
-
-</div>
-</div>
-        );
+          return (
+            <div>
+              <h1 className="text-2xl font-bold mb-4">Address</h1>
+        
+              {/* Add New Address Button */}
+              <div className="flex items-center mt-4">
+                <IoIosAddCircle className="text-sky-500 text-xl" />
+                <button
+                  className="ml-2 text-blue-500 hover:text-blue-700"
+                  onClick={handleAddNewAddress}
+                >
+                  {showAddressForm ? "Cancel" : "Add New Address"}
+                </button>
+              </div>
+        
+              {/* Address Form */}
+              {showAddressForm && (
+                <form className="grid gap-4 mt-4" onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Name"
+                      value={address.name}
+                      onChange={(e) => setAddress((prev) => ({ ...prev, name: e.target.value }))}
+                      className="border p-2 rounded-lg"
+                      required
+                    />
+                    <input
+                      type="text"
+                      name="mobileNo"
+                      placeholder="Mobile Number"
+                      value={address.mobileNo}
+                      onChange={(e) => setAddress((prev) => ({ ...prev, mobileNo: e.target.value }))}
+                      className="border p-2 rounded-lg"
+                      required
+                    />
+                  </div>
+        
+                  {/* Street Input with Suggestions */}
+                  <input
+                    type="text"
+                    name="street"
+                    placeholder="Street"
+                    value={address.street}
+                    onChange={handleStreetChange}
+                    className="border p-2 rounded-lg"
+                    required
+                  />
+                  {streetSuggestions.length > 0 && (
+                    <ul className="border border-gray-300 p-2 rounded-lg bg-white">
+                      {streetSuggestions.map((suggestion, idx) => (
+                        <li
+                          key={idx}
+                          className="p-1 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            setAddress((prev) => ({ ...prev, street: suggestion }));
+                            setStreetSuggestions([]); // Close dropdown
+                          }}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+        
+                  {/* City Input with Suggestions */}
+                  <input
+                    type="text"
+                    name="city"
+                    placeholder="City"
+                    value={address.city}
+                    onChange={handleCityChange}
+                    className="border p-2 rounded-lg"
+                    required
+                  />
+                  {citySuggestions.length > 0 && (
+                    <ul className="border border-gray-300 p-2 rounded-lg bg-white">
+                      {citySuggestions.map((suggestion, idx) => (
+                        <li
+                          key={idx}
+                          className="p-1 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            setAddress((prev) => ({ ...prev, city: suggestion }));
+                            setCitySuggestions([]); // Close dropdown
+                          }}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+        
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <input
+                      type="text"
+                      name="state"
+                      placeholder="State"
+                      value={address.state}
+                      onChange={(e) => setAddress((prev) => ({ ...prev, state: e.target.value }))}
+                      className="border p-2 rounded-lg"
+                      required
+                    />
+                    <input
+                      type="text"
+                      name="zip"
+                      placeholder="ZIP Code"
+                      value={address.zip}
+                      onChange={(e) => setAddress((prev) => ({ ...prev, zip: e.target.value }))}
+                      className="border p-2 rounded-lg"
+                      required
+                    />
+                  </div>
+        
+                  <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-full">
+                    Add New Address
+                  </button>
+                </form>
+              )}
+        
+              {/* Display Existing Addresses */}
+              <div className="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {userData?.address?.length > 0 ? (
+                  userData.address.map((addr, index) => (
+                    <div
+                      key={index}
+                      className="relative p-6 bg-white shadow-md rounded-lg border border-gray-300 mb-4"
+                    >
+                      <div className="flex justify-between">
+                        <strong className="text-gray-800">{addr.name}</strong>
+                        <div
+                          className="absolute top-2 right-2 text-red-500 cursor-pointer p-2 hover:text-white hover:bg-red-600 hover:rounded-full"
+                          onClick={() => deleteAddress(addr._id, userData._id)}
+                        >
+                          <MdDelete fontSize={18} />
+                        </div>
+                      </div>
+        
+                      <p className="text-gray-800 mt-4">
+                        <span>{addr.mobileNo}</span>
+                      </p>
+                      <p className="text-gray-700 mt-2">
+                        {addr.street}, {addr.city}, <br />
+                        {addr.state} - <strong>{addr.zip}</strong>
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex justify-center items-center p-2">
+                    <p className="text-red-500 text-md">No addresses provided.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ); 
 
          // Inside renderContent function
        case "Delivered":
