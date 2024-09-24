@@ -21,9 +21,11 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    // alert(process.env.REACT_APP_BACKEND_DOMAIN_URL)
     e.preventDefault();
     try {
       const response = await fetch(SummaryApi.signIn.url, {
+        
         method: SummaryApi.signIn.method,
         credentials: 'include',
         headers: {
