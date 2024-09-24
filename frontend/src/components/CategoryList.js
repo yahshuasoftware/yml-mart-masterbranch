@@ -64,7 +64,7 @@ const CategoryList = () => {
         setIsDropdownVisible(true);
     };
 
-    // Handle mouse leave from category or dropdown
+    // Handle hiding dropdown when mouse leaves category or dropdown
     const handleMouseLeave = () => {
         setTimeout(() => {
             if (!dropdownElementHovered && !categoryElementHovered) {
@@ -100,6 +100,21 @@ const CategoryList = () => {
         };
     }, [lastScrollY]);
 
+    // Close dropdown when the mouse is not over the dropdown or the category
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.category-item') && !event.target.closest('.dropdown-item')) {
+                setIsDropdownVisible(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className="container mx-auto pt-5 pb-8 px-6">
             <div className="flex items-center gap-4 justify-between overflow-x-auto bg-white px-6 py-4 rounded-lg shadow-lg">
@@ -114,11 +129,9 @@ const CategoryList = () => {
                     categoryProduct.map((product) => (
                         <div
                             key={product?.category || product?._id} // Use a unique key if possible
-                            className="relative group"
-                            onMouseEnter={(e) => handleMouseEnter(e, product?.category)}
-                            onMouseLeave={() => {
-                                categoryElementHovered = false;
-                            }}
+                            className="relative group category-item"
+                            onMouseEnter={(e) => { handleMouseEnter(e, product?.category); categoryElementHovered = true; }}
+                            onMouseLeave={() => { categoryElementHovered = false; handleMouseLeave(); }}
                         >
                             <Link
                                 to={"/product-category?category=" + product?.category}
@@ -143,7 +156,7 @@ const CategoryList = () => {
             {/* The dropdown, fixed to the position of the hovered category */}
             {isDropdownVisible && (
                 <div
-                    className="fixed z-50 bg-white shadow-lg p-4 rounded-lg w-48 border border-gray-300 overflow-y-auto max-h-64 mt-2"
+                    className="fixed z-50 bg-white shadow-lg p-4 rounded-lg w-48 border border-gray-300 overflow-y-auto max-h-64 mt-2 dropdown-item"
                     style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
                     onMouseEnter={() => { dropdownElementHovered = true; setIsDropdownVisible(true); }}
                     onMouseLeave={() => { dropdownElementHovered = false; handleMouseLeave(); }}
