@@ -131,7 +131,7 @@ const Header = () => {
             </div>
           </div>
             {user?._id && (
-              <Link to="/cart" className="text-2xl relative">
+              <Link to="/cart" className="text-3xl relative">
                 <FaShoppingCart className="text-gray-700 hover:text-sky-600 transition-colors duration-200" />
                 <div className="bg-red-600 text-white w-5 h-5 text-xs rounded-full absolute -top-2 -right-2 flex items-center justify-center">
                   {cartProductCount}

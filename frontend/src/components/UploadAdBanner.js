@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import uploadImage from '../helpers/uploadImage';
 import SummaryApi from '../common';
 
-const UploadBannerForm = ({ userId , authToken }) => { // Assuming userId is passed as a prop
+const UploadBannerForm = ({authToken }) => { // Assuming userId is passed as a prop
     const [image, setImage] = useState(null);
 
     const handleImageChange = (e) => {
@@ -21,8 +21,7 @@ const handleSubmit = async (e) => {
     try {
         const uploadedImage = await uploadImage(image);
 
-        // Assuming you have access to the user's ID from context or props
-        const userId = "66d42c2761d50fc1400a33ec";  // Replace with actual user ID
+        // Assuming you have access to the user's ID from context or props  // Replace with actual user ID
 
         const response = await fetch(SummaryApi.uploadAdBanner.url,{
             method : SummaryApi.uploadAdBanner.method,
@@ -31,7 +30,7 @@ const handleSubmit = async (e) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authToken}`, 
             },
-            body: JSON.stringify({ userId, imageUrl: uploadedImage.secure_url }),
+            body: JSON.stringify({imageUrl: uploadedImage.secure_url }),
         });
 
         if (response.ok) {

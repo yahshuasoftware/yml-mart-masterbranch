@@ -1,5 +1,5 @@
 const backendDomin = "http://localhost:8000";
-// const backendDomin = process.env.SERVER_URI ;
+// const backendDomin = process.env.SERVER_URI;
 
 const SummaryApi = {
     signUP: {
@@ -134,6 +134,19 @@ const SummaryApi = {
     getRating: {
         url: `${backendDomin}/api/rating/:itemId`,
         method: 'get'
+    },
+    createOrder : {
+        url : `${backendDomin}/api/payment/create-order`,
+        method : 'post'
+    },
+  
+    payment_Success : {
+        url : `${backendDomin}/api/payment/payment-success`,
+        method : 'post'
+    },
+    pushAllPricesInDb : {
+        url : `${backendDomin}/api/businessPrices`,
+        method : 'post'
     },
     // getmyKyc: {
     //     url: `${backendDomin}/api/user-kyc/:userId`,

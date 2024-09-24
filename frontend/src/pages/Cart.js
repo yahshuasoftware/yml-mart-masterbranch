@@ -148,6 +148,7 @@ const Cart = ({authToken}) => {
   };
 
   const handlePayment = async (finalAddress) => {
+    
     if (!selectedAddress) {
       alert("Add Delivery Address");
     } else {

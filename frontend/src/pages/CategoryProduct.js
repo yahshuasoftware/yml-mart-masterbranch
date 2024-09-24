@@ -109,7 +109,7 @@ const CategoryProduct = () => {
     };
 
     return (
-        <div className='container mx-auto p-4'>
+        <div className='container mx-auto p-4 '>
             <div className='lg:grid grid-cols-[200px,1fr]'>
                 {/* Sidebar for larger screens */}
                 <div className='hidden lg:block bg-white p-2 min-h-[calc(100vh-120px)] overflow-y-scroll'>
@@ -157,7 +157,7 @@ const CategoryProduct = () => {
                 </div>
 
                 {/* Display Products */}
-                <div className='px-4 mt-8'>
+                <div className='px-0 mt-8 lg:px-4'>
                     <p className='font-medium text-slate-800 text-lg my-2'>Search Results: {data.length}</p>
                     <div className='min-h-[calc(100vh-120px)] overflow-y-scroll max-h-[calc(100vh-120px)]'>
                         {
