@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 
+const backend_Domin = process.env.BACKEND_DOMAIN_UR;
+
 const ChangeDeliveryStatus = ({ _id, deliveryStatus, onClose, callFunc }) => {
     const [newStatus, setNewStatus] = useState(deliveryStatus);
 
     const handleStatusChange = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/orders/${_id}`, {
+            const response = await fetch(`${backend_Domin}/api/orders/${_id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

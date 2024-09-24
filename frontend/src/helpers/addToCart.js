@@ -9,7 +9,7 @@ const AddToCart = async (e, id,authToken) => {
 
     const response = await fetch(SummaryApi.addToCartProduct.url, {
         method: SummaryApi.addToCartProduct.method,
-        credentials: 'include',
+        // credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${authToken}`, // Add token to Authorization header
