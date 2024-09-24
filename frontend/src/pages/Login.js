@@ -21,31 +21,42 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission
     try {
-      const response = await fetch(SummaryApi.signIn.url, {
-        method: SummaryApi.signIn.method,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+        const response = await fetch(SummaryApi.signIn.url, {
+            method: SummaryApi.signIn.method,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data), // Ensure 'data' is your user credentials
+        });
 
-      const result = await response.json();
-      if (result.success) {
-        toast.success(result.message);
-        const token = result.token;
-        saveAuthToken(token);
-        await fetchUserDetails(); // Fetch user details
-        navigate('/');
-      } else {
-        toast.error(result.message);
-      }
+        const result = await response.json(); // Parse the JSON response
+        
+        if (result.success) {
+            toast.success(result.message); // Show success message
+            
+            const token = result.data;
+            alert(token) // Access the token from result.data
+            
+            // Check if the token is actually retrieved
+            if (token) {
+                saveAuthToken(token); // Save the token to context and localStorage
+                await fetchUserDetails(); // Fetch user details
+                navigate('/'); // Redirect to home page
+            } else {
+                toast.error('Token is undefined.'); // Error if token is not found
+            }
+        } else {
+            toast.error(result.message); // Show error message from the API
+        }
     } catch (error) {
-      toast.error('An error occurred');
+        console.error('An error occurred:', error); // Log any errors
+        toast.error('An error occurred during login.'); // Generic error message
     }
-  };
+};
+
 
   return (
     <section id='login'>

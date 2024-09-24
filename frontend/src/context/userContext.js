@@ -12,8 +12,14 @@ export const UserProvider = ({ children }) => {
 
   const fetchUserDetails = async () => {
     try {
+      const token = localStorage.getItem('authToken'); 
+      // al ert(token)
       const dataResponse = await fetch(SummaryApi.current_user.url, {
         method: SummaryApi.current_user.method,
+        headers: {
+          'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+          'Content-Type': 'application/json',
+      },
         credentials: 'include',
       });
 

@@ -104,6 +104,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserData = async (authToken) => {
+    
       try {
         const response = await fetch(SummaryApi.current_user.url, {
           method: SummaryApi.current_user.method,

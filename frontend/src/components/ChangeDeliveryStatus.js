@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-const backend_Domin = process.env.BACKEND_DOMAIN_UR;
+const backend_Domin = process.env.REACT_APP_BACKEND_DOMAIN_URL;
 
 const ChangeDeliveryStatus = ({ _id, deliveryStatus, onClose, callFunc }) => {
     const [newStatus, setNewStatus] = useState(deliveryStatus);
