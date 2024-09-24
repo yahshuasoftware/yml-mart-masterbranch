@@ -16,6 +16,7 @@ const upload = multer({ dest: 'uploads/' });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
+
 app.use(cors({
     origin: ['http://localhost:3000', '*','http://54.236.48.172'],
     credentials: true,

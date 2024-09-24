@@ -1,4 +1,4 @@
-const backendDomin = "http://localhost:8000";
+const backendDomin = "https://yml-backend.onrender.com/";
 // const backendDomin = process.env.SERVER_URI;
 
 const SummaryApi = {

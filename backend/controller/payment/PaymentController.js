@@ -2,6 +2,7 @@ const Razorpay = require('razorpay');
 const Order = require('../../models/order');
 const userModel = require("../../models/userModel");
 const productModel = require('../../models/productModel');
+const pdf = require('html-pdf');
 
 const razorpay = new Razorpay({
     key_id: 'rzp_test_U4XuiM2cjeWzma',
@@ -44,7 +45,6 @@ const createOrder = async (req, res) => {
         res.status(500).json({ success: false, message: "Server Error", error });
     }
 };
-
 const handlePaymentSuccess = async (req, res) => {
     const { order_id, payment_id, signature, userId } = req.body;
 
@@ -61,12 +61,12 @@ const handlePaymentSuccess = async (req, res) => {
         order.signature = signature;
         order.status = 'paid';
 
-        // Loop through each product in the order and update the quantity in the Product schema
+        // Update product quantities in the Product schema
         for (const item of order.products) {
             const product = await productModel.findById(item.productId);
             if (product) {
                 if (product.quantity >= item.quantity) {
-                    product.quantity -= item.quantity; // Reduce product quantity by the ordered amount
+                    product.quantity -= item.quantity; // Reduce product quantity
                     product.purchaseCount = (product.purchaseCount || 0) + item.quantity; // Update purchase count
                     await product.save();
                 } else {
@@ -81,21 +81,73 @@ const handlePaymentSuccess = async (req, res) => {
         // Save the updated order
         await order.save();
 
-        // Handle referral system (if applicable)
-        const user = await userModel.findById(userId);
-        if (user && user.refferal.refferredbycode) {
-            // Find the referrer using the referral code
-            const referrer = await userModel.findOne({ 'refferal.refferalcode': user.refferal.refferredbycode });
-            if (referrer) {
-                referrer.refferal.myrefferalorders.push({
-                    'userId': user._id,
-                    "order_id": order._id,
-                });
-                await referrer.save();
-            }
-        }
+        // Generate the invoice after successful payment
+        const invoiceHTML = `
+            <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        .invoice { padding: 20px; border: 1px solid #000; }
+                        .header { text-align: center; }
+                        .products { width: 100%; border-collapse: collapse; }
+                        .products th, .products td { border: 1px solid #000; padding: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="invoice">
+                        <h1 class="header">Invoice</h1>
+                        <p>Order ID: ${order.order_id}</p>
+                        <p>Customer ID: ${order.userId}</p>
+                        <p>Delivery Address: ${JSON.stringify(order.deliveryAddress)}</p>
+                        <table class="products">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${order.products.map(product => `
+                                    <tr>
+                                        <td>${product.name}</td>
+                                        <td>${product.quantity}</td>
+                                        <td>${product.price}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <h3>Total Amount: ${order.amount} ${order.currency}</h3>
+                    </div>
+                </body>
+            </html>
+        `;
 
-        res.status(200).json({ success: true, message: "Payment successful, order updated, stock and purchase count adjusted" });
+        // Generate PDF
+        pdf.create(invoiceHTML).toFile(`invoices/invoice_${order._id}.pdf`, async (err, result) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: "Error generating invoice", error: err });
+            }
+
+            // Update the order with the invoice path
+            order.invoicePath = result.filename; // Store the path to the invoice
+            await order.save();
+
+            // Handle referral system (if applicable)
+            const user = await userModel.findById(userId);
+            if (user && user.refferal.refferredbycode) {
+                const referrer = await userModel.findOne({ 'refferal.refferalcode': user.refferal.refferredbycode });
+                if (referrer) {
+                    referrer.refferal.myrefferalorders.push({
+                        'userId': user._id,
+                        "order_id": order._id,
+                    });
+                    await referrer.save();
+                }
+            }
+
+            res.status(200).json({ success: true, message: "Payment successful, order updated, invoice generated", invoicePath: result.filename });
+        });
     } catch (error) {
         console.error("Error updating order after payment", error);
         res.status(500).json({ success: false, message: "Server Error", error });
