@@ -1,4 +1,4 @@
-const backendDomin = "http://localhost:8000";
+const backendDomin = "http://3.85.148.197:8000";
 // const backendDomin = process.env.SERVER_URI;
 
 const SummaryApi = {
