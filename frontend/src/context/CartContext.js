@@ -15,13 +15,16 @@ export const CartProvider = ({ children }) => {
         method: SummaryApi.addToCartProductCount.method,
         credentials: 'include',
       });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
       setCartProductCount(data?.data?.count || 0);
-      fetchCartProductCount();
     } catch (error) {
       console.error('Error fetching cart product count:', error);
     }
   };
+  
 
   useEffect(() => {
     fetchCartProductCount();
