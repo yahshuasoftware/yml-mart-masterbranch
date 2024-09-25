@@ -120,8 +120,10 @@ const VerticalCardProduct = ({ category, heading }) => {
                     <p className="text-slate-400 text-xs line-through">
                         {displayINRCurrency(product?.price)}
                     </p>
+                
                 </div>
                 <div className="flex justify-center pt-2">
+                    {/* <p>t</p> */}
                     {product?.quantity > 0 ? (
                         <button
                             className="text-sm text-white bg-green-600 border border-green-600 px-4 py-2 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600"
@@ -129,9 +131,11 @@ const VerticalCardProduct = ({ category, heading }) => {
                         >
                             Add to Cart
                         </button>
+                        
                     ) : (
-                        <span className="text-sm text-red-500 bg-red-100 px-4 py-2 rounded-full border border-red-500 font-semibold">
-                            Out of Stock
+                        <span                             className="text-sm text-white bg-green-600 border border-green-600 px-4 py-2 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600">
+
+                            Add to Cart
                         </span>
                     )}
                 </div>

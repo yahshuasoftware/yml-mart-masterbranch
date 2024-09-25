@@ -30,7 +30,7 @@ const ProductDetails = () => {
   });
   const [zoomImage, setZoomImage] = useState(false);
 
-  const { fetchUserAddToCart } = useContext(Context);
+  // const { fetchUserAddToCart } = useContext(Context);
 
   const navigate = useNavigate();
 
@@ -78,6 +78,8 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to top
+
     fetchProductDetails();
   }, [params]);
 
@@ -103,12 +105,12 @@ const ProductDetails = () => {
 
   const handleAddToCart = async (e, id) => {
     await addToCart(e, id);
-    fetchUserAddToCart();
+    // fetchUserAddToCart();
   };
 
   const handleBuyProduct = async (e, id) => {
     await addToCart(e, id);
-    fetchUserAddToCart();
+    // fetchUserAddToCart();
     navigate("/cart");
   };
 

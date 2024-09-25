@@ -21,16 +21,18 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    // alert(process.env.REACT_APP_BACKEND_DOMAIN_URL)
+    e.preventDefault();
     try {
-        const response = await fetch(SummaryApi.signIn.url, {
-            method: SummaryApi.signIn.method,
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data), // Ensure 'data' is your user credentials
-        });
+      const response = await fetch(SummaryApi.signIn.url, {
+        
+        method: SummaryApi.signIn.method,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
         const result = await response.json(); // Parse the JSON response
         

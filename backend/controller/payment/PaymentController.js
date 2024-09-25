@@ -3,6 +3,8 @@ const Order = require('../../models/order');
 const userModel = require("../../models/userModel");
 const productModel = require('../../models/productModel');
 const pdf = require('html-pdf');
+const path = require('path');
+
 
 const razorpay = new Razorpay({
     key_id: 'rzp_test_U4XuiM2cjeWzma',
@@ -147,16 +149,19 @@ const handlePaymentSuccess = async (req, res) => {
         `;
 
         // Generate PDF
-        pdf.create(invoiceHTML).toFile(`/invoices/invoice_${order._id}.pdf`, async (err, result) => {
+        const invoicesDir = path.join(__dirname, '../..', 'invoices');
+
+// PDF generation logic
+pdf.create(invoiceHTML).toFile(path.join(invoicesDir, `invoice_${order._id}.pdf`), async (err, result) => {
             if (err) {
                 return res.status(500).json({ success: false, message: "Error generating invoice", error: err });
             }
 
             // Update the order with the invoice path
             // console.log(result.filename)
-            order.invoicePath = result.filename; // Store the path to the invoice
-            await order.save();
-
+            const relativePath = `/invoices/invoice_${order._id}.pdf`;
+            order.invoicePath = relativePath;  // Save this relative path
+            await order.save();  // Save the order with the invoicePath
             // Handle referral system (if applicable)
             const user = await userModel.findById(userId);
             if (user && user.refferal.refferredbycode) {

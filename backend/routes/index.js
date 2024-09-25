@@ -12,6 +12,8 @@ const getKYCController = require('../controller/user/getKycController'); // Impo
 const kycController = require('../controller/user/kycController'); // Import your KYC controller
 const updateKycController  = require('../controller/user/updatekyc');
 const businessPrices = require("../controller/user/businessPrices")
+const reset = require("../controller/user/reset")
+
 //const getkyc = require('../controller/user/getkyc');
 
 
@@ -88,5 +90,9 @@ router.get("/countAddToCartProduct", require('../middleware/authToken'), require
 router.get("/view-card-product", require('../middleware/authToken'), require('../controller/user/addToCartViewProduct'));
 router.post("/update-cart-product", require('../middleware/authToken'), require('../controller/user/updateAddToCartProduct'));
 router.post("/delete-cart-product", require('../middleware/authToken'), require('../controller/user/deleteAddToCartProduct'));
+
+
+//reset totalPurchase
+router.post('/reset', reset)
 
 module.exports = router;

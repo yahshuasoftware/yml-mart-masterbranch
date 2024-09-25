@@ -4,7 +4,7 @@ const User = require('../../models/userModel'); // Import the User model
 const businessPrices = async (req, res) => {
     const { totalBusiness, totalIntensive, totalPurchasing, userId } = req.body;
 
-    // console.log('Received values:', { totalBusiness, totalIntensive, totalPurchasing, userId });
+    console.log('Received values:', { totalBusiness, totalIntensive, totalPurchasing, userId });
   
     if (!userId || totalBusiness === undefined || totalIntensive === undefined || totalPurchasing === undefined) {
       return res.status(400).json({ message: 'Missing required fields' });

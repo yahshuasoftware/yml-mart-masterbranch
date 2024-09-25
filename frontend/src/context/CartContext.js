@@ -6,21 +6,22 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
     const [cartProductCount, setCartProductCount] = useState(0);
 
-    const fetchCartProductCount = async () => {
-        try {
-          const response = await fetch(SummaryApi.addToCartProductCount.url, {
-            method: SummaryApi.addToCartProductCount.method,
-            credentials: 'include',
-          });
-          if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-          }
-          const data = await response.json();
-          setCartProductCount(data?.data?.count || 0);
-        } catch (error) {
-          console.error('Error fetching cart product count:', error);
-        }
-      };
+  const fetchCartProductCount = async () => {
+    try {
+      const response = await fetch(SummaryApi.addToCartProductCount.url, {
+        method: SummaryApi.addToCartProductCount.method,
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      setCartProductCount(data?.data?.count || 0);
+    } catch (error) {
+      console.error('Error fetching cart product count:', error);
+    }
+  };
+  
 
     useEffect(() => {
         fetchCartProductCount();

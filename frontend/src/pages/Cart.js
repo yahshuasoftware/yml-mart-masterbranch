@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 import Context from "../context";
 import { useUser } from '../context/userContext'; // Import the useUser hook
 import { useCart } from '../context/CartContext';
+import { uploadAddress } from "../helpers/uploadAddress";
+import axios from "axios";
+
 
 
 const Cart = ({authToken}) => {
@@ -14,6 +17,8 @@ const Cart = ({authToken}) => {
   const [loading, setLoading] = useState(true);
   const { user } = useUser(); // Get the user details from UserContext
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+
   const [hasAddress, setHasAddress] = useState(false);
   const [finalAmount, setFinalAmount] = useState(0);
   const [discountPrice, setDiscountPrice] = useState(0);
@@ -23,9 +28,74 @@ const Cart = ({authToken}) => {
   const [showAllAddresses, setShowAllAddresses] = useState(false);
   const context = useContext(Context);
   const { updateCartProductCount } = useCart();
+  const [streetSuggestions, setStreetSuggestions] = useState([]);
+  const [citySuggestions, setCitySuggestions] = useState([]);
+  const [address, setAddress] = useState({
+    name: "", 
+    mobileNo: "",
+    street: "",
+    city: "",
+    state: "Maharashtra", // Pre-fill with "Maharashtra"
+    zip: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (address.state !== "Maharashtra") {
+      alert("Please enter an address in Maharashtra");
+      return;
+    }
+    //here user should be updated ex setUserData
+    await uploadAddress(address, setUserData);
+    setShowAddressForm(false);
+  };
+
+  // Fetch street suggestions from Nominatim for Maharashtra
+  const fetchStreetSuggestions = async (query) => {
+    if (query.length < 3) return; // Avoid too many API calls for short queries
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?street=${query}&state=Maharashtra&countrycodes=IN&format=json`
+      );
+      setStreetSuggestions(response.data.map((item) => item.display_name));
+    } catch (error) {
+      console.error("Error fetching street suggestions:", error);
+    }
+  };
+
+  // Fetch city suggestions for Maharashtra only
+  const fetchCitySuggestions = async (query) => {
+    if (query.length < 3) return;
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?city=${query}&state=Maharashtra&countrycodes=IN&format=json`
+      );
+      setCitySuggestions(response.data.map((item) => item.display_name));
+    } catch (error) {
+      console.error("Error fetching city suggestions:", error);
+    }
+  };
+
+  // Update street input and fetch suggestions
+  const handleStreetChange = (e) => {
+    const { value } = e.target;
+    setAddress((prevAddress) => ({ ...prevAddress, street: value }));
+    fetchStreetSuggestions(value);
+  };
+
+  // Update city input and fetch suggestions
+  const handleCityChange = (e) => {
+    const { value } = e.target;
+    setAddress((prevAddress) => ({ ...prevAddress, city: value }));
+    fetchCitySuggestions(value);
+  };
+
 
   const handleAddNewAddress = () => {
     setShowAddressForm((prevState) => !prevState);
+    if (!showAddressForm) {
+      setAddress({ name: "", mobileNo: "", street: "", city: "", state: "Maharashtra", zip: "" });
+    }
   };
 
   const handleSelectAddress = (address) => {
@@ -290,7 +360,127 @@ const Cart = ({authToken}) => {
         >
           {showAllAddresses ? 'Hide Addresses' : 'Change Address'}
         </button>
+
+                <IoIosAddCircle className="text-sky-500 text-xl ml-2" />
+                <button
+          className=" text-sky-600 hover:text-sky-700"
+          onClick={handleAddNewAddress}
+                >
+                  {showAddressForm ? "Cancel" : "Add New Address"}
+                </button>
       </div>
+      
+      {showAddressForm && (
+  <form className="grid gap-4 mt-4 max-w-lg " onSubmit={handleSubmit}>
+    {/* Name and Mobile Number */}
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        value={address.name}
+        onChange={(e) => setAddress((prev) => ({ ...prev, name: e.target.value }))}
+        className="border p-2 rounded-lg"
+        required
+      />
+      <input
+        type="text"
+        name="mobileNo"
+        placeholder="Mobile Number"
+        value={address.mobileNo}
+        onChange={(e) => setAddress((prev) => ({ ...prev, mobileNo: e.target.value }))}
+        className="border p-2 rounded-lg"
+        required
+      />
+    </div>
+
+    {/* Street and City */}
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div>
+        <input
+          type="text"
+          name="street"
+          placeholder="Street"
+          value={address.street}
+          onChange={handleStreetChange}
+          className="border p-2 rounded-lg w-full"
+          required
+        />
+        {streetSuggestions.length > 0 && (
+          <ul className="border border-gray-300 p-2 rounded-lg bg-white">
+            {streetSuggestions.map((suggestion, idx) => (
+              <li
+                key={idx}
+                className="p-1 hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  setAddress((prev) => ({ ...prev, street: suggestion }));
+                  setStreetSuggestions([]); // Close dropdown
+                }}
+              >
+                {suggestion}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div>
+        <input
+          type="text"
+          name="city"
+          placeholder="City"
+          value={address.city}
+          onChange={handleCityChange}
+          className="border p-2 rounded-lg w-full"
+          required
+        />
+        {citySuggestions.length > 0 && (
+          <ul className="border border-gray-300 p-2 rounded-lg bg-white">
+            {citySuggestions.map((suggestion, idx) => (
+              <li
+                key={idx}
+                className="p-1 hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  setAddress((prev) => ({ ...prev, city: suggestion }));
+                  setCitySuggestions([]); // Close dropdown
+                }}
+              >
+                {suggestion}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+
+    {/* State and ZIP Code */}
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <input
+        type="text"
+        name="state"
+        placeholder="State"
+        value={address.state}
+        onChange={(e) => setAddress((prev) => ({ ...prev, state: e.target.value }))}
+        className="border p-2 rounded-lg"
+        required
+      />
+      <input
+        type="text"
+        name="zip"
+        placeholder="ZIP Code"
+        value={address.zip}
+        onChange={(e) => setAddress((prev) => ({ ...prev, zip: e.target.value }))}
+        className="border p-2 rounded-lg"
+        required
+      />
+    </div>
+
+    <button         className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"  >
+      Add New Address
+    </button>
+  </form>
+)}
+
 
       {showAllAddresses && (
         <div className="mt-4">

@@ -5,6 +5,26 @@ const Dashboard = () => {
     const [orders, setOrders] = useState([]);
     const [totalRevenue, setTotalRevenue] = useState(0);
 
+    const handleReset = async () => {
+        // alert(SummaryApi.reset.method)
+        try {
+            const response = await fetch(SummaryApi.reset.url, {
+                method: SummaryApi.reset.method,
+                credentials: "include",
+              
+              });
+
+            const data = await response.json();
+            console.log(data.message)
+
+            // Recalculate total revenue excluding canceled orders
+     
+        } catch (error) {
+            console.error('Error resetting Total Purchase of user:', error);
+        }
+    };
+
+
     const fetchOrders = async () => {
         try {
             const response = await fetch(SummaryApi.getOrders.url);
@@ -73,6 +93,9 @@ const Dashboard = () => {
                     <p>₹{totalRevenue.toFixed(2)}</p>
                 </div>
             </div>
+            <button                     
+            onClick={handleReset}
+            className='w-40 h-10  bg-sky-700 text-white rounded-md'> Reset the Total</button>
         </div>
     );
 };
