@@ -5,7 +5,7 @@ const uploadProductPermission = async (userId) => {
         const user = await userModel.findById(userId);
 
         if (!user) {
-            console.log(`User not found with ID: ${userId}`);
+            // console.log(`User not found with ID: ${userId}`);
             return false; // User not found, return false
         }
 

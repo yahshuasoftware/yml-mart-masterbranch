@@ -38,7 +38,7 @@ const Login = () => {
             toast.success(result.message); // Show success message
             
             const token = result.data;
-            alert(token) // Access the token from result.data
+            // alert(token) // Access the token from result.data
             
             // Check if the token is actually retrieved
             if (token) {

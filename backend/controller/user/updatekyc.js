@@ -6,8 +6,8 @@ const updateKycController = async (req, res) => {
     const { kycStatus } = req.body;
 
     // Log the incoming kycId and request body for debugging
-    console.log('kycId:', kycId);
-    console.log('Status:', kycStatus);
+    // console.log('kycId:', kycId);
+    // console.log('Status:', kycStatus);
 
     // Validate kycId format
     if (!mongoose.Types.ObjectId.isValid(kycId)) {

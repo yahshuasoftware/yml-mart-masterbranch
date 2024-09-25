@@ -10,7 +10,7 @@ const getProductController = async (req, res) => {
             acc[banner._id] = banner; // Use banner._id as the key
             return acc;
         }, {});
-        console.log(bannerObject)
+        // console.log(bannerObject)
 
         res.json({
             message: "All Banner",

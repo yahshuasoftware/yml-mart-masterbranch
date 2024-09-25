@@ -11,7 +11,7 @@ const addToCartController = async (req, res) => {
       userId: currentUser, // Include userId in the query checking for user also
     });
 
-    console.log("isProductAvailable:", isProductAvailable);
+    // console.log("isProductAvailable:", isProductAvailable);
 
     if (isProductAvailable) {
       return res.json({
