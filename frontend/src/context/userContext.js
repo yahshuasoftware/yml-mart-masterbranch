@@ -1,4 +1,3 @@
-// userContext.js
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { useDispatch } from 'react-redux';
@@ -9,17 +8,21 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
+  const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
 
   const fetchUserDetails = async () => {
     try {
-      const token = localStorage.getItem('authToken'); 
-      // al ert(token)
+      if (!authToken) {
+        console.error("No auth token found");
+        return;
+      }
+
       const dataResponse = await fetch(SummaryApi.current_user.url, {
         method: SummaryApi.current_user.method,
         headers: {
-          'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+          'Authorization': `Bearer ${authToken}`, // Include the token in the Authorization header
           'Content-Type': 'application/json',
-      },
+        },
         credentials: 'include',
       });
 
@@ -35,10 +38,10 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     fetchUserDetails();
-  }, []);
+  }, [authToken]); // Re-fetch if authToken changes
 
   return (
-    <UserContext.Provider value={{ user, fetchUserDetails }}>
+    <UserContext.Provider value={{ user, fetchUserDetails, authToken, setAuthToken }}>
       {children}
     </UserContext.Provider>
   );

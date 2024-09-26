@@ -1,9 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import MyProfile from './ProfileForm';
 import { FaTimes, FaBars } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import moment from 'moment';
 import SummaryApi from '../../common';
+import Context from "../../context/index";
+
 
 const BusinessProfile = () => {
   const [showProfileForm, setShowProfileForm] = useState(false);
@@ -15,6 +17,8 @@ const BusinessProfile = () => {
   const [orderData, setOrderData] = useState([]);
   const [totalBusiness, setTotalBusiness] = useState(0);
   const [totalInsentive, setTotalInsentive] = useState(0);
+  const { authToken } = useContext(Context); // Get the authToken from Context
+
 
 
   const handleProfileClick = () => {
@@ -34,8 +38,8 @@ const BusinessProfile = () => {
 
 
   useEffect(() => {
-      fetchUserData(); // Fetch user data
-      fetchOrderData(); // Fetch order data
+      fetchUserData(authToken); // Fetch user data
+      fetchOrderData(authToken); // Fetch order data
     
   }, []);
   

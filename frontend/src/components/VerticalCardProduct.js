@@ -4,9 +4,13 @@ import displayINRCurrency from '../helpers/displayCurrency';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
-import Context from '../context';
+import Context from '../context/index';
+// import authToken from '../../../backend/middleware/authToken';
+
 
 const VerticalCardProduct = ({ category, heading }) => {
+    const { authToken } = useContext(Context); // Get the authToken from Context
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -18,7 +22,7 @@ const VerticalCardProduct = ({ category, heading }) => {
 
     const handleAddToCart = async (e, id) => {
         e.stopPropagation();  // Stop event propagation to prevent Link navigation
-        await addToCart(e, id);
+        await addToCart(e, id,authToken);
         if (fetchUserAddToCart) {
           fetchUserAddToCart(); // Call fetchUserAddToCart after adding the product to the cart
         } else {

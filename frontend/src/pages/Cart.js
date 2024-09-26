@@ -4,7 +4,7 @@ import displayINRCurrency from "../helpers/displayCurrency";
 import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
-import Context from "../context";
+import Context from "../context/";
 import { useUser } from '../context/userContext'; // Import the useUser hook
 import { useCart } from '../context/CartContext';
 import { uploadAddress } from "../helpers/uploadAddress";
@@ -12,10 +12,13 @@ import axios from "axios";
 
 
 
-const Cart = ({authToken}) => {
+const Cart = () => {
+  const { authToken } = useContext(Context); // Get the authToken from Context
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useUser(); // Get the user details from UserContext
+  const{cart} = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
 
@@ -38,6 +41,7 @@ const Cart = ({authToken}) => {
     state: "Maharashtra", // Pre-fill with "Maharashtra"
     zip: "",
   });
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,13 +107,15 @@ const Cart = ({authToken}) => {
     setShowAllAddresses(false); // Hide the list once an address is selected
   };
 
-  const fetchData = async () => {
+  const fetchData = async (authToken) => {
     try {
       const response = await fetch(SummaryApi.addToCartProductView.url, {
         method: SummaryApi.addToCartProductView.method,
         credentials: "include",
         headers: {
           "content-type": "application/json",
+          'Authorization': `Bearer ${authToken}`, 
+
         },
       });
 
@@ -130,8 +136,8 @@ const Cart = ({authToken}) => {
       setHasAddress(!!user.address);
       setSelectedAddress(user?.address[0]);
     }
-    fetchData(); // Fetch cart data
-  }, [user]);
+    fetchData(authToken); // Fetch cart data
+  }, [user,authToken]);
 
   useEffect(() => {
     if (!loading && data.length > 0) {
@@ -158,6 +164,8 @@ const Cart = ({authToken}) => {
       credentials: "include",
       headers: {
         "content-type": "application/json",
+        'Authorization': `Bearer ${authToken}`, 
+
       },
       body: JSON.stringify({
         _id: id,
@@ -168,7 +176,7 @@ const Cart = ({authToken}) => {
   
     const responseData = await response.json();
     if (responseData.success) {
-      fetchData(); // Refresh the cart data
+      fetchData(authToken); // Refresh the cart data
     } else {
       alert(responseData.message);
     }
@@ -181,6 +189,8 @@ const Cart = ({authToken}) => {
         credentials: "include",
         headers: {
           "content-type": "application/json",
+          'Authorization': `Bearer ${authToken}`, 
+
         },
         body: JSON.stringify({
           _id: id,
@@ -191,7 +201,7 @@ const Cart = ({authToken}) => {
 
       const responseData = await response.json();
       if (responseData.success) {
-        fetchData(); // Refresh the cart data
+        fetchData(authToken); // Refresh the cart data
       } else {
         alert(responseData.message);
       }
@@ -204,6 +214,8 @@ const Cart = ({authToken}) => {
       credentials: "include",
       headers: {
         "content-type": "application/json",
+        'Authorization': `Bearer ${authToken}`, 
+
       },
       body: JSON.stringify({
         _id: id,
@@ -212,8 +224,8 @@ const Cart = ({authToken}) => {
 
     const responseData = await response.json();
     if (responseData.success) {
-      fetchData();
-      updateCartProductCount();
+      fetchData(authToken);
+      updateCartProductCount(authToken);
     }
   };
 

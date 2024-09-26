@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { toast } from 'react-toastify';
 import { FaInstagram, FaWhatsapp, FaFacebook } from "react-icons/fa";
 import SummaryApi from '../common';
 
+import Context from "../context/index"; 
+
 const ReferCard = () => {
+  const { authToken } = useContext(Context); 
+
   const [userData, setUserData] = useState(null);
 
   function sendmessege() {
@@ -37,7 +41,7 @@ const ReferCard = () => {
       }
     };
 
-    fetchUserData();
+    fetchUserData(authToken);
   }, []);
 
   const copyToClipboard = () => {
