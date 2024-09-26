@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import uploadImage from '../helpers/uploadImage';
 import SummaryApi from '../common';
 import { useUser } from '../context/userContext'; // Import UserContext to get user details
 import ROLE from '../common/role'; // Import roles
+import Context from "../context/index";
 
-const UploadBannerForm = ({ authToken }) => {
+
+
+const UploadBannerForm = () => {
   const { user } = useUser(); // Get user details from context
   const [image, setImage] = useState(null);
+  const { authToken } = useContext(Context); 
+ // Get the authToken from Context
+
 
   const handleImageChange = (e) => {
+    
     setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     if (!image) {
       alert('Please select an image');

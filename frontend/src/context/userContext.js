@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
 
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = async (authToken) => {
     try {
       if (!authToken) {
         console.error("No auth token found");
@@ -37,7 +37,7 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchUserDetails();
+    fetchUserDetails(authToken);
   }, [authToken]); // Re-fetch if authToken changes
 
   return (

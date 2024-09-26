@@ -46,7 +46,7 @@ const Profile = () => {
 
   const [streetSuggestions, setStreetSuggestions] = useState([]);
   const [citySuggestions, setCitySuggestions] = useState([]);
-
+  
   const handleAddNewAddress = () => {
     setShowAddressForm((prevState) => !prevState);
     if (!showAddressForm) {
@@ -60,7 +60,7 @@ const Profile = () => {
       alert("Please enter an address in Maharashtra");
       return;
     }
-    await uploadAddress(address, setUserData);
+    await uploadAddress(address, setUserData,authToken );
     setShowAddressForm(false);
   };
 
@@ -107,6 +107,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async (authToken) => {
       // const authToken = localStorage.getItem('authToken');
+      
       try {
         const response = await fetch(SummaryApi.current_user.url, {
           method: SummaryApi.current_user.method,
@@ -322,7 +323,7 @@ const Profile = () => {
                 type="submit"
                 className="bg-sky-600 text-white py-2 px-4 rounded mt-4 w-full"
               >
-                Edit
+                Edit 
               </button>
             </form>
           </div>

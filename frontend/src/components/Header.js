@@ -1,5 +1,5 @@
 // src/components/Header.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { GrSearch } from "react-icons/gr";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
@@ -11,12 +11,16 @@ import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
 import { useCart } from "../context/CartContext";
 import ProfileIcon from "../assest/loginProfile1.png"
+import Context from '../context/index';
+
 
 const Header = () => {
+
+  const { authToken } = useContext(Context); // Get the authToken from Context
+
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State for mobile menu
-  // const context = useContext(Context);
   const navigate = useNavigate();
   const searchInput = useLocation();
   const URLSearch = new URLSearchParams(searchInput?.search);
@@ -31,6 +35,11 @@ const Header = () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
       method: SummaryApi.logout_user.method,
       credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Authorization': `Bearer ${authToken}`, 
+      },
+      
     });
 
     const data = await fetchData.json();
@@ -38,6 +47,8 @@ const Header = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(setUserDetails(null));
+      localStorage.removeItem("authToken");
+
       navigate("/");
     } else if (data.error) {
       toast.error(data.message);

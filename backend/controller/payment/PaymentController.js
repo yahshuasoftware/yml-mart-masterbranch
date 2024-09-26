@@ -66,6 +66,12 @@ const handlePaymentSuccess = async (req, res) => {
 
         // Update product quantities in the Product schema
         for (const item of order.products) {
+
+            await userModel.findByIdAndUpdate(order.userId._id, { 
+                $inc: { "businessPrices.myPurchase": order.amount } 
+            });
+            
+
             const product = await productModel.findById(item.productId);
             if (product) {
                 if (product.quantity >= item.quantity) {
@@ -164,16 +170,22 @@ pdf.create(invoiceHTML).toFile(path.join(invoicesDir, `invoice_${order._id}.pdf`
             await order.save();  // Save the order with the invoicePath
             // Handle referral system (if applicable)
             const user = await userModel.findById(userId);
-            if (user && user.refferal.refferredbycode) {
-                const referrer = await userModel.findOne({ 'refferal.refferalcode': user.refferal.refferredbycode });
-                if (referrer) {
-                    referrer.refferal.myrefferalorders.push({
-                        'userId': user._id,
-                        "order_id": order._id,
-                    });
-                    await referrer.save();
-                }
+        if (user && user.refferal.refferredbycode) {
+            const referrer = await userModel.findOne({ 'refferal.refferalcode': user.refferal.refferredbycode });
+            if (referrer) {
+                // Increment totalPurchase and calculate 5% incentive
+                const totalIncentive = 0.05 * order.amount;
+
+                referrer.businessPrices.totalPurchase += order.amount; // Update totalPurchase
+                referrer.businessPrices.totalIncentive += totalIncentive; // Update totalIncentive
+                referrer.refferal.myrefferalorders.push({
+                    userId: user._id,
+                    order_id: order._id,
+                });
+
+                await referrer.save(); // Save the updated referrer details
             }
+        }
 
             res.status(200).json({ success: true, message: "Payment successful, order updated, invoice generated", invoicePath: result.filename });
         });

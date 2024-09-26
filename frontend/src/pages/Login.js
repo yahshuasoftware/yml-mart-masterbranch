@@ -5,14 +5,17 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
-import Context from '../context';
 import { useUser } from '../context/userContext';
+import Context from "../context/index";
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: '', password: '' });
   const { saveAuthToken } = useContext(Context);
   const { fetchUserDetails } = useUser(); // Use UserContext
+  const { authToken } = useContext(Context); // Get the authToken from Context
+
   const navigate = useNavigate();
 
   const handleOnChange = (e) => {

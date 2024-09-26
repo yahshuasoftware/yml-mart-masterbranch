@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { MdModeEdit, MdDelete } from "react-icons/md";
 import ChangeUserRole from '../components/ChangeUserRole';
+import Context from "../context/index";
+
 
 const AllUsers = () => {
     const [allUser, setAllUsers] = useState([]);
     const [openUpdateRole, setOpenUpdateRole] = useState(false);
+    const { authToken } = useContext(Context); // Get the authToken from Context
+
     const [updateUserDetails, setUpdateUserDetails] = useState({
         email: "",
         name: "",
@@ -18,7 +22,11 @@ const AllUsers = () => {
     const fetchAllUsers = async () => {
         const fetchData = await fetch(SummaryApi.allUser.url, {
             method: SummaryApi.allUser.method,
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
+              },
         });
 
         const dataResponse = await fetchData.json();
@@ -41,7 +49,10 @@ const AllUsers = () => {
             try {
                 const fetchResponse = await fetch(`/api/delete-user/${userId}`, {
                     method: 'DELETE',
-                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`, 
+                      },
                 });
 
                 const responseData = await fetchResponse.json();
