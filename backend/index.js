@@ -38,6 +38,10 @@ app.use(cookieParser());
 
 app.use("/api", router); // Mounting the router correctly on the '/api' pat
 
+app.use((req, res, next) => {
+    console.log(`Request received: ${req.method} ${req.url}`);
+    next();
+});
 
 const PORT = process.env.PORT || 8080;
 connectDB().then(() => {

@@ -9,7 +9,7 @@ export const UserProvider = ({ children }) => {
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
-
+  
   const fetchUserDetails = async (authToken) => {
     try {
       if (!authToken) {
@@ -38,9 +38,11 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchUserDetails(authToken);
-  }, [authToken]); // Re-fetch if authToken changes
-
+    if (authToken) {
+      fetchUserDetails(authToken);
+    }
+  }, [authToken]);
+  
   return (
     <UserContext.Provider value={{ user, fetchUserDetails, authToken, setAuthToken }}>
       {children}
