@@ -1,6 +1,6 @@
 // const backendDomin = "http://3.85.148.197:8000"
-// const backendDomin = process.env.REACT_APP_API_URL;
-const backendDomin = process.env.REACT_APP_LOCALHOST_URI
+const backendDomin = process.env.REACT_APP_API_URL;
+// const backendDomin = process.env.REACT_APP_LOCALHOST_URI
 
 // const backendDomin = "https://yml-backend.onrender.com";
 
