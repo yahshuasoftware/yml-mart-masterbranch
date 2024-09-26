@@ -13,6 +13,7 @@ export const CartProvider = ({ children }) => {
   const fetchCartData = async (authToken) => {
     try {
       const response = await fetch('/api/cart', {
+         credentials: 'include',
         headers: {
           'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json',

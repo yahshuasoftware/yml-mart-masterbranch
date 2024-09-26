@@ -19,6 +19,7 @@ export const UserProvider = ({ children }) => {
 
       const dataResponse = await fetch(SummaryApi.current_user.url, {
         method: SummaryApi.current_user.method,
+         credentials: 'include',
         headers: {
           'Authorization': `Bearer ${authToken}`, // Include the token in the Authorization header
           'Content-Type': 'application/json',
