@@ -1,5 +1,6 @@
-const backendDomin = "http://3.85.148.197:8000";
-// const backendDomin = process.env.SERVER_URI;
+// const backendDomin = "http://3.85.148.197:8000"
+const backendDomin = process.env.REACT_APP_API_URL;
+// const backendDomin = "https://yml-backend.onrender.com";
 
 const SummaryApi = {
     signUP: {
@@ -152,6 +153,10 @@ const SummaryApi = {
     //     url: `${backendDomin}/api/user-kyc/:userId`,
     //     method : 'get'
     // },
+    reset: {
+        url: `${backendDomin}/api/reset`,
+        method: "post"
+    },
 };
 
 export default SummaryApi;

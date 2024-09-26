@@ -10,7 +10,7 @@ const businessPrices = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
   
-    console.log(`${userId} is updating their business prices`);
+    // console.log(`${userId} is updating their business prices`);
   
     try {
       // Update the user's businessPrices object

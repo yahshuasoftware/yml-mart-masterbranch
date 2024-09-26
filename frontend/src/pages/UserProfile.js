@@ -224,65 +224,7 @@ const Profile = () => {
  
 
 
-  const resetTotalPurchasing = () => {
-    //setTotalPurchasing(0);
-    console.log("Total purchasing reset to 0");
-  };
 
-  
-
-
-  const getTimeUntilNextFirst = () => {
-    const now = new Date();
-    const nextMonth = now.getMonth() + 1;
-    const nextYear = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear();
-    const firstOfNextMonth = new Date(nextYear, nextMonth % 12, 1, 0, 0, 0);
-    return firstOfNextMonth - now;
-  };
-
-
-  useEffect(() => {
-    // Function to handle the monthly reset
-    const handleMonthlyReset = () => {
-      const now = new Date();
-      const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`; // 1-indexed month
-
-      // Retrieve the last reset month from localStorage
-      const lastResetMonth = localStorage.getItem('lastResetMonth');
-
-      if (lastResetMonth !== currentMonthYear) {
-        if (now.getDate() === 1) {
-          resetTotalPurchasing();
-          localStorage.setItem('lastResetMonth', currentMonthYear);
-        }
-      }
-    };
-
-    // Perform the initial check on component mount
-    handleMonthlyReset();
-
-    // Schedule the next reset
-    const scheduleNextReset = () => {
-      const delay = getTimeUntilNextFirst();
-      setTimeout(() => {
-        resetTotalPurchasing();
-        const now = new Date();
-        const currentMonthYear = `${now.getFullYear()}-${now.getMonth() + 1}`;
-        localStorage.setItem('lastResetMonth', currentMonthYear);
-        // Schedule the subsequent reset
-        scheduleNextReset();
-      }, delay);
-    };
-
-    scheduleNextReset();
-
-    // Cleanup function to clear timeout when component unmounts
-    return () => {
-      // If you store the timeout ID, you can clear it here
-      // Example:
-      // clearTimeout(timer);
-    };
-  }, []);
 
 
 
@@ -382,86 +324,104 @@ const Profile = () => {
             </form>
           </div>
         );
-      case "My Orders":
-        return (
-          <div>
-      <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
-
-      {orderData ? (
-        <div className="w-full max-w-3xl">
-          {orderData.length > 0 ? (
+        case "My Orders":
+          return (
             <div>
-              <h2 className="text-xl font-semibold mb-4">Order Details</h2>
-              {orderData.map((order) => (
-                <div key={order._id} className="mb-6 relative">
-                  <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
-                    {order.products.map((product) => (
-                      <div
-                        key={product._id}
-                        className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm"
-                      >
-                        <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
-                          <img
-                            src={product.image[0]}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                          />
+              <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
+        
+              {orderData ? (
+                <div className="w-full max-w-3xl">
+                  {orderData.length > 0 ? (
+                    <div>
+                      <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+                      {orderData.map((order) => (
+                        <div key={order._id} className="mb-6 relative">
+                          <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
+                            {order.products.map((product) => (
+                              <div
+                                key={product._id}
+                                className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm"
+                              >
+                                <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
+                                  <img
+                                    src={product.image[0]}
+                                    alt={product.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <div className="ml-4 flex flex-col justify-between">
+                                  <h3 className="text-lg font-semibold text-gray-800">
+                                    {product.name}
+                                  </h3>
+                                  <h4 className="text-sm text-gray-600">
+                                    {product.category}
+                                  </h4>
+                                  <p className="text-sm text-gray-700">
+                                    <strong>Quantity:</strong> {product.quantity}
+                                  </p>
+                                  <p className="text-sm text-gray-700">
+                                    <strong>Total Cost:</strong>{" "}
+                                    <span className="font-bold text-gray-800">
+                                      {"₹" + product.price * product.quantity}
+                                    </span>
+                                  </p>
+                                  <p className="text-sm flex items-center">
+                                    <strong>Status:</strong>{" "}
+                                    <span className="text-green-700 font-semibold flex items-center">
+                                      <span className="ml-2">{order.status}</span>
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+        
+                            {/* Order ID and Tracking Status */}
+                            <div className="absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg">
+                              <p className="text-sm text-blue-600 font-semibold flex items-center">
+                                {getStatusIcon(order.deliveryStatus)}
+                                <span className="ml-2">Tracking Status: {order.deliveryStatus}</span>
+                              </p>
+                            </div>
+        
+                            {/* Invoice Buttons */}
+                            {order.status === "paid" && (
+                              <div className="mt-4 flex space-x-2">
+                                <a
+                                  href={"http://localhost:8000"+order.invoicePath}
+                                  className="text-sm text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-500 hover:text-white"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  View Invoice
+                                </a>
+                                <a
+                                  href={"http://localhost:8000"+order.invoicePath}
+                                  className="text-sm text-green-500 border border-green-500 px-3 py-1 rounded hover:bg-green-500 hover:text-white"
+                                  download
+                                >
+                                  Download Invoice
+                                </a>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <div className="ml-4 flex flex-col justify-between">
-                          <h3 className="text-lg font-semibold text-gray-800">
-                            {product.name}
-                          </h3>
-                          <h4 className="text-sm text-gray-600">
-                            {product.category}
-                          </h4>
-                          <p className="text-sm text-gray-700">
-                            <strong>Quantity:</strong> {product.quantity}
-                          </p>
-                          <p className="text-sm text-gray-700">
-                            <strong>Total Cost:</strong>{" "}
-                            <span className="font-bold text-gray-800">
-                              {"₹" + product.price * product.quantity}
-                            </span>
-                          </p>
-                          <p className="text-sm flex items-center">
-                            <strong>Status:</strong>{" "}
-                            <span className="text-green-700 font-semibold flex items-center">
-                              {/* {getStatusIcon(order.status)}{" "} */}
-                              <span className="ml-2">{order.status}</span>
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-
-                    {/* Order ID and Tracking Status */}
-                    <div className="absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg">
-                      <p className="text-sm text-blue-600 font-semibold flex items-center">
-                        {getStatusIcon(order.deliveryStatus)}
-                        <span className="ml-2">Tracking Status: {order.deliveryStatus}</span>
-                      </p>
+                      ))}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="flex flex-col items-center">
+                      <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+                      <p>No orders found!</p>
+                    </div>
+                  )}
                 </div>
-              ))}
+              ) : (
+                <div className="flex flex-col items-center">
+                  <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+                  <p>No order found!</p>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="flex flex-col items-center">
-              <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
-              <p>No orders found!</p>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center">
-          <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
-          <p>No order found!</p>
-        </div>
-      )}
-    </div>
-        );
-
-
+          );
         case "Address":
           return (
             <div>

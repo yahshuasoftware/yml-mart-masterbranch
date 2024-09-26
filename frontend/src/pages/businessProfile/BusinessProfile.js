@@ -131,8 +131,8 @@ const BusinessProfile = () => {
   };
   
   const pushAllPricesInDb = async (totalBusiness, totalInsentive, totalPurchasing) => {
+    console.log(totalBusiness, totalInsentive, totalPurchasing)
     try {
-
       const response = await fetch(SummaryApi.pushAllPricesInDb.url, {
         method: SummaryApi.pushAllPricesInDb.method,
         credentials: "include",

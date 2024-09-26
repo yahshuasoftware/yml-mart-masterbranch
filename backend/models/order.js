@@ -29,7 +29,7 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, default: 'created' }, // 'created', 'paid', 'failed'
     createdAt: { type: Date, default: Date.now },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}, // Assuming you have a User model
-    // name:{type:String},
+    invoicePath:{type:String},
     deliveryStatus:{type: String, default:'Ordered'},
     deliveryAddress:deliveryAddressSchema
     

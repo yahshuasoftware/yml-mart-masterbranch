@@ -2,9 +2,7 @@ const User = require('../../models/userModel'); // Import the User model
 
 // Controller to handle saving prices in the database
 const pushAllPricesInDb = async (req, res) => {
-  const { totalBusiness, totalIntensive, totalPurchasing } = req.body;
-  const userId = req.user._id; // Assuming you are using authentication middleware to get the user's ID
-
+  const { totalBusiness, totalIntensive, totalPurchasing,userId } = req.body;
   try {
     // Update the user's totalBusiness, totalIntensive, and totalPurchasing
     const user = await User.findByIdAndUpdate(userId, {

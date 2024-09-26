@@ -9,8 +9,8 @@ async function userDetailsController(req,res){
         .sort({ createdAt: -1 }) // Sorting in descending order (newest first)
         .exec();
         
-        console.log('User Data:', user); // Log user data
-        console.log('Order Data:', order)
+        // console.log('User Data:', user); // Log user data
+        // console.log('Order Data:', order)
     
         res.status(200).json({
             data : user,

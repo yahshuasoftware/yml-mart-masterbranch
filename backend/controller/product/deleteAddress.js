@@ -4,7 +4,7 @@ const userModel = require('../../models/userModel');
 async function deleteAddress(req, res) {
     try {
 
-        console.log('Request Body:', req.body);
+        // console.log('Request Body:', req.body);
 
         // Extract product ID from the request body
         const { AddressId, userId } = req.body;

@@ -10,7 +10,7 @@ const getAdBannerController = async (req, res) => {
             acc[adbanner._id] = adbanner; // Use banner._id as the key
             return acc;
         }, {});
-        console.log(AdBannerObject)
+        // console.log(AdBannerObject)
 
         res.json({
             message: "All Banner",
