@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { CgClose } from "react-icons/cg";
 import productCategory from '../helpers/productCategory'; // Update this to include subcategories
 import { FaCloudUploadAlt } from "react-icons/fa";
@@ -7,11 +7,14 @@ import DisplayImage from './DisplayImage';
 import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
+import Context from "../context/index";
+
 
 const UploadProduct = ({
     onClose,
     fetchData,
-    authToken
+    
+    
 }) => {
   const [data, setData] = useState({
     productName: "",
@@ -24,11 +27,14 @@ const UploadProduct = ({
     sellingPrice: "",
     quantity: ""
   });
+  const { authToken } = useContext(Context); // Get the authToken from Context
+
   
   const [subcategories, setSubcategories] = useState([]);
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
-
+  
+  alert(authToken)
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({

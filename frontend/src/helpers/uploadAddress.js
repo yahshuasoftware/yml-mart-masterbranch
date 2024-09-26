@@ -1,6 +1,11 @@
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import SummaryApi from '../common';
-export const uploadAddress = async (address, setUserData, setHasAddress, setShowAddressForm, authToken) => {
+import Context from '../context/index';
+
+
+export const uploadAddress = async (address, setUserData, authToken) => {
+alert()
   try {
     const response = await fetch(SummaryApi.uploadAddress.url, {  
       method: 'POST',

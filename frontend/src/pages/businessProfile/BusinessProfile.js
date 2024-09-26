@@ -13,10 +13,10 @@ const BusinessProfile = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [usersData, setUsersData] = useState(null);
-  const [totalPurchasing, setTotalPurchasing] = useState(0);
+  // const [totalPurchasing, setTotalPurchasing] = useState(0);
   const [orderData, setOrderData] = useState([]);
-  const [totalBusiness, setTotalBusiness] = useState(0);
-  const [totalInsentive, setTotalInsentive] = useState(0);
+  // const [totalBusiness, setTotalBusiness] = useState(0);
+  // const [totalInsentive, setTotalInsentive] = useState(0);
   const { authToken } = useContext(Context); // Get the authToken from Context
 
 
@@ -43,11 +43,11 @@ const BusinessProfile = () => {
     
   }, []);
   
-  useEffect(() => {
-        if (totalBusiness && totalInsentive && totalPurchasing && userData) {
-          pushAllPricesInDb(totalBusiness, totalInsentive, totalPurchasing);
-        }
-      }, [totalBusiness, totalInsentive, totalPurchasing]);
+  // useEffect(() => {
+  //       if (totalBusiness && totalInsentive && totalPurchasing && userData) {
+  //         pushAllPricesInDb(totalBusiness, totalInsentive, totalPurchasing);
+  //       }
+  //     }, [totalBusiness, totalInsentive, totalPurchasing]);
       
       const fetchOrderData = async (authToken) => {
         // alert(authToken)
@@ -83,8 +83,8 @@ const BusinessProfile = () => {
         setOrderData(data.orders);
         // setUserData(data.user);
         setUsersData(data.users);
-        setTotalBusiness(totalBusinesss.toFixed(2));
-        setTotalInsentive((0.05 * totalBusinesss).toFixed(2));
+        // setTotalBusiness(totalBusinesss.toFixed(2));
+        // setTotalInsentive((0.05 * totalBusinesss).toFixed(2));
       } else {
         console.log("No orders found.");
       }
@@ -126,7 +126,7 @@ const BusinessProfile = () => {
             0
           );
   
-        setTotalPurchasing(totalAmount.toFixed(2));
+        // setTotalPurchasing(totalAmount.toFixed(2));
         
       }
     } catch (error) {
@@ -134,39 +134,39 @@ const BusinessProfile = () => {
     }
   };
   
-  const pushAllPricesInDb = async (totalBusiness, totalInsentive, totalPurchasing) => {
-    console.log(totalBusiness, totalInsentive, totalPurchasing)
-    try {
-      const response = await fetch(SummaryApi.pushAllPricesInDb.url, {
-        method: SummaryApi.pushAllPricesInDb.method,
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-          totalBusiness,
-          totalInsentive,
-          totalPurchasing,
-          userId: userData.data._id // Ensure you pass the correct userId
-        }),
-      });
+  // const pushAllPricesInDb = async (totalBusiness, totalInsentive, totalPurchasing) => {
+  //   console.log(totalBusiness, totalInsentive, totalPurchasing)
+  //   try {
+  //     const response = await fetch(SummaryApi.pushAllPricesInDb.url, {
+  //       method: SummaryApi.pushAllPricesInDb.method,
+  //       credentials: "include",
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         // 'Authorization': `Bearer ${authToken}`,
+  //       },
+  //       body: JSON.stringify({
+  //         totalBusiness,
+  //         totalInsentive,
+  //         totalPurchasing,
+  //         userId: userData.data._id // Ensure you pass the correct userId
+  //       }),
+  //     });
   
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
       
       
-      const data = await response.json();
-        // setTotalBusiness(0)
-        // setTotalPurchasing(0)
-        // setTotalInsentive(0)
-        // console.log(totalBusiness)
-      console.log('Response from server:', data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  //     const data = await response.json();
+  //       // setTotalBusiness(0)
+  //       // setTotalPurchasing(0)
+  //       // setTotalInsentive(0)
+  //       // console.log(totalBusiness)
+  //     console.log('Response from server:', data);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
   
 
 
@@ -276,15 +276,15 @@ const BusinessProfile = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold">Total Purchasing</h3>
-          <p className="text-xl">₹{(totalBusiness)}</p>
+          <p className="text-xl">₹{(userData?.data.businessPrices.totalPurchase)}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold">Business Insentive(Income)</h3>
-          <p className="text-xl">₹{totalInsentive}</p>
+          <p className="text-xl">₹{(userData?.data.businessPrices.totalIncentive)}</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold">My Purchasing</h3>
-          <p className="text-xl">₹{totalPurchasing}</p>
+          <p className="text-xl">₹{(userData?.data.businessPrices.myPurchase)}</p>
         </div>
       </div>
       <button onClick={withdraw} className='h-10 w-50 mb-6 bg-red-500 text-white rounded-md mt-5 px-5'>Withdraw Balance</button>

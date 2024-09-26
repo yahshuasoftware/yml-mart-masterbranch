@@ -8,7 +8,8 @@ const router = require('./routes'); // Correctly importing the router from Route
 const multer = require('multer');
 const app = express();
 const path = require('path');
-
+const cron = require('node-cron'); // Importing node-cron
+const User = require('./models/userModel');
 
 const fs = require('fs');
 // Ensure invoices directory exists
@@ -28,8 +29,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use(cors({
-    // origin: ['http://localhost:3000'],
-    origin: 'http://3.85.148.197',
+    origin: ['http://localhost:3000'],
+    // origin: ['http://3.85.148.197'],
     credentials: true,
 }));
 // app.use(cors());
@@ -44,5 +45,15 @@ connectDB().then(() => {
     app.listen(PORT, () => {
         console.log("Connected to DB");
         console.log(`Server is running on port ${PORT}`);
+    });
+
+
+    cron.schedule('* * * * *', async () => {
+        try {
+            await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });
+            console.log('Total purchase values reset to 0 for all users.');
+        } catch (error) {
+            console.error('Error resetting total purchases:', error);
+        }
     });
 });

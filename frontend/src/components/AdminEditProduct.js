@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { CgClose } from "react-icons/cg";
 import productCategory from '../helpers/productCategory';
 import { FaCloudUploadAlt } from "react-icons/fa";
@@ -7,6 +7,7 @@ import DisplayImage from './DisplayImage';
 import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
+import Context from "../context/index";
 
 const AdminEditProduct = ({
     onClose,
@@ -26,6 +27,8 @@ const AdminEditProduct = ({
     });
     const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
     const [fullScreenImage, setFullScreenImage] = useState("");
+    const { authToken } = useContext(Context); // Get the authToken from Context
+
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
@@ -66,8 +69,9 @@ const AdminEditProduct = ({
             method: SummaryApi.updateProduct.method,
             credentials: 'include',
             headers: {
-                "content-type": "application/json"
-            },
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`, 
+              },
             body: JSON.stringify(data)
         });
 
@@ -94,7 +98,8 @@ const AdminEditProduct = ({
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                },
+                    'Authorization': `Bearer ${authToken}`, 
+                  },
                 body: JSON.stringify({ _id: data._id }),
             });
 
