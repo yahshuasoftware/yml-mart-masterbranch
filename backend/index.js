@@ -13,17 +13,17 @@ const User = require('./models/userModel');
 
 const fs = require('fs');
 // Ensure invoices directory exists
-const invoicesDir = path.join(__dirname, 'invoices');
+// const invoicesDir = path.join(__dirname, 'invoices');
 
-if (!fs.existsSync(invoicesDir)) {
-    fs.mkdirSync(invoicesDir, { recursive: true }); // Creates the folder if it doesn't exist
-}
+// if (!fs.existsSync(invoicesDir)) {
+//     fs.mkdirSync(invoicesDir, { recursive: true }); // Creates the folder if it doesn't exist
+// }
 
 // Serve static files from the invoices directory
-app.use('/invoices', express.static(invoicesDir));
+// app.use('/invoices', express.static(invoicesDir));
 // const uploads = multer({ dest: 'uploads/userProfilePics/' });
-const upload = multer({ dest: 'uploads/' });
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// const upload = multer({ dest: 'uploads/' });
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
