@@ -26,12 +26,14 @@ import { IoIosAddCircle } from "react-icons/io";
 
 
 
+
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
+  const { authToken } = useContext(Context); // Get the authToken from Context
 
   const [address, setAddress] = useState({
     name: "", 
@@ -104,6 +106,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserData = async (authToken) => {
+      // const authToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(SummaryApi.current_user.url, {
           method: SummaryApi.current_user.method,
@@ -125,7 +128,7 @@ const Profile = () => {
         console.error("Error:", error);
       }
     };
-    fetchUserData();
+    fetchUserData(authToken);
   }, []);
 
   const deleteAddress = async (id, userId, authToken) => {
