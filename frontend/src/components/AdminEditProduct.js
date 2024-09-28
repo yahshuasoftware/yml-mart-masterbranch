@@ -8,6 +8,8 @@ import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import Context from "../context/index";
+import AWS from 'aws-sdk';
+
 
 const AdminEditProduct = ({
     onClose,
@@ -41,13 +43,40 @@ const AdminEditProduct = ({
 
     const handleUploadProduct = async (e) => {
         const file = e.target.files[0];
-        const uploadImageCloudinary = await uploadImage(file);
+    
+        try {
+            // Upload to S3 instead of Cloudinary
+            const uploadImageS3 = await uploadImageToS3(file);
+    
+            setData((prev) => ({
+                ...prev,
+                productImage: [...prev.productImage, uploadImageS3] // Store S3 URL instead of Cloudinary
+            }));
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    };
+    const s3 = new AWS.S3();
 
-        setData((prev) => ({
-            ...prev,
-            productImage: [...prev.productImage, uploadImageCloudinary.url]
-        }));
-    }
+
+    const uploadImageToS3 = async (file) => {
+        const params = {
+            Bucket: process.env.REACT_APP_BUCKET_NAME,
+            Key: `products/${Date.now()}_${file.name}`, // you can change the path as per your structure
+            Body: file,
+            // ACL: 'public-read', // makes the file publicly readable
+            ContentType: file.type,
+        };
+    
+        return new Promise((resolve, reject) => {
+            s3.upload(params, (err, data) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(data.Location); // URL of the uploaded file
+            });
+        });
+    };
 
     const handleDeleteProductImage = async (index) => {
         console.log("image index", index);

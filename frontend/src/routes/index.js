@@ -134,7 +134,7 @@ const router = createBrowserRouter([
                         element : <AllProducts/>
                     },
                     {
-                        path : "all=kyc",
+                        path : "all-kyc",
                         element : <AllKyc/>
                     },
                     {

@@ -8,6 +8,8 @@ import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import Context from "../context/index";
+import AWS from 'aws-sdk';
+
 
 
 const UploadProduct = ({
@@ -55,14 +57,49 @@ const UploadProduct = ({
     setSubcategories(selected ? selected.subcategories : []);
   };
 
-  const handleUploadProduct = async (e) => {
+
+// Configure AWS
+AWS.config.update({
+    accessKeyId: process.env.REACT_APP_ACCESS_KEY,
+    secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
+    region: process.env.REACT_APP_BUCKET_REGION
+});
+
+const s3 = new AWS.S3();
+
+const handleUploadProduct = async (e) => {
     const file = e.target.files[0];
-    const uploadImageCloudinary = await uploadImage(file);
-    setData((prev) => ({
-      ...prev,
-      productImage: [...prev.productImage, uploadImageCloudinary.url]
-    }));
-  };
+    console.log(file)
+    try {
+        const url = await uploadImageToS3(file);
+        setData((prev) => ({
+            ...prev,
+            productImage: [...prev.productImage, url]
+        }));
+    } catch (error) {
+        console.error('Error uploading image:', error);
+    }
+};
+
+const uploadImageToS3 = async (file) => {
+    const params = {
+        Bucket: process.env.REACT_APP_BUCKET_NAME,
+        Key: `products/${Date.now()}_${file.name}`, // you can change the path as per your structure
+        Body: file,
+        // ACL: 'public-read', // makes the file publicly readable
+        ContentType: file.type,
+    };
+
+    return new Promise((resolve, reject) => {
+        s3.upload(params, (err, data) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(data.Location); // URL of the uploaded file
+        });
+    });
+};
+
 
   const handleDeleteProductImage = (index) => {
     const newProductImage = [...data.productImage];

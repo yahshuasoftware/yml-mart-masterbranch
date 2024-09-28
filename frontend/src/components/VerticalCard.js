@@ -1,13 +1,16 @@
-import React from 'react';
+import React,{ useContext, }  from 'react';
 import { Link } from 'react-router-dom';
 import displayINRCurrency from '../helpers/displayCurrency';
 import addToCart from '../helpers/addToCart';
+import Context from '../context/index';
+
 
 const VerticalCard = ({ loading, data = [] }) => {
     const loadingList = new Array(13).fill(null);
+    const { authToken } = useContext(Context); // Get the authToken from Context
 
     const handleAddToCart = async (e, id) => {
-        await addToCart(e, id);
+        await addToCart(e, id, authToken);
     };
 
     return (

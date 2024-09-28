@@ -4,18 +4,19 @@ import displayINRCurrency from '../helpers/displayCurrency'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import addToCart from '../helpers/addToCart'
-import Context from '../context'
 import scrollTop from '../helpers/scrollTop'
+import Context from "../context/index";
 
 const CategroyWiseProductDisplay = ({category, heading}) => {
     const [data,setData] = useState([])
     const [loading,setLoading] = useState(true)
     const loadingList = new Array(13).fill(null)
+    const { authToken } = useContext(Context); // Get the authToken from Context
 
     const { fetchUserAddToCart } = useContext(Context)
 
     const handleAddToCart = async(e,id)=>{
-       await addToCart(e,id)
+       await addToCart(e,id, authToken)
       //  fetchUserAddToCart()
     }
 
