@@ -60,9 +60,9 @@ const UploadProduct = ({
 
 // Configure AWS
 AWS.config.update({
-    accessKeyId: process.env.REACT_APP_ACCESS_KEY,
-    secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
-    region: process.env.REACT_APP_BUCKET_REGION
+    accessKeyId: process.env.local.REACT_APP_ACCESS_KEY,
+    secretAccessKey: process.env.local.REACT_APP_SECRET_ACCESS_KEY,
+    region: process.env.local.REACT_APP_BUCKET_REGION
 });
 
 const s3 = new AWS.S3();
@@ -83,7 +83,7 @@ const handleUploadProduct = async (e) => {
 
 const uploadImageToS3 = async (file) => {
     const params = {
-        Bucket: process.env.REACT_APP_BUCKET_NAME,
+        Bucket: process.env.local.REACT_APP_BUCKET_NAME,
         Key: `products/${Date.now()}_${file.name}`, // you can change the path as per your structure
         Body: file,
         // ACL: 'public-read', // makes the file publicly readable

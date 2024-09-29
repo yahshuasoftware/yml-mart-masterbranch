@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-// const backend_Domin = process.env.REACT_APP_API_URL;
-const backend_Domin = process.env.REACT_APP_LOCALHOST_URI;
+// const backend_Domin = process.env.local.REACT_APP_API_URL;
+const backend_Domin = process.env.local.REACT_APP_LOCALHOST_URI;
 
 
 const ChangeKycStatus = ({ _id, kycStatus, callFunc, onClose, setGlobalKycStatus }) => {

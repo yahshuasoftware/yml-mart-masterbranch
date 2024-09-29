@@ -61,7 +61,7 @@ const AdminEditProduct = ({
 
     const uploadImageToS3 = async (file) => {
         const params = {
-            Bucket: process.env.REACT_APP_BUCKET_NAME,
+            Bucket: process.env.local.REACT_APP_BUCKET_NAME,
             Key: `products/${Date.now()}_${file.name}`, // you can change the path as per your structure
             Body: file,
             // ACL: 'public-read', // makes the file publicly readable
