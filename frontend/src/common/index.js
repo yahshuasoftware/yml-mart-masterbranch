@@ -148,13 +148,9 @@ const SummaryApi = {
         url : `${backendDomin}/api/businessPrices`,
         method : 'post'
     },
-    // getmyKyc: {
-    //     url: `${backendDomin}/api/user-kyc/:userId`,
-    //     method : 'get'
-    // },
-    reset: {
-        url: `${backendDomin}/api/reset`,
-        method: "post"
+    getmykyc: {
+        url: `${backendDomin}/api/user-kyc/:userId`,
+        method : 'get'
     },
 };
 

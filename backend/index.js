@@ -1,5 +1,4 @@
-require('dotenv').config();
-
+const dotenv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -27,7 +26,7 @@ const fs = require('fs');
 
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
-
+dotenv.config();
 app.use(cors({
     origin: 'http://3.85.148.197', // Specify your frontend origin 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

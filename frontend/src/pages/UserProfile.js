@@ -28,10 +28,16 @@ import { IoIosAddCircle } from "react-icons/io";
 
 
 const Profile = () => {
+  const backendDomin = process.env.REACT_APP_API_URL;
+
+
+
   const [activeSection, setActiveSection] = useState("Profile Information");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState(null);
+  const [kycDetails, setKycDetails] = useState(null);
+
   const [showAddressForm, setShowAddressForm] = useState(false);
   const { authToken } = useContext(Context); // Get the authToken from Context
 
@@ -103,6 +109,33 @@ const Profile = () => {
     setAddress((prevAddress) => ({ ...prevAddress, city: value }));
     fetchCitySuggestions(value);
   };
+
+
+  const fetchKycStatus = async (authToken, userId) => {
+    // Replace the :userId in the URL with the actual userId
+    const urlWithUserId = SummaryApi.getmykyc.url.replace(':userId', userId);
+  alert(urlWithUserId)
+    try {
+      const response = await fetch(urlWithUserId, {
+        method: SummaryApi.getmykyc.method,
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const data = await response.json();
+      setKycDetails(data.data)
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
 
   useEffect(() => {
     const fetchUserData = async (authToken) => {
@@ -391,7 +424,7 @@ const Profile = () => {
                             /* {order.status === "paid" && (
                               <div className="mt-4 flex space-x-2">
                                 <a
-                                  href={"http://localhost:8000"+order.invoicePath}
+                                  href={backendDomin+order.invoicePath}
                                   className="text-sm text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-500 hover:text-white"
                                   target="_blank"
                                   rel="noopener noreferrer"
@@ -399,7 +432,7 @@ const Profile = () => {
                                   View Invoice
                                 </a>
                                 <a
-                                  href={"http://localhost:8000"+order.invoicePath}
+                                  href={backendDomin+order.invoicePath}
                                   className="text-sm text-green-500 border border-green-500 px-3 py-1 rounded hover:bg-green-500 hover:text-white"
                                   download
                                 >
@@ -666,19 +699,41 @@ const Profile = () => {
           </div>
         );
       
-      // case "Track Order":
-        // return (
-        //   <div>
-        //     <h1 className="text-2xl font-bold mb-4">Track Your Order</h1>
-        //     <div className="flex flex-col items-center">
-        //       <CgTrack
-        //         style={{ fontSize: "6rem" }}
-        //         className="text-sky-600 text-6xl mb-2"
-        //       />
-        //       <p>Order not found!</p>
-        //     </div>
-        //   </div>
-        // );
+      case "My KYC Status":
+        const statusColors = {
+          Rejected: "text-red-500 bg-red-100 border-red-500",
+          Pending: "text-yellow-500 bg-yellow-100 border-yellow-500",
+          Verified: "text-green-500 bg-green-100 border-green-500",
+          undefined: "text-blue-500 bg-blue-100 border-blue-500", // Default when status is undefined
+        };
+        if (!kycDetails) {
+          return (
+            <div>
+              <h1 className="text-2xl font-bold mb-4">My KYC Status</h1>
+              <p>Loading KYC status...</p>
+            </div>
+          );
+        }
+        return (
+          <div>
+    <h1 className="text-2xl font-bold mb-4">My KYC Status</h1>
+      <div className="flex flex-col items-center">
+        <p className="text-xl font-semibold px-4 py-2">Your Kyc status is</p>
+        <div
+          className={` font-semibold px-2 py-1 rounded border ${statusColors[kycDetails.kycStatus] || "text-gray-500 bg-gray-100 border-gray-500"}`}
+        >
+          {kycDetails.kycStatus ? kycDetails.kycStatus : "Complete KYC Now"}
+        </div>
+        {kycDetails.kycStatus === undefined && (
+          <button
+            className="mt-4 px-6 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600 transition duration-300"
+          >
+            Complete KYC Now
+          </button>
+        )}
+      </div>
+          </div>
+        );
       default:
         return (
           <div>
@@ -761,7 +816,23 @@ const Profile = () => {
     >
       Delivered
     </button>
+    
   </li>
+
+  <li className={activeSection === "My KYC Status" ? "font-bold text-sky-600" : ""}>
+
+  <button
+      onClick={() => {
+        setActiveSection("My KYC Status");
+        toggleSidebar();
+        fetchKycStatus(authToken,userData._id)
+
+      }}
+      className="text-lg"
+    >
+      My KYC Status
+    </button>
+    </li>
             
             {/* <li
               className={
