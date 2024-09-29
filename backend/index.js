@@ -1,4 +1,3 @@
-const dotenv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -9,7 +8,7 @@ const app = express();
 const path = require('path');
 const cron = require('node-cron'); // Importing node-cron
 const User = require('./models/userModel');
-
+require('dotenv').config();
 const fs = require('fs');
 // Ensure invoices directory exists
 // const invoicesDir = path.join(__dirname, 'invoices');
@@ -26,9 +25,9 @@ const fs = require('fs');
 
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
-dotenv.config();
 app.use(cors({
-    origin: 'http://3.85.148.197', // Specify your frontend origin 
+    origin: 'http://3.85.148.197',
+    // origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
