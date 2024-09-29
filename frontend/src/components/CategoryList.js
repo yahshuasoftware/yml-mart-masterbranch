@@ -116,8 +116,8 @@ const CategoryList = () => {
     }, []);
 
     return (
-        <div className="container mx-auto pt-5 pb-8 px-6">
-            <div className="flex items-center gap-4 justify-between overflow-x-auto bg-white p-6 rounded-lg shadow-lg">
+        <div className="container mx-auto pt-5 pb-8 px-4">
+            <div className="flex items-center gap-4 justify-between overflow-x-auto bg-white pt-2 pr-6 pl-6 pb-4 rounded-lg shadow-lg">
                 {loading ? (
                     categoryLoading.map((_, index) => (
                         <div
