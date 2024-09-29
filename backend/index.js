@@ -29,7 +29,7 @@ const fs = require('fs');
 
 
 app.use(cors({
-    origin: 'http://3.85.148.197', // Specify your frontend origin
+    origin: 'http://3.85.148.197', // Specify your frontend origin 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials

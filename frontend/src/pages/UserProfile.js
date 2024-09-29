@@ -388,7 +388,7 @@ const Profile = () => {
                             </div>
         
                             {/* Invoice Buttons */}
-                            {order.status === "paid" && (
+                            /* {order.status === "paid" && (
                               <div className="mt-4 flex space-x-2">
                                 <a
                                   href={"http://localhost:8000"+order.invoicePath}
@@ -406,7 +406,7 @@ const Profile = () => {
                                   Download Invoice
                                 </a>
                               </div>
-                            )}
+                            )} 
                           </div>
                         </div>
                       ))}
