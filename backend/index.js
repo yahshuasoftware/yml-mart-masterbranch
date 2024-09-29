@@ -32,7 +32,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
 }));
-// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
