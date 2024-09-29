@@ -26,7 +26,7 @@ async function verifyOTPController(req, res) {
         _id: user._id,
         email: user.email,
       };
-      const token = await jwt.sign(tokenData, process.env.local.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 8 });
+      const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 8 });
 
       res.status(200).json({
         message: "OTP verified successfully",

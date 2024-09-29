@@ -1,5 +1,4 @@
-require('dotenv').config();
-
+require('dotenv').config({ path: '.env.local' });
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -40,7 +39,7 @@ app.use(cookieParser());
 app.use("/api", router); // Mounting the router correctly on the '/api' pat
 
 
-const PORT = process.env.local.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log("Connected to DB");

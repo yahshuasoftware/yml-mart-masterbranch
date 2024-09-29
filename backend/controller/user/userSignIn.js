@@ -28,12 +28,12 @@ async function userSignInController(req,res){
             _id : user._id,
             email : user.email,
         }
-        const token = await jwt.sign(tokenData, process.env.local.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 8 });
+        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 8 });
 
         const tokenOption = {
             httpOnly : true,
             secure : true
-        //  secure : process.env.local.NODE_ENV === 'production', // Ensure this is set to true in production
+        //  secure : process.env.NODE_ENV === 'production', // Ensure this is set to true in production
 
         }
 
