@@ -158,7 +158,7 @@ const handlePaymentSuccess = async (req, res) => {
         const invoicesDir = path.join(__dirname, '../..', 'invoices');
 
 // PDF generation logic
-pdf.create(invoiceHTML).toFile(path.join(invoicesDir, `invoice_${order._id}.pdf`), async (err, result) => {
+pdf.create(invoiceHTML).toFile(path.join(`invoicesDir, invoice_${order._id}.pdf`), async (err, result) => {
             if (err) {
                 return res.status(500).json({ success: false, message: "Error generating invoice", error: err });
             }

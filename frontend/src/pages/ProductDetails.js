@@ -6,7 +6,8 @@ import displayINRCurrency from '../helpers/displayCurrency';
 import VerticalCardProduct from '../components/VerticalCardProduct';
 import CategroyWiseProductDisplay from '../components/CategoryWiseProductDisplay';
 import addToCart from '../helpers/addToCart';
-import Context from '../context';
+import Context from '../context/index';
+
 
 const ProductDetails = () => {
   const [data, setData] = useState({
@@ -23,6 +24,7 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const productImageListLoading = new Array(4).fill(null);
   const [activeImage, setActiveImage] = useState("");
+  const { authToken } = useContext(Context); // Get the authToken from Context
 
   const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
     x: 0,
@@ -104,8 +106,8 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = async (e, id) => {
-    await addToCart(e, id);
-    // fetchUserAddToCart();
+    await addToCart(e, id,authToken);
+    // fetchUserAddToCart(authToken);
   };
 
   const handleBuyProduct = async (e, id) => {
@@ -128,7 +130,7 @@ const ProductDetails = () => {
                   style={{
                     background: `url(${activeImage})`,
                     backgroundRepeat: 'no-repeat',
-                    backgroundPosition: `${zoomImageCoordinate.x * 100}% ${zoomImageCoordinate.y * 100}% `
+                    backgroundPosition: `${zoomImageCoordinate.x * 100}% ${zoomImageCoordinate.y * 100}%`
                   }}
                 >
                 </div>

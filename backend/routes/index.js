@@ -14,10 +14,8 @@ const updateKycController  = require('../controller/user/updatekyc');
 const businessPrices = require("../controller/user/businessPrices")
 const reset = require("../controller/user/reset")
 
-//const getkyc = require('../controller/user/getkyc');
-
-
-//router.get('/user-kyc/:userId',getkyc.getkyc);
+const getkyc = require('../controller/user/getkyc');
+router.get('/user-kyc/:userId',getkyc.getkyc);
 
 router.put('/upload-kyc/:userId', updateKycController);
 
