@@ -89,7 +89,9 @@ const productCategory = [
         subcategories: [
             { id: 901, label: "Vegetables", value: "vegetables" },
             { id: 902, label: "Dairy", value: "dairy" },
-            { id: 903, label: "Snacks", value: "snacks" }
+            { id: 903, label: "Snacks", value: "snacks" },
+            { id: 904, label: "Biscuits, Drinks", value: "Biscuits, Drinks" },
+
         ]
     },
     { 
