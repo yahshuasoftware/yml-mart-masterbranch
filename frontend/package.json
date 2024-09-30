@@ -32,7 +32,8 @@
     "react-toastify": "^10.0.4",
     "react-tooltip": "^5.28.0",
     "swiper": "^11.1.10",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

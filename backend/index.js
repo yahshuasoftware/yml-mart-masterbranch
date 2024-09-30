@@ -26,14 +26,15 @@ const fs = require('fs');
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
 app.use(cors({
-    // origin: 'http://3.85.148.197',
-    origin: 'http://localhost:3000',
+    origin: 'http://3.85.148.197',
+    // origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
 }));
 app.use(express.json());
 app.use(cookieParser());
+
 
 app.use("/api", router); // Mounting the router correctly on the '/api' pat
 
