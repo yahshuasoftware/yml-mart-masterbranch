@@ -1,55 +1,49 @@
-import React, { createContext, useContext, useState } from 'react';
-import { useUser } from './userContext'; // Use the user context for authToken
-import Context from "../context/index";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useUser } from './userContext';
+import SummaryApi from '../common';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
-  // const { authToken } = useUser(); // Get authToken from userContext
-  const { authToken } = useContext(Context); // Get the authToken from Context
+  const [cartProductCount, setCartProductCount] = useState(0);
+  const { authToken } = useUser();
 
-
-  const fetchCartData = async (authToken) => {
+  // Fetch cart count from the API
+  const fetchCartCount = async () => {
     try {
-      const response = await fetch('/api/cart', {
-         credentials: 'include',
+      const response = await fetch(SummaryApi.addToCartProductCount.url, {
+        method: SummaryApi.addToCartProductCount.method,
+        credentials: 'include',
         headers: {
-          'Authorization': `Bearer ${authToken}`,
+          Authorization: `Bearer ${authToken}`,
           'Content-Type': 'application/json',
         },
       });
-
+      
       const data = await response.json();
-      setCart(data.cartItems || []);
-    } catch (error) {
-      console.error("Error fetching cart data:", error);
-    }
-  };
-
-  const addToCart = async (productId) => {
-    try {
-      const response = await fetch('/api/cart/add', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId }),
-      });
-
-      if (response.ok) {
-        fetchCartData(authToken); // Re-fetch cart data after adding an item
-      } else {
-        console.error("Failed to add product to cart");
+      console.log('Fetched data:', data); // Log full response
+  
+      if (data.success) {
+        console.log('Count:', data?.count);
+        setCartProductCount(data.count);
+    } else {
+        console.error('Failed to fetch cart count');
       }
     } catch (error) {
-      console.error("Error adding product to cart:", error);
+      console.error('Error fetching cart count:', error);
     }
   };
+  
+
+  // Call fetchCartCount when the component mounts or authToken changes
+  useEffect(() => {
+    if (authToken) {
+      fetchCartCount();
+    }
+  }, [authToken]);
 
   return (
-    <CartContext.Provider value={{ cart, fetchCartData, addToCart }}>
+    <CartContext.Provider value={{ cartProductCount, fetchCartCount }}>
       {children}
     </CartContext.Provider>
   );

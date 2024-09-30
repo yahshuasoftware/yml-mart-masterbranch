@@ -5,8 +5,6 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
 import Context from '../context/index';
-// import authToken from '../../../backend/middleware/authToken';
-
 
 const VerticalCardProduct = ({ category, heading }) => {
     const { authToken } = useContext(Context); // Get the authToken from Context
@@ -22,13 +20,13 @@ const VerticalCardProduct = ({ category, heading }) => {
 
     const handleAddToCart = async (e, id) => {
         e.stopPropagation();  // Stop event propagation to prevent Link navigation
-        await addToCart(e, id,authToken);
+        await addToCart(e, id, authToken);
         if (fetchUserAddToCart) {
           fetchUserAddToCart(); // Call fetchUserAddToCart after adding the product to the cart
         } else {
           console.error('fetchUserAddToCart is not available in context');
         }
-      };
+    };
 
     const fetchData = async () => {
         setLoading(true);
@@ -67,13 +65,13 @@ const VerticalCardProduct = ({ category, heading }) => {
 
             {/* Scroll buttons */}
             <button
-                className='bg-white shadow-md rounded-full p-2 absolute left-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
+                className='bg-white shadow-md rounded-full p-1 absolute left-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
                 onClick={scrollLeft}
             >
                 <FaAngleLeft />
             </button>
             <button
-                className='bg-white shadow-md rounded-full p-2 absolute right-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
+                className='bg-white shadow-md rounded-full p-1 absolute right-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
                 onClick={scrollRight}
             >
                 <FaAngleRight />
@@ -82,72 +80,67 @@ const VerticalCardProduct = ({ category, heading }) => {
             {/* Products Slider */}
             <div
                 ref={scrollElement}
-                className='flex gap-4 overflow-x-auto scrollbar-none'
+                className='flex gap-5 overflow-x-auto scrollbar-none'
                 style={{
                     scrollBehavior: 'smooth', // Ensure smooth scrolling behavior
                 }}
             >
                 {loading ? (
-    loadingList.map((_, index) => (
-        <div key={index} className="bg-white rounded-lg shadow-lg">
-            <div className="bg-slate-200 h-48 p-4 flex justify-center items-center animate-pulse"></div>
-            <div className="p-4 space-y-3">
-                <div className="h-4 bg-slate-200 rounded-full animate-pulse"></div>
-                <div className="h-4 bg-slate-200 rounded-full animate-pulse"></div>
-                <div className="h-4 bg-slate-200 rounded-full animate-pulse"></div>
-            </div>
-        </div>
-    ))
-) : (
-    data.map((product, index) => (
-        <Link
-            key={index}
-            to={`/product/${product?._id}`}
-            className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
-            style={{ minWidth: '220px', maxWidth: '220px' }} // Consistent width for each product
-        >
-            <div className="bg-slate-100 h-48 p-4 flex justify-center items-center">
-                <img
-                    src={product.productImage[0]}
-                    className="object-contain h-full w-full transition-transform duration-300 hover:scale-105"
-                    alt={product?.productName}
-                />
-            </div>
-            <div className="p-4 space-y-2">
-                <h3 className="text-sm md:text-base font-semibold text-gray-800 truncate">
-                    {product?.productName}
-                </h3>
-                <div className="flex items-center justify-between">
-                    <p className="text-green-700 text-sm font-semibold">
-                        {displayINRCurrency(product?.sellingPrice)}
-                    </p>
-                    <p className="text-slate-400 text-xs line-through">
-                        {displayINRCurrency(product?.price)}
-                    </p>
-                
-                </div>
-                <div className="flex justify-center pt-2">
-                    {/* <p>t</p> */}
-                    {product?.quantity > 0 ? (
-                        <button
-                            className="text-sm text-white bg-green-600 border border-green-600 px-4 py-2 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600"
-                            onClick={(e) => handleAddToCart(e, product?._id)}
+                    loadingList.map((_, index) => (
+                        <div key={index} className="bg-white rounded-lg shadow-lg">
+                            <div className="bg-slate-200 h-36 p-2 flex justify-center items-center animate-pulse"></div>
+                            <div className="p-2 space-y-2">
+                                <div className="h-4 bg-slate-200 rounded-full animate-pulse"></div>
+                                <div className="h-4 bg-slate-200 rounded-full animate-pulse"></div>
+                                <div className="h-4 bg-slate-200 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    data.map((product, index) => (
+                        <Link
+                            key={index}
+                            to={`/product/${product?._id}`}
+                            className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
+                            style={{ minWidth: '170px', maxWidth: '170px' }} // Decreased card width
                         >
-                            Add to Cart
-                        </button>
-                        
-                    ) : (
-                        <span                             className="text-sm text-white bg-green-600 border border-green-600 px-4 py-2 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600">
-
-                            Add to Cart
-                        </span>
-                    )}
-                </div>
-            </div>
-        </Link>
-    ))
-)}
-
+                            <div className=" h-28 px-2 pt-2 flex justify-center items-center">
+                                <img
+                                    src={product.productImage[0]}
+                                    className="object-contain h-full w-full transition-transform duration-300 hover:scale-105"
+                                    alt={product?.productName}
+                                />
+                            </div>
+                            <div className="px-4 pt-2 pb-3 h-30 space-y-1"> {/* Reduced padding */}
+                                <h3 className="text-xs md:text-sm font-semibold text-gray-800 truncate">
+                                    {product?.productName}
+                                </h3>
+                                <div className="flex items-center justify-between">
+                                    <p className="text-green-700 text-xs font-semibold">
+                                        {displayINRCurrency(product?.sellingPrice)}
+                                    </p>
+                                    <p className="text-slate-400 text-xs line-through">
+                                        {displayINRCurrency(product?.price)}
+                                    </p>
+                                </div>
+                                <div className="flex justify-center pt-1"> {/* Reduced spacing */}
+                                    {product?.quantity > 0 ? (
+                                        <button
+                                            className=" text-sm text-green border border-black px-4 py-1 rounded-full mt-1 transition-colors duration-300 hover:bg-white hover:text-sky-600"
+                                            onClick={(e) => handleAddToCart(e, product?._id)}
+                                        >
+                                            Add to Cart
+                                        </button>
+                                    ) : (
+                                        <span className="text-xs text-white bg-green-600 border border-green-600 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600">
+                                            Add to Cart
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </Link>
+                    ))
+                )}
             </div>
         </div>
     );

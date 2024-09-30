@@ -3,7 +3,6 @@ import SummaryApi from "../common";
 import displayINRCurrency from "../helpers/displayCurrency";
 import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
-import { Link } from "react-router-dom";
 import Context from "../context/";
 import { useUser } from '../context/userContext'; // Import the useUser hook
 import { useCart } from '../context/CartContext';
@@ -18,7 +17,7 @@ const Cart = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useUser(); // Get the user details from UserContext
-  const{cart} = useCart();
+  const { updateCartProductCount } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
 
@@ -29,8 +28,6 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = useState(user?.address[0]); 
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showAllAddresses, setShowAllAddresses] = useState(false);
-  const context = useContext(Context);
-  const { updateCartProductCount } = useCart();
   const [streetSuggestions, setStreetSuggestions] = useState([]);
   const [citySuggestions, setCitySuggestions] = useState([]);
   const [address, setAddress] = useState({
@@ -209,25 +206,29 @@ const Cart = () => {
   };
 
   const deleteCartProduct = async (id) => {
-    const response = await fetch(SummaryApi.deleteCartProduct.url, {
-      method: SummaryApi.deleteCartProduct.method,
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-        'Authorization': `Bearer ${authToken}`, 
-
-      },
-      body: JSON.stringify({
-        _id: id,
-      }),
-    });
-
-    const responseData = await response.json();
-    if (responseData.success) {
-      fetchData(authToken);
-      updateCartProductCount(authToken);
+    try {
+      const response = await fetch(SummaryApi.deleteCartProduct.url, {
+        method: SummaryApi.deleteCartProduct.method,
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ _id: id }),
+      });
+  
+      const responseData = await response.json();
+      if (responseData.success) {
+        await fetchData(authToken);  // Refresh the cart data
+        updateCartProductCount(authToken);
+      } else {
+        alert(responseData.message);
+      }
+    } catch (error) {
+      console.error("Error deleting cart product:", error);
     }
   };
+  
 
   const handlePayment = async (finalAddress) => {
     
