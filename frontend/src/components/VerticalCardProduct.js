@@ -104,7 +104,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                             className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
                             style={{ minWidth: '170px', maxWidth: '170px' }} // Decreased card width
                         >
-                            <div className=" h-32 px-2 pt-2 flex justify-center items-center">
+                            <div className=" h-28 px-2 pt-2 flex justify-center items-center">
                                 <img
                                     src={product.productImage[0]}
                                     className="object-contain h-full w-full transition-transform duration-300 hover:scale-105"
@@ -126,7 +126,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                                 <div className="flex justify-center pt-1"> {/* Reduced spacing */}
                                     {product?.quantity > 0 ? (
                                         <button
-                                            className="text-sm text-green border border-green-600 px-4 py-1 rounded-full my-2 transition-colors duration-300 hover:bg-white hover:text-green-600"
+                                            className=" text-sm text-green border border-black px-4 py-1 rounded-full mt-1 transition-colors duration-300 hover:bg-white hover:text-sky-600"
                                             onClick={(e) => handleAddToCart(e, product?._id)}
                                         >
                                             Add to Cart
