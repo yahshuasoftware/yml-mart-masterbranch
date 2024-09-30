@@ -24,7 +24,6 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    alert(process.env.REACT_APP_LOCALHOST_URI)
     e.preventDefault();
     try {
       const response = await fetch(SummaryApi.signIn.url, {

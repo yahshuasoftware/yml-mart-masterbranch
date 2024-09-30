@@ -153,7 +153,6 @@ const Cart = () => {
       setFinalAmount(total);
     }
   }, [data, loading]);
-  
   const totalQty = data
     .filter(product => product.productId.quantity > 0 && product.quantity > 0)
     .reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
