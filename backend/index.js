@@ -1,4 +1,3 @@
-// require('dotenv').config({ path: '.env.local' });
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -27,8 +26,12 @@ const fs = require('fs');
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
 app.use(cors({
+<<<<<<< HEAD
     // origin: 'http://3.85.148.197',
     origin: 'http://localhost:3000',
+=======
+    origin: 'http://18.206.206.207:3000',
+>>>>>>> 3c7233e051953a8ebd31a94e7b9560b0462400c4
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
@@ -50,8 +53,6 @@ connectDB().then(() => {
         console.log("Connected to DB");
         console.log(`Server is running on port ${PORT}`);
     });
-
-
     cron.schedule('0 0 1 * *', async () => {
         try {
             await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });

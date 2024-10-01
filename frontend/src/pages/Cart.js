@@ -271,7 +271,7 @@ const Cart = () => {
         }
 
         const options = {
-          key: process.env.RAZARPAY_KEY,
+          key: process.env.REACT_APP_RAZARPAY_KEY,
           amount: responseData.order.amount,
           currency: responseData.order.currency,
           name: "YML Mart",
@@ -305,7 +305,7 @@ const Cart = () => {
           prefill: {
             name: user?.name || "Your Name",
             email: user?.email || "Your Email",
-            contact: user?.contact || "0000000000",
+            contact: user?.contact || "Your No.",
           },
           theme: {
             color: "#3399cc",
