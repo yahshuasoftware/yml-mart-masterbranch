@@ -25,7 +25,7 @@ const BannerProduct = () => {
     }, []);
 
     return (
-        <div className="container mx-auto px-4 rounded relative">
+        <div className="container mx-auto px-4 mt-10 rounded relative">
             <div className="h-56 md:h-72 w-full relative" style={{ height: '250px' }}>
                 
                 {/* Desktop and tablet version */}

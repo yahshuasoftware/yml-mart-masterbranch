@@ -25,6 +25,9 @@ const AdminEditProduct = ({
         description: productData?.description,
         price: productData?.price,
         sellingPrice: productData?.sellingPrice,
+        description: productData?.description,
+        soldBy: productData?.soldBy,
+        features: productData?.features,
         _id: productData?._id
     });
     const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
@@ -273,16 +276,52 @@ const AdminEditProduct = ({
                     required
                     />
 
-                    <label htmlFor='description' className='mt-3'>Description :</label>
-                    <textarea 
-                        className='h-28 bg-slate-100 border resize-none p-1' 
-                        placeholder='enter product description' 
-                        rows={3} 
-                        onChange={handleOnChange} 
-                        name='description'
-                        value={data.description}
-                    >
-                    </textarea>
+<label htmlFor='description' className='mt-3 block'>Description:</label>
+<textarea
+  id='description'
+  placeholder='Enter description'
+  value={data.description}
+  name='description'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
+
+{/* soldby Section */}
+<label htmlFor='soldBy' className='mt-3 block'>Sold By:</label>
+<textarea
+  id='soldBy'
+  placeholder='Enter Sold by'
+  value={data.soldBy}
+  name='soldBy'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
+
+{/* Features Section */}
+<label htmlFor='features' className='mt-3 block'>Features:</label>
+<textarea
+  id='features'
+  placeholder='Enter features (use new line for each bullet point)'
+  value={data.features}
+  name='features'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
+
+{/* Product Information Section */}
+<label htmlFor='productInfo' className='mt-3 block'>Product Information:</label>
+<textarea
+  id='productInfo'
+  placeholder='Enter product information (use new line for each bullet point)'
+  value={data.productInfo}
+  name='productInfo'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
 
                     <button className='px-3 py-2 bg-red-600 text-white mb-10 hover:bg-red-700' type='submit'>Update Product</button>
                     <button className='px-3 py-2 bg-red-600 text-white mb-10 hover:bg-red-700' onClick={handleDelete}>Delete Product</button>

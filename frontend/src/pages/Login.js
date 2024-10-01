@@ -24,8 +24,10 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     try {
+      alert(SummaryApi.signIn.url)
       const response = await fetch(SummaryApi.signIn.url, {
         
         method: SummaryApi.signIn.method,

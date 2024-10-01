@@ -282,12 +282,12 @@ const uploadImageToS3 = async (file) => {
 ></textarea>
 
 {/* soldby Section */}
-<label htmlFor='description' className='mt-3 block'>Sold By:</label>
+<label htmlFor='soldBy' className='mt-3 block'>Sold By:</label>
 <textarea
   id='soldBy'
   placeholder='Enter Sold by'
   value={data.soldBy}
-  name='soldBY'
+  name='soldBy'
   onChange={handleOnChange}
   className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
   required

@@ -60,7 +60,7 @@ const VerticalCardProduct = ({ category, heading }) => {
     };
 
     return (
-        <div className='container mx-auto px-10 my-6 relative'>
+    <div className='container mx-auto px-5 sm:px-10 my-6 relative'>
             <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
 
             {/* Scroll buttons */}

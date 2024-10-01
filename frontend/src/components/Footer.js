@@ -16,10 +16,8 @@ const ScrollToTop = () => {
 
 const Footer = () => {
   return (
-    <div className="min-h-screen flex flex-col justify-between overflow-hidden">
-      <div className="flex-grow">
-        {/* Page content goes here */}
-      </div>
+    <div className=" flex flex-col justify-between overflow-hidden">
+
 
       {/* Footer Section */}
       <div className="bg-white-600 text-gray-400">
