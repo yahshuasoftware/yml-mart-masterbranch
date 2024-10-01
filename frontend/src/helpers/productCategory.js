@@ -6,26 +6,34 @@ const productCategory = [
         subcategories: [
             { id: 101, label: "Hair Care", value: "hair care" },
             { id: 102, label: "Skin Care", value: "skin care" },
-            { id: 103, label: "Oral Care", value: "oral care" }
+            { id: 103, label: "Oral Care", value: "oral care" },
+            { id: 104, label: "Men's Grooming", value: "men's grooming" },
+            { id: 105, label: "Deo & Fragrances", value: "deo & fragrances" },
+            { id: 106, label: "Health & Wellness", value: "health & wellness" },
         ]
     },
     { 
         id: 2, 
-        label: "Home care", 
-        value: "home care", 
+        label: "Kitchenware", 
+        value: "kitchenware", 
         subcategories: [
-            { id: 201, label: "Cleaning Supplies", value: "cleaning supplies" },
-            { id: 202, label: "Laundry", value: "laundry" },
-            { id: 203, label: "Air Fresheners", value: "air fresheners" }
+            { id: 201, label: "Cookers & Steamers", value: "cookers & steamers" },
+            { id: 202, label: "Kitchen Tools", value: "kitchen tools" },
+            { id: 203, label: "Pots & Pans", value: "pots & pans" },
+            { id: 204, label: "Containers & Storage", value: "containers & storage" },
+            { id: 205, label: "Flask, Bottle & Tiffin Boxes", value: "flask, bottle & tiffin boxes" },
+            { id: 206, label: "Cutting & Chopping", value: "Cutting & Chopping" },
         ]
     },
     { 
         id: 3, 
-        label: "Medicines", 
-        value: "medicines", 
+        label: "Toys & Games", 
+        value: "toys & games", 
         subcategories: [
-            { id: 301, label: "OTC Drugs", value: "otc drugs" },
-            { id: 302, label: "Prescriptions", value: "prescriptions" }
+            { id: 301, label: "Bikes, Trikes & Ride-Ons", value: "bikes, trikes & ride-ons" },
+            { id: 302, label: "Remote & App-Controlled Toys", value: "remote & app-controlled toys" },
+            { id: 302, label: "Toy Vehicles", value: "toy vehicles" },
+            { id: 302, label: "Model Building Kits", value: "model building kits" },
         ]
     },
     { 
@@ -33,9 +41,10 @@ const productCategory = [
         label: "Beauty", 
         value: "beauty", 
         subcategories: [
-            { id: 401, label: "Makeup", value: "makeup" },
-            { id: 402, label: "Skincare", value: "skincare" },
-            { id: 403, label: "Fragrance", value: "fragrance" }
+            { id: 401, label: "Beauty Accessories", value: "beauty accessories" },
+            { id: 402, label: "Nails & Lips", value: "nails & lips" },
+            { id: 403, label: "Eyes", value: "eyes" },
+            { id: 404, label: "Face", value: "face" },
         ]
     },
     { 
@@ -45,7 +54,10 @@ const productCategory = [
         subcategories: [
             { id: 501, label: "Notebooks", value: "notebooks" },
             { id: 502, label: "Pens & Pencils", value: "pens pencils" },
-            { id: 503, label: "Art Supplies", value: "art supplies" }
+            { id: 503, label: "Art Supplies", value: "art supplies" },
+            { id: 504, label: "Office Supplies", value: "office supplies    " },
+            { id: 505, label: "Party Accessories", value: "party accessories" },
+            { id: 506, label: "Children's Books", value: "children's books" },
         ]
     },
     { 
@@ -88,17 +100,6 @@ const productCategory = [
     },
     { 
         id: 9, 
-        label: "TVs & Appliances", 
-        value: "tvs & appliances", 
-        subcategories: [
-            { id: 901, label: "Washing Machine", value: "washing machine" },
-            { id: 902, label: "Television", value: "television" },
-            { id: 903, label: "Refrigerator", value: "refrigerator" },
-            { id: 904, label: "Iron", value: "iron" }
-        ]
-    },
-    { 
-        id: 10, 
         label: "Gifts & Hampers", 
         value: "gifts & hampers", 
         subcategories: [
