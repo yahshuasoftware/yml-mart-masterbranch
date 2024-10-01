@@ -16,6 +16,8 @@ const ProductDetails = () => {
     category: "",
     productImage: [],
     description: "",
+    soldBy: '',
+    features: '',
     price: "",
     sellingPrice: "",
     ratings: { average: 4.5, count: 120 } // Assuming the average rating and count are included
@@ -155,7 +157,7 @@ const ProductDetails = () => {
             )}
           </div>
         </div>
-
+  
         {/* product details */}
         {loading ? (
           <div className='grid gap-1 w-full'>
@@ -195,25 +197,30 @@ const ProductDetails = () => {
               <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
             </div>
             {data?.quantity > 0 ? (
-              <button className='border-2 border-sky-600 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-sky-600 hover:text-sky-600 hover:bg-white' onClick={(e) => handleAddToCart(e, data?._id)}>Add To Cart</button>
+              <button className='border-2 border-sky-600 rounded px-2 py-1 min-w-[80px] font-medium text-white bg-sky-600 hover:text-sky-600 hover:bg-white' onClick={(e) => handleAddToCart(e, data?._id)}>Add To Cart</button>
             ) : (
               <span className="text-red-600 text-2xl font-bold">
                 Out of Stock
               </span>
             )}
-            <div>
-              <p className='text-slate-600 font-medium my-1'>Description : </p>
+            <div className='flex flex-col mt-4'>
+              <p className='text-slate-600 font-medium my-1'>Description:</p>
               <p>{data?.description}</p>
+              <p className='text-slate-600 font-medium my-1'>Sold By:</p>
+              <p>{data?.soldBy}</p>
+              <p className='text-slate-600 font-medium my-1'>Features:</p>
+              <p>{data?.features}</p>
             </div>
           </div>
         )}
       </div>
-
+  
       {data.category && (
         <CategroyWiseProductDisplay category={data?.category} heading={"Recommended Product"} />
       )}
     </div>
   );
+  
 };
 
 export default ProductDetails;
