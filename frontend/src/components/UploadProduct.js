@@ -26,11 +26,12 @@ const UploadProduct = ({
     price: "",
     sellingPrice: "",
     quantity: "",
-    soldBy: '',
-    features: '',
+    soldBy: "",
+    features: "",
+    productInfo:""
   });
   const { authToken } = useContext(Context); // Get the authToken from Context
-  
+
 
   const [subcategories, setSubcategories] = useState([]);
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);

@@ -30,12 +30,11 @@ const productCategory = [
     },
     { 
         id: 4, 
-        label: "Fruits", 
-        value: "fruits", 
+        label: "Fruits, Vegetables", 
+        value: "Fruits, Vegetables", 
         subcategories: [
-            { id: 401, label: "Citrus", value: "citrus" },
-            { id: 402, label: "Berries", value: "berries" },
-            { id: 403, label: "Tropical", value: "tropical" }
+            { id: 401, label: "Fruits", value: "fruits" },
+            { id: 402, label: "Vegetables", value: "vegetables" },
         ]
     },
     { 
@@ -87,7 +86,7 @@ const productCategory = [
         label: "Groceries", 
         value: "groceries", 
         subcategories: [
-            { id: 901, label: "Vegetables", value: "vegetables" },
+            { id: 901, label: "Biscuits, Drinks", value: "biscuits, drinks" },
             { id: 902, label: "Dairy", value: "dairy" },
             { id: 903, label: "Snacks", value: "snacks" },
             { id: 904, label: "Biscuits, Drinks", value: "Biscuits, Drinks" },
