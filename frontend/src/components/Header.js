@@ -37,7 +37,6 @@ const Header = () => {
       credentials: "include",
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${authToken}`, 
       },
       
     });

@@ -152,6 +152,10 @@ const SummaryApi = {
         url: `${backendDomin}/api/user-kyc/:userId`,
         method : 'get'
     },
+    reset: {
+        url: `${backendDomin}/api/reset`,
+        method: "post"
+    },
 };
 
 export default SummaryApi;

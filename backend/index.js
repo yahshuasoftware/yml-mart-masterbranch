@@ -1,3 +1,4 @@
+// require('dotenv').config({ path: '.env.local' });
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -51,7 +52,7 @@ connectDB().then(() => {
     });
 
 
-    cron.schedule('* * * * *', async () => {
+    cron.schedule('0 0 1 * *', async () => {
         try {
             await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });
             console.log('Total purchase values reset to 0 for all users.');
@@ -59,4 +60,5 @@ connectDB().then(() => {
             console.error('Error resetting total purchases:', error);
         }
     });
+    
 });

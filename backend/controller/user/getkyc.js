@@ -8,7 +8,7 @@ const getkyc = async (req, res) => {
 
     // Check if KYC details for the user exist
     const kycDetails = await KYC.findOne({ userId });
-
+    
     // If KYC details are not found, send a 404 response
     if (!kycDetails) {
       return res.status(404).json({

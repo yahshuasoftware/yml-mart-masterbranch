@@ -13,6 +13,7 @@ const kycController = require('../controller/user/kycController'); // Import you
 const updateKycController  = require('../controller/user/updatekyc');
 const businessPrices = require("../controller/user/businessPrices")
 const reset = require("../controller/user/reset")
+// const getKyc =  require("../controller/user/getkyc")
 
 const getkyc = require('../controller/user/getkyc');
 router.get('/user-kyc/:userId',getkyc.getkyc);

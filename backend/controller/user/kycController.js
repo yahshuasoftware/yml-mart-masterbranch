@@ -3,7 +3,7 @@ const KYC = require('../../models/kyc'); // Import the KYC model
 // Controller function for handling KYC data and file uploads (POST method)
 const postKYC = async (req, res) => {
   try {
-    const userId = req.body.userId; // Assuming userId is sent in the request body
+    const userId = req.body.userId;
 
     // Check if KYC details for the user already exist
     const existingKYC = await KYC.findOne({ userId });
@@ -18,16 +18,16 @@ const postKYC = async (req, res) => {
     // Create a new KYC document
     const kycDetails = new KYC({
       userId,
-      panNumber: req.body.panNumber || '', // Default to empty string if not provided
-      panName: req.body.panName || '', // Default to empty string if not provided
-      panCardFilePath: req.files['panCardFile'] ? req.files['panCardFile'][0].path : null,
-      aadharNumber: req.body.aadharNumber || '', // Default to empty string if not provided
-      aadharName: req.body.aadharName || '', // Default to empty string if not provided
-      aadharFilePath: req.files['aadharFile'] ? req.files['aadharFile'][0].path : null,
-      accountHolderName: req.body.accountHolderName || '', // Default to empty string if not provided
-      accountNumber: req.body.accountNumber || '', // Default to empty string if not provided
-      ifscCode: req.body.ifscCode || '', // Default to empty string if not provided
-      passbookFilePath: req.files['passbookFile'] ? req.files['passbookFile'][0].path : null,
+      panNumber: req.body.panNumber || '', // Defaults to empty string if not provided
+      panName: req.body.panName || '',
+      panCardFilePath: req.body.panCardFile || null, // Now receiving URLs from frontend
+      aadharNumber: req.body.aadharNumber || '',
+      aadharName: req.body.aadharName || '',
+      aadharFilePath: req.body.aadharFile || null, // URL
+      accountHolderName: req.body.accountHolderName || '',
+      accountNumber: req.body.accountNumber || '',
+      ifscCode: req.body.ifscCode || '',
+      passbookFilePath: req.body.passbookFile || null, // URL
     });
 
     // Save the KYC document to the database

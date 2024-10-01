@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SummaryApi from '../../common/index'; // Adjust the import path if necessary
+const AWS = require('aws-sdk');
 
 const KYCPage = () => {
   const [selectedPanCard, setSelectedPanCard] = useState(false);
@@ -76,20 +77,59 @@ const KYCPage = () => {
 
   }, [userId]); // Re-run useEffect whenever userId changes
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files && files.length > 0) {
-      setKycDetails((prevDetails) => ({
-        ...prevDetails,
-        [name]: files[0],
-      }));
-    } else {
-      setKycDetails((prevDetails) => ({
-        ...prevDetails,
-        [name]: value,
-      }));
-    }
+
+AWS.config.update({
+  accessKeyId: process.env.REACT_APP_ACCESS_KEY,
+  secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
+  region: process.env.REACT_APP_BUCKET_REGION,
+});
+
+const s3 = new AWS.S3();
+const handleUploadKYC = async (e) => {
+  const file = e.target.files[0]; // Grab the selected file
+  const name = e.target.name; // Input field name (panCardFile, aadharFile, passbookFile)
+
+  try {
+    const url = await uploadImageToS3(file); // Upload file to S3
+    setKycDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: url, // Store the S3 URL instead of file object
+    }));
+  } catch (error) {
+    console.error('Error uploading file to S3:', error);
+  }
+};
+
+const uploadImageToS3 = async (file) => {
+  const params = {
+    Bucket: process.env.REACT_APP_BUCKET_NAME,
+    Key: `kycDocuments/${Date.now()}_${file.name}`, // S3 folder structure
+    Body: file,
+    ContentType: file.type,
   };
+
+  return new Promise((resolve, reject) => {
+    s3.upload(params, (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(data.Location); // S3 file URL
+    });
+  });
+};
+
+// Handle KYC form change
+const handleChange = (e) => {
+  const { name, value, files } = e.target;
+  if (files && files.length > 0) {
+    handleUploadKYC(e); // Upload files to S3
+  } else {
+    setKycDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  }
+};
 
   const validateForm = () => {
     if (selectedPanCard && (!kycDetails.panNumber || !kycDetails.panName || !kycDetails.panCardFile)) {
@@ -106,41 +146,52 @@ const KYCPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const validationError = validateForm();
     if (validationError) {
       alert(validationError);
       return;
     }
-
-    const formData = new FormData();
-    formData.append('userId', userId);
-
-    if (selectedPanCard) {
-      formData.append('panNumber', kycDetails.panNumber);
-      formData.append('panName', kycDetails.panName);
-      formData.append('panCardFile', kycDetails.panCardFile);
-    }
-
-    if (selectedAadharCard) {
-      formData.append('aadharNumber', kycDetails.aadharNumber);
-      formData.append('aadharName', kycDetails.aadharName);
-      formData.append('aadharFile', kycDetails.aadharFile);
-    }
-
-    if (selectedAccountDetails) {
-      formData.append('accountHolderName', kycDetails.accountHolderName);
-      formData.append('accountNumber', kycDetails.accountNumber);
-      formData.append('ifscCode', kycDetails.ifscCode);
-      formData.append('passbookFile', kycDetails.passbookFile);
-    }
-
+  
+    // Upload files to AWS S3
+    let panCardUrl = null;
+    let aadharUrl = null;
+    let passbookUrl = null;
+  
     try {
+      if (kycDetails.panCardFile) {
+        panCardUrl = await uploadImageToS3(kycDetails.panCardFile, 'kycDocs/panCards');
+      }
+      if (kycDetails.aadharFile) {
+        aadharUrl = await uploadImageToS3(kycDetails.aadharFile, 'kycDocs/aadharCards');
+      }
+      if (kycDetails.passbookFile) {
+        passbookUrl = await uploadImageToS3(kycDetails.passbookFile, 'kycDocs/passbooks');
+      }
+  
+      // Send data to backend API
+      const formData = {
+        userId,
+        panNumber: kycDetails.panNumber,
+        panName: kycDetails.panName,
+        panCardFile: panCardUrl,
+        aadharNumber: kycDetails.aadharNumber,
+        aadharName: kycDetails.aadharName,
+        aadharFile: aadharUrl,
+        accountHolderName: kycDetails.accountHolderName,
+        accountNumber: kycDetails.accountNumber,
+        ifscCode: kycDetails.ifscCode,
+        passbookFile: passbookUrl,
+      };
+  
       const response = await fetch(SummaryApi.uploadKYC.url, {
         method: SummaryApi.uploadKYC.method,
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-
+  
       const result = await response.json();
       if (result.success) {
         setSubmissionStatus('Verification is pending.');
