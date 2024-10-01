@@ -11,7 +11,7 @@ const productCategory = [
     },
     { 
         id: 2, 
-        label: "Home Care", 
+        label: "Home care", 
         value: "home care", 
         subcategories: [
             { id: 201, label: "Cleaning Supplies", value: "cleaning supplies" },
@@ -30,82 +30,82 @@ const productCategory = [
     },
     { 
         id: 4, 
-        label: "Fruits", 
-        value: "fruits", 
+        label: "Beauty", 
+        value: "beauty", 
         subcategories: [
-            { id: 401, label: "Citrus", value: "citrus" },
-            { id: 402, label: "Berries", value: "berries" },
-            { id: 403, label: "Tropical", value: "tropical" }
+            { id: 401, label: "Makeup", value: "makeup" },
+            { id: 402, label: "Skincare", value: "skincare" },
+            { id: 403, label: "Fragrance", value: "fragrance" }
         ]
     },
     { 
         id: 5, 
-        label: "Beauty", 
-        value: "beauty", 
+        label: "Stationary", 
+        value: "stationary", 
         subcategories: [
-            { id: 501, label: "Makeup", value: "makeup" },
-            { id: 502, label: "Skincare", value: "skincare" },
-            { id: 503, label: "Fragrance", value: "fragrance" }
+            { id: 501, label: "Notebooks", value: "notebooks" },
+            { id: 502, label: "Pens & Pencils", value: "pens pencils" },
+            { id: 503, label: "Art Supplies", value: "art supplies" }
         ]
     },
     { 
         id: 6, 
-        label: "Stationary", 
-        value: "stationary", 
+        label: "Electronics", 
+        value: "electronics", 
         subcategories: [
-            { id: 601, label: "Notebooks", value: "notebooks" },
-            { id: 602, label: "Pens & Pencils", value: "pens pencils" },
-            { id: 603, label: "Art Supplies", value: "art supplies" }
+            { id: 601, label: "Mobile Phones", value: "mobile phones" },
+            { id: 602, label: "Laptops", value: "laptops" },
+            { id: 603, label: "Accessories", value: "accessories" },
+            { id: 604, label: "Airpods", value: "airpods" },
+            { id: 605, label: "Smart Watches", value: "smart watches" },
         ]
     },
     { 
         id: 7, 
-        label: "Electronics", 
-        value: "electronics", 
+        label: "Home Decor", 
+        value: "home decor", 
         subcategories: [
-            { id: 701, label: "Mobile Phones", value: "mobile phones" },
-            { id: 702, label: "Laptops", value: "laptops" },
-            { id: 703, label: "Accessories", value: "accessories" },
-            { id: 704, label: "Airpods", value: "airpods" },
-            { id: 705, label: "Smart Watches", value: "smart watches" },
-
-
+            { id: 701, label: "Wall Art", value: "wall art" },
+            { id: 702, label: "Furniture", value: "furniture" },
+            { id: 703, label: "Lighting", value: "lighting" }
         ]
     },
     { 
         id: 8, 
-        label: "Home Decor", 
-        value: "home decor", 
+        label: "Groceries", 
+        value: "groceries", 
         subcategories: [
-            { id: 801, label: "Wall Art", value: "wall art" },
-            { id: 802, label: "Furniture", value: "furniture" },
-            { id: 803, label: "Lighting", value: "lighting" }
+            { id: 801, label: "Biscuits & Drinks", value: "biscuits, drinks" },
+            { id: 802, label: "Fruits & Vegetables", value: "fruits, vegetables" },
+            { id: 803, label: "Cooking Essentials", value: "cooking essentials" },
+            { id: 804, label: "Dairy & Bakery", value: "dairy & bakery" },
+            { id: 805, label: "Mom & Baby Care", value: "mom, baby care" },
+            { id: 806, label: "Disposables", value: "disposables" },
+            { id: 807, label: "Dairy & Bakery", value: "dairy & bakery" },
+            { id: 808, label: "Dairy & Bakery", value: "dairy & bakery" },
+
         ]
     },
     { 
         id: 9, 
-        label: "Groceries", 
-        value: "groceries", 
+        label: "TVs & Appliances", 
+        value: "tvs & appliances", 
         subcategories: [
-            { id: 901, label: "Vegetables", value: "vegetables" },
-            { id: 902, label: "Dairy", value: "dairy" },
-            { id: 903, label: "Snacks", value: "snacks" },
-            { id: 904, label: "Biscuits, Drinks", value: "Biscuits, Drinks" },
-
+            { id: 901, label: "Washing Machine", value: "washing machine" },
+            { id: 902, label: "Television", value: "television" },
+            { id: 903, label: "Refrigerator", value: "refrigerator" },
+            { id: 904, label: "Iron", value: "iron" }
         ]
     },
     { 
         id: 10, 
-        label: "TVs & Appliances", 
-        value: "tvs & appliances", 
+        label: "Gifts & Hampers", 
+        value: "gifts & hampers", 
         subcategories: [
-            { id: 1001, label: "Washing Machine", value: "washing machine" },
-            { id: 1002, label: "Television", value: "television" },
-            { id: 1003, label: "Refrigerator", value: "refrigerator" },
-            // { id: 1004, label: "Refrigerator", value: "refrigerator" },
-            { id: 1005, label: "Iron", value: "iron" }
-
-
+            { id: 901, label: "Washing Machine", value: "washing machine" },
+            { id: 902, label: "Television", value: "television" },
+            { id: 903, label: "Refrigerator", value: "refrigerator" },
+            { id: 905, label: "Iron", value: "iron" }
         ]
     }
 ];
