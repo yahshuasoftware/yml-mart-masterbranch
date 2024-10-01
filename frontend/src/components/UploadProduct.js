@@ -26,7 +26,7 @@ const UploadProduct = ({
     price: "",
     sellingPrice: "",
     quantity: "",
-    soldBy: '',
+    soldBy: 'YML Mart',
     features: '',
   });
 
@@ -282,7 +282,7 @@ const uploadImageToS3 = async (file) => {
 ></textarea>
 
 {/* soldby Section */}
-<label htmlFor='soldBy' className='mt-3 block'>Sold By:</label>
+<label htmlFor='soldB' className='mt-3 block'>Sold By:</label>
 <textarea
   id='soldBy'
   placeholder='Enter Sold by'
