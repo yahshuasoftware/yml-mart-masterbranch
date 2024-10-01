@@ -167,7 +167,7 @@ const Header = () => {
                     className="py-2 text-lg text-sky-600 hover:bg-sky-600 hover:text-white transition-colors duration-300"
                     onClick={toggleMobileMenu}
                   >
-                    B Profile
+                    Account
                   </Link>
                   <Link
                     to="/refer"
@@ -211,7 +211,7 @@ const Header = () => {
                 to="/businessprofile"
                 className="px-3 py-1 text-sm rounded border border-sky-600 text-sky-600 bg-transparent hover:bg-sky-600 hover:text-white transition-colors duration-300"
               >
-                B Profile
+                Account
               </Link>
               <Link
                 to="/refer"

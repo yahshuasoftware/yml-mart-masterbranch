@@ -24,7 +24,6 @@ const UploadProduct = ({
     quantity: "",
     soldBy: '',
     features: '',
-    productInfo: '',
   });
 
   const [subcategories, setSubcategories] = useState([]);
@@ -230,18 +229,6 @@ const UploadProduct = ({
             required
           />
 
-          {/* Quantity Input */}
-<label htmlFor='quantity' className='mt-3'>Quantity:</label>
-<input
-  type='Number'
-  id='quantity'
-  placeholder='Enter Quantity'
-  value={data.quantity}
-  name='quantity'
-  onChange={handleOnChange}
-  className='p-2 bg-slate-100 border rounded w-full'
-  required
-/>
 
 {/* Description Section */}
 <label htmlFor='description' className='mt-3 block'>Description:</label>
@@ -250,6 +237,18 @@ const UploadProduct = ({
   placeholder='Enter description'
   value={data.description}
   name='description'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
+
+{/* soldby Section */}
+<label htmlFor='description' className='mt-3 block'>Sold By:</label>
+<textarea
+  id='soldBy'
+  placeholder='Enter Sold by'
+  value={data.soldBy}
+  name='soldBY'
   onChange={handleOnChange}
   className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
   required

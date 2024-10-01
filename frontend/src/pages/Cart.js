@@ -632,21 +632,31 @@ const Cart = () => {
 
     {/* Cart Summary */}
     <div className="border-t pt-4">
-      <div className="flex justify-between mb-2 text-gray-700">
-        <span>Delivery Charges:</span>
-        <span>₹0</span>
-      </div>
-      <div className="flex justify-between mb-2 text-red-500">
-        <span>Discount:</span>
-        {displayINRCurrency(0)}
-      </div>
-      <div className="flex justify-between font-semibold text-gray-800">
-        <span>Total:</span>
-        <span className="text-md">
-          {displayINRCurrency(totalPrice)}
-        </span>
-      </div>
-    </div>
+  <div className="flex items-center mb-4 p-2 bg-yellow-100 text-yellow-700 border border-yellow-500 rounded">
+    <svg className="w-6 h-6 text-yellow-500 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 11c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6z"></path>
+    </svg>
+    <span className="text-sm font-medium">This delivery is available in Pune Location Only</span>
+  </div>
+
+  <div className="flex justify-between mb-2 text-gray-700">
+    <span>Delivery Charges:</span>
+    <span>₹0</span>
+  </div>
+  <div className="flex justify-between mb-2 text-red-500">
+    <span>Discount:</span>
+    {displayINRCurrency(0)}
+  </div>
+  <div className="flex justify-between font-semibold text-gray-800">
+    <span>Total:</span>
+    <span className="text-md">
+      {displayINRCurrency(totalPrice)}
+    </span>
+  </div>
+</div>
+
+
+
   </div>
 </div>
 

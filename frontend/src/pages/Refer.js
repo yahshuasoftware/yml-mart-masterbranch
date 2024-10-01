@@ -1,53 +1,56 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
-import { FaInstagram, FaWhatsapp, FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp, FaFacebook } from 'react-icons/fa';
 import SummaryApi from '../common';
-
-import Context from "../context/index"; 
+import Context from '../context/index';
 
 const ReferCard = () => {
-  const { authToken } = useContext(Context); 
-
+  const { authToken } = useContext(Context);
   const [userData, setUserData] = useState(null);
-
-  function sendmessege() {
-    const message = `Check this out! Here is an offer for you. Just click on the link and enter the referral code ${userData?.refferal?.refferalcode} to get extra 5% off on every order: https://ymlmart.com`;
-    navigator.clipboard.writeText(message).then(() => {
-    }).catch(err => {
-      console.error('Failed to copy message: ', err);
-    });
-  }
 
   useEffect(() => {
     const fetchUserData = async (authToken) => {
       try {
         const response = await fetch(SummaryApi.current_user.url, {
-          method: "GET",
-          credentials: "include",
+          method: 'GET',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`,
+            Authorization: `Bearer ${authToken}`,
           },
         });
 
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
 
         const data = await response.json();
         setUserData(data.data);
       } catch (error) {
-        console.error("Error:", error);
+        console.error('Error:', error);
       }
     };
 
     fetchUserData(authToken);
-  }, []);
+  }, [authToken]);
 
   const copyToClipboard = () => {
     if (userData && userData.refferal && userData.refferal.refferalcode) {
       navigator.clipboard.writeText(userData.refferal.refferalcode);
-      toast.success("Referral code copied to clipboard!");
+      toast.success('Referral code copied to clipboard!');
+    }
+  };
+
+  const generateMessage = (platform) => {
+    const referralCode = userData?.refferal?.refferalcode;
+    const baseMessage = `Check out YML Mart for amazing deals! Use my referral code ${referralCode} to get an extra 5% off on every order. Visit: https://ymlmart.com`;
+
+    if (platform === 'whatsapp') {
+      return `https://wa.me/?text=${encodeURIComponent(baseMessage)}`;
+    } else if (platform === 'instagram') {
+      return `https://www.instagram.com?text=${encodeURIComponent(baseMessage)}`;
+    } else if (platform === 'facebook') {
+      return `https://www.facebook.com/sharer/sharer.php?u=https://ymlmart.com&quote=${encodeURIComponent(baseMessage)}`;
     }
   };
 
@@ -69,12 +72,11 @@ const ReferCard = () => {
         {/* Referral Code Section */}
         <div className="mb-4">
           <div className="text-2xl font-bold text-black">₹00</div>
-          <div className="text-sm text-gray-600"></div>
         </div>
 
         <div className="flex items-center justify-between mb-4 bg-gray-100 p-3 rounded-lg shadow-inner w-full">
           <span className="text-gray-800 font-mono text-sm overflow-hidden text-ellipsis whitespace-nowrap">
-            {userData?.refferal?.refferalcode || "No referral code available"}
+            {userData?.refferal?.refferalcode || 'No referral code available'}
           </span>
           <button
             onClick={copyToClipboard}
@@ -97,29 +99,26 @@ const ReferCard = () => {
           <p className="text-md font-bold text-gray-900 mb-2">Share with friends via</p>
           <div className="flex justify-center space-x-4">
             <a
-              href="https://wa.me/?text=Check%20this%20out!"
+              href={generateMessage('whatsapp')}
               target="_blank"
               rel="noopener noreferrer"
               className="text-green-500"
-              onClick={sendmessege}
             >
               <FaWhatsapp size={30} />
             </a>
             <a
-              href="https://www.instagram.com"
+              href={generateMessage('instagram')}
               target="_blank"
               rel="noopener noreferrer"
               className="text-pink-500"
-              onClick={sendmessege}
             >
               <FaInstagram size={30} />
             </a>
             <a
-              href="https://www.facebook.com"
+              href={generateMessage('facebook')}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-500"
-              onClick={sendmessege}
             >
               <FaFacebook size={30} />
             </a>

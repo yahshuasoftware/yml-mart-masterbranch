@@ -269,7 +269,7 @@ const BusinessProfile = () => {
           className="px-4 py-2 bg-sky-600 z-30 text-white rounded-md hover:bg-sky-700"
           onClick={handleProfileClick}
         >
-          {showProfileForm ? 'Close Profile' : 'My Profile'}
+          {showProfileForm ? 'Close your KYC' : 'Upload your KYC'}
         </button>
       </div>
 
