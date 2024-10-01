@@ -9,7 +9,9 @@ const productSchema = mongoose.Schema({
     description: String,
     price: Number,
     sellingPrice: Number,
-    quantity: Number
+    quantity: Number,
+    soldBy:String,
+    features:String
 }, {
     timestamps: true
 });

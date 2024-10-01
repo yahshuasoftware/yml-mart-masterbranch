@@ -26,7 +26,9 @@ const fs = require('fs');
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
 app.use(cors({
-    origin: 'http://18.206.206.207:3000',
+    // origin: 'http://18.206.206.207:3000',
+    origin: 'http://localhost:3000',
+
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
@@ -48,6 +50,8 @@ connectDB().then(() => {
         console.log("Connected to DB");
         console.log(`Server is running on port ${PORT}`);
     });
+
+    
     cron.schedule('0 0 1 * *', async () => {
         try {
             await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });

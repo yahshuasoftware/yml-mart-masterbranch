@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { CgClose } from "react-icons/cg";
 import productCategory from '../helpers/productCategory'; // Include subcategories in this import
 import { FaCloudUploadAlt } from "react-icons/fa";
@@ -6,15 +6,15 @@ import uploadImage from '../helpers/uploadImage';
 import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
-import Context from "../context/index";
 import AWS from 'aws-sdk';
+import Context from "../context/index";
+
 
 
 
 const UploadProduct = ({
     onClose,
     fetchData,
-    authToken
 }) => {
   const [data, setData] = useState({
     productName: "",
@@ -29,6 +29,8 @@ const UploadProduct = ({
     soldBy: '',
     features: '',
   });
+  const { authToken } = useContext(Context); // Get the authToken from Context
+  
 
   const [subcategories, setSubcategories] = useState([]);
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
