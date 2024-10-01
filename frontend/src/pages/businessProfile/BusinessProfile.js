@@ -203,22 +203,24 @@ return (
       <div className="flex items-center">
         <div className="w-16 h-16 rounded-full flex justify-center items-center text-white text-xl">
           {userData?.profilePic ? (
-            <img src={`${userData?.profilePic}`} alt="Profile" className="w-24 h-24 rounded-full mb-2" />
-          ) : (
-            <FaRegCircleUser size={70} className="text-gray-500" />
-          )}
+                  <img
+                    src={`${userData?.profilePic}`}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full mb-2"
+                  />
+                ) : (
+                  <FaRegCircleUser size={70} className="text-gray-500" />
+                )}
+          </div>
+          <div className="ml-4 text-2xl font-bold">{userData && <div>Welcome, {userData.data.name}!</div>}</div>
         </div>
-        <div className="ml-4 text-2xl font-bold">
-          {userData && <div>Welcome, {userData.data.name}!</div>}
-        </div>
+        <button
+          className="px-4 py-2 bg-sky-600 z-30 text-white rounded-md hover:bg-sky-700"
+          onClick={handleProfileClick}
+        >
+          {showProfileForm ? 'Close Profile' : 'My Profile'}
+        </button>
       </div>
-      <button
-        className="px-4 py-2 bg-sky-600 z-30 text-white rounded-md hover:bg-sky-700"
-        onClick={handleProfileClick}
-      >
-        {showProfileForm ? 'Close Profile' : 'My Profile'}
-      </button>
-    </div>
 
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div className="bg-gray-100 p-4 rounded-md shadow-md">
