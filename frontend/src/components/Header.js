@@ -190,7 +190,7 @@ const Header = () => {
                   className="py-2 text-lg text-white bg-red-600 hover:bg-red-700 transition-colors duration-300"
                   onClick={toggleMobileMenu}
                 >
-                   please Login 
+                  Login 
                 </Link>
               )}
               
@@ -294,7 +294,7 @@ const Header = () => {
                 to="/login"
                 className="px-4 py-2 rounded-full text-sm text-white bg-red-600 hover:bg-red-700 transition-colors duration-200"
               >
-                please Login
+                Login
               </Link>
             )}
           </div>
