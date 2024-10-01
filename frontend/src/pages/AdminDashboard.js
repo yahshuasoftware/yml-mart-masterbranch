@@ -93,9 +93,7 @@ const Dashboard = () => {
                     <p>₹{totalRevenue.toFixed(2)}</p>
                 </div>
             </div>
-            <button                     
-            onClick={handleReset}
-            className='w-40 h-10  bg-sky-700 text-white rounded-md'> Reset the Total</button>
+   
         </div>
     );
 };

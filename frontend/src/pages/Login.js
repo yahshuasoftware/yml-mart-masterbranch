@@ -24,7 +24,6 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    // alert(process.env.REACT_APP_BACKEND_DOMAIN_URL)
     e.preventDefault();
     try {
       const response = await fetch(SummaryApi.signIn.url, {
@@ -41,14 +40,14 @@ const Login = () => {
         
         if (result.success) {
             toast.success(result.message); // Show success message
-            
+             
             const token = result.data;
             // alert(token) // Access the token from result.data
             
             // Check if the token is actually retrieved
             if (token) {
                 saveAuthToken(token); // Save the token to context and localStorage
-                await fetchUserDetails(); // Fetch user details
+                await fetchUserDetails(token); // Fetch user details
                 navigate('/'); // Redirect to home page
             } else {
                 toast.error('Token is undefined.'); // Error if token is not found

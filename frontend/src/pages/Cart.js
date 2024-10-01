@@ -119,6 +119,7 @@ const Cart = () => {
       const responseData = await response.json();
       if (responseData.success) {
         setData(responseData.data);
+        console.log(data)
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -206,26 +207,23 @@ const Cart = () => {
   };
 
   const deleteCartProduct = async (id) => {
-    try {
-      const response = await fetch(SummaryApi.deleteCartProduct.url, {
-        method: SummaryApi.deleteCartProduct.method,
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({ _id: id }),
-      });
-  
-      const responseData = await response.json();
-      if (responseData.success) {
-        await fetchData(authToken);  // Refresh the cart data
-        updateCartProductCount(authToken);
-      } else {
-        alert(responseData.message);
-      }
-    } catch (error) {
-      console.error("Error deleting cart product:", error);
+    const response = await fetch(SummaryApi.deleteCartProduct.url, {
+      method: SummaryApi.deleteCartProduct.method,
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+        'Authorization': `Bearer ${authToken}`, 
+
+      },
+      body: JSON.stringify({
+        _id: id,
+      }),
+    });
+
+    const responseData = await response.json();
+    if (responseData.success) {
+      fetchData(authToken);
+      // updateCartProductCount(authToken);
     }
   };
   
