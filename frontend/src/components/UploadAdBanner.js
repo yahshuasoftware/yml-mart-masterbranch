@@ -3,14 +3,20 @@
 import React, { useState } from 'react';
 import uploadImage from '../helpers/uploadImage';
 import SummaryApi from '../common';
+import { useDispatch, useSelector } from "react-redux";
+import { useUser } from '../context/userContext'; // Import UserContext to get user details
+
+
 
 
 const UploadBannerForm = ({authToken }) => { // Assuming userId is passed as a prop
     const [image, setImage] = useState(null);
-
+    const { user } = useUser(); // Get user details from context
     const handleImageChange = (e) => {
         setImage(e.target.files[0]);
     };
+
+    
     
 const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +29,6 @@ const handleSubmit = async (e) => {
         const uploadedImage = await uploadImage(image);
 
         // Assuming you have access to the user's ID from context or props  // Replace with actual user ID
-
         const response = await fetch(SummaryApi.uploadAdBanner.url,{
             method : SummaryApi.uploadAdBanner.method,
             credentials : 'include',
@@ -31,7 +36,10 @@ const handleSubmit = async (e) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authToken}`, 
             },
-            body: JSON.stringify({imageUrl: uploadedImage.secure_url }),
+            body: JSON.stringify({
+                userId : user._id,
+                imageUrl: uploadedImage.secure_url
+             }),
         });
 
         if (response.ok) {

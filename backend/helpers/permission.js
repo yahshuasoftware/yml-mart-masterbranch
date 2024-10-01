@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 const uploadProductPermission = async (userId) => {
     try {
         const user = await userModel.findById(userId);
-
+        
         if (!user) {
             // console.log(`User not found with ID: ${userId}`);
             return false; // User not found, return false
