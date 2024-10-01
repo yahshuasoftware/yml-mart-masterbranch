@@ -11,8 +11,9 @@ const UploadBannerForm = () => {
   const { user } = useUser(); // Get user details from context
   const [image, setImage] = useState(null);
   const { authToken } = useContext(Context); 
- // Get the authToken from Context
 
+ // Get the authToken from Context
+alert(user)
 
   const handleImageChange = (e) => {
     
@@ -26,7 +27,7 @@ const UploadBannerForm = () => {
       alert('Please select an image');
       return;
     }
-    
+    console.log(user)
     if (!user || (user.role !== ROLE.ADMIN && user.role !== ROLE.SUPER_ADMIN)) {
       return <p>You do not have permission to upload banners.</p>;
     }
@@ -35,14 +36,17 @@ const UploadBannerForm = () => {
       const uploadedImage = await uploadImage(image);
       
 
-      const response = await fetch(SummaryApi.uploadAdBanner.url, {
-        method: SummaryApi.uploadAdBanner.method,
+      const response = await fetch(SummaryApi.uploadBanner.url, {
+        method: SummaryApi.uploadBanner.method,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authToken}`,
         },
-        body: JSON.stringify({ imageUrl: uploadedImage.secure_url }),
+        body: JSON.stringify({
+          userId : user._id,
+          imageUrl: uploadedImage.secure_url
+       }),
       });
 
       if (response.ok) {

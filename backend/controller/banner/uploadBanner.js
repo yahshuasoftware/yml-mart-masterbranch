@@ -8,6 +8,7 @@ const uploadBanner = async (req, res) => {
 
     try {
         const hasPermission = await uploadProductPermission(userId);
+        console.log(hasPermission)
 
         if (!hasPermission) {
             return res.status(403).json({ message: 'You do not have permission to upload a banner or user not found.' });
