@@ -1,9 +1,8 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState } from 'react';
 import { CgClose } from "react-icons/cg";
-import productCategory from '../helpers/productCategory'; // Update this to include subcategories
+import productCategory from '../helpers/productCategory'; // Include subcategories in this import
 import { FaCloudUploadAlt } from "react-icons/fa";
 import uploadImage from '../helpers/uploadImage';
-import DisplayImage from './DisplayImage';
 import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
@@ -15,8 +14,7 @@ import AWS from 'aws-sdk';
 const UploadProduct = ({
     onClose,
     fetchData,
-    
-    
+    authToken
 }) => {
   const [data, setData] = useState({
     productName: "",
@@ -27,11 +25,12 @@ const UploadProduct = ({
     description: "",
     price: "",
     sellingPrice: "",
-    quantity: ""
+    quantity: "",
+    soldBy: '',
+    features: '',
+    productInfo: '',
   });
-  const { authToken } = useContext(Context); // Get the authToken from Context
 
-  
   const [subcategories, setSubcategories] = useState([]);
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
@@ -129,6 +128,11 @@ const uploadImageToS3 = async (file) => {
     } else {
       toast.error(responseData?.message);
     }
+  };
+
+  // Function to split text into bullet points (each line is treated as a new bullet point)
+  const handleBulletPoints = (text) => {
+    return text.split('\n').map((item, index) => <li key={index}>{item}</li>);
   };
 
   return (
@@ -265,18 +269,74 @@ const uploadImageToS3 = async (file) => {
             required
           />
 
-          <label htmlFor='description' className='mt-3'>Description :</label>
-          <textarea
-            className='h-28 bg-slate-100 border resize-none p-1'
-            placeholder='enter product description'
-            rows={3}
-            onChange={handleOnChange}
-            name='description'
-            value={data.description}
-          ></textarea>
+          {/* Quantity Input */}
+<label htmlFor='quantity' className='mt-3'>Quantity:</label>
+<input
+  type='Number'
+  id='quantity'
+  placeholder='Enter Quantity'
+  value={data.quantity}
+  name='quantity'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full'
+  required
+/>
 
-          <button className='px-3 py-2 bg-sky-600 text-white mb-10 hover:bg-sky-700'>Upload Product</button>
+{/* Description Section */}
+<label htmlFor='description' className='mt-3 block'>Description:</label>
+<textarea
+  id='description'
+  placeholder='Enter description'
+  value={data.description}
+  name='description'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
+
+{/* Features Section */}
+<label htmlFor='features' className='mt-3 block'>Features:</label>
+<textarea
+  id='features'
+  placeholder='Enter features (use new line for each bullet point)'
+  value={data.features}
+  name='features'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
+
+{/* Product Information Section */}
+<label htmlFor='productInfo' className='mt-3 block'>Product Information:</label>
+<textarea
+  id='productInfo'
+  placeholder='Enter product information (use new line for each bullet point)'
+  value={data.productInfo}
+  name='productInfo'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
+
+
+          <button className='bg-sky-600 hover:bg-sky-800 text-white p-2 w-full rounded my-3' type='submit'>
+            Upload Product
+          </button>
         </form>
+
+        {openFullScreenImage && (
+          <div className='fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 z-50 flex items-center justify-center'>
+            <div className='relative'>
+              <img src={fullScreenImage} alt='Full Image' className='max-w-full max-h-screen object-contain' />
+              <button
+                className='absolute top-2 right-2 text-white text-2xl'
+                onClick={() => setOpenFullScreenImage(false)}
+              >
+                <CgClose />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

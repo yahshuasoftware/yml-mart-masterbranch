@@ -114,7 +114,6 @@ const Profile = () => {
   const fetchKycStatus = async (authToken, userId) => {
     // Replace the :userId in the URL with the actual userId
     const urlWithUserId = SummaryApi.getmykyc.url.replace(':userId', userId);
-  alert(urlWithUserId)
     try {
       const response = await fetch(urlWithUserId, {
         method: SummaryApi.getmykyc.method,
@@ -130,6 +129,7 @@ const Profile = () => {
       }
   
       const data = await response.json();
+      console.log(data)
       setKycDetails(data.data)
     } catch (error) {
       console.error("Error:", error);
@@ -420,26 +420,7 @@ const Profile = () => {
                               </p>
                             </div>
         
-                            {/* Invoice Buttons */}
-                            {order.status === "paid" && (
-                              <div className="mt-4 flex space-x-2">
-                                <a
-                                  href={backendDomin+order.invoicePath}
-                                  className="text-sm text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-500 hover:text-white"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  View Invoice
-                                </a>
-                                <a
-                                  href={backendDomin+order.invoicePath}
-                                  className="text-sm text-green-500 border border-green-500 px-3 py-1 rounded hover:bg-green-500 hover:text-white"
-                                  download
-                                >
-                                  Download Invoice
-                                </a>
-                              </div>
-                            )}
+                           
                           </div>
                         </div>
                       ))}

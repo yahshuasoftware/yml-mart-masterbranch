@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '.env.local' });
+// require('dotenv').config({ path: '.env.local' });
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -9,7 +9,7 @@ const app = express();
 const path = require('path');
 const cron = require('node-cron'); // Importing node-cron
 const User = require('./models/userModel');
-
+require('dotenv').config();
 const fs = require('fs');
 // Ensure invoices directory exists
 // const invoicesDir = path.join(__dirname, 'invoices');
@@ -26,18 +26,23 @@ const fs = require('fs');
 
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
-
 app.use(cors({
-    // origin: 'http://3.85.148.197',
-    origin: 'http://localhost:3000',
-    credentials: true,
+    //origin: 'http://3.85.148.197',
+     origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // Allow cookies and other credentials
 }));
-// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+
 app.use("/api", router); // Mounting the router correctly on the '/api' pat
 
+app.use((req, res, next) => {
+    console.log(`Request received: ${req.method} ${req.url}`);
+    next();
+});
 
 const PORT = process.env.PORT || 8080;
 connectDB().then(() => {
@@ -47,7 +52,7 @@ connectDB().then(() => {
     });
 
 
-    cron.schedule('* * * * *', async () => {
+    cron.schedule('0 0 1 * *', async () => {
         try {
             await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });
             console.log('Total purchase values reset to 0 for all users.');
@@ -55,4 +60,5 @@ connectDB().then(() => {
             console.error('Error resetting total purchases:', error);
         }
     });
+    
 });

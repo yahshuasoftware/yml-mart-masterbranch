@@ -16,8 +16,6 @@ const reset = require("../controller/user/reset")
 // const getKyc =  require("../controller/user/getkyc")
 
 const getkyc = require('../controller/user/getkyc');
-
-
 router.get('/user-kyc/:userId',getkyc.getkyc);
 
 router.put('/upload-kyc/:userId', updateKycController);

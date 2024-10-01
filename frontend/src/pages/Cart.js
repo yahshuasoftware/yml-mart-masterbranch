@@ -122,6 +122,7 @@ const Cart = () => {
       const responseData = await response.json();
       if (responseData.success) {
         setData(responseData.data);
+        console.log(data)
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -153,6 +154,7 @@ const Cart = () => {
       setFinalAmount(total);
     }
   }, [data, loading]);
+  
   const totalQty = data
     .filter(product => product.productId.quantity > 0 && product.quantity > 0)
     .reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
@@ -224,7 +226,7 @@ const Cart = () => {
     const responseData = await response.json();
     if (responseData.success) {
       fetchData(authToken);
-      updateCartProductCount(authToken);
+      // updateCartProductCount(authToken);
     }
   };
 
