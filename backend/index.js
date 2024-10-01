@@ -49,6 +49,8 @@ connectDB().then(() => {
         console.log("Connected to DB");
         console.log(`Server is running on port ${PORT}`);
     });
+
+    
     cron.schedule('0 0 1 * *', async () => {
         try {
             await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });
