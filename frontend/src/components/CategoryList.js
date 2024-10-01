@@ -19,6 +19,7 @@ const CategoryList = () => {
             const response = await fetch(SummaryApi.categoryProduct.url);
             const dataResponse = await response.json();
             setCategoryProduct(Array.isArray(dataResponse.data) ? dataResponse.data : []);
+            console.log(Array.isArray(dataResponse.data) ? dataResponse.data : [])
         } catch (error) {
             console.error("Failed to fetch category products:", error);
             setCategoryProduct([]); // Set an empty array on error to prevent map errors
