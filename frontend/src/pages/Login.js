@@ -27,7 +27,6 @@ const Login = () => {
     
     e.preventDefault();
     try {
-      alert(SummaryApi.signIn.url)
       const response = await fetch(SummaryApi.signIn.url, {
         
         method: SummaryApi.signIn.method,
@@ -44,7 +43,6 @@ const Login = () => {
             toast.success(result.message); // Show success message
              
             const token = result.data;
-            // alert(token) // Access the token from result.data
             
             // Check if the token is actually retrieved
             if (token) {
@@ -55,7 +53,7 @@ const Login = () => {
                 toast.error('Token is undefined.'); // Error if token is not found
             }
         } else {
-            toast.error(result.message); // Show error message from the API
+            toast.error(result.message ,"hiiiiii"); // Show error message from the API
         }
     } catch (error) {
         console.error('An error occurred:', error); // Log any errors
