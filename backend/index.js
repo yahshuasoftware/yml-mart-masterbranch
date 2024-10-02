@@ -26,7 +26,7 @@ const fs = require('fs');
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
 app.use(cors({
-    origin: 'http://18.234.168.68',
+    origin: 'http://34.234.193.222',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
