@@ -25,19 +25,11 @@ const fs = require('fs');
 
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
-const allowedOrigins = ['http://18.234.168.68:3000', 'http://ymlmart.com','http://18.234.168.68'];
-
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: 'http://18.234.168.68',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
+    credentials: true, // Allow cookies and other credentials
 }));
 app.use(express.json());
 app.use(cookieParser());
