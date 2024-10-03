@@ -68,18 +68,27 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 const handleUploadProduct = async (e) => {
-    const file = e.target.files[0];
-    console.log(file)
+  const files = e.target.files; // Get all selected files
+  const uploadedImages = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    console.log(file);
     try {
-        const url = await uploadImageToS3(file);
-        setData((prev) => ({
-            ...prev,
-            productImage: [...prev.productImage, url]
-        }));
+      const url = await uploadImageToS3(file);
+      uploadedImages.push(url); // Store the uploaded image URL
     } catch (error) {
-        console.error('Error uploading image:', error);
+      console.error('Error uploading image:', error);
     }
+  }
+
+  // Update the state with the uploaded images
+  setData((prev) => ({
+    ...prev,
+    productImage: [...prev.productImage, ...uploadedImages], // Add new images to existing ones
+  }));
 };
+
 
 const uploadImageToS3 = async (file) => {
     const params = {
@@ -203,7 +212,7 @@ const uploadImageToS3 = async (file) => {
               <div className='text-slate-500 flex justify-center items-center flex-col gap-2'>
                 <span className='text-4xl'><FaCloudUploadAlt /></span>
                 <p className='text-sm'>Upload Product Image</p>
-                <input type='file' id='uploadImageInput' className='' onChange={handleUploadProduct} />
+                <input type='file' id='uploadImageInput' multiple onChange={handleUploadProduct} />
               </div>
             </div>
           </label>

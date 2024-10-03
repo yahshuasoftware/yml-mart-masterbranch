@@ -103,10 +103,9 @@ const productCategory = [
         label: "Gifts & Hampers", 
         value: "gifts & hampers", 
         subcategories: [
-            { id: 901, label: "Washing Machine", value: "washing machine" },
-            { id: 902, label: "Television", value: "television" },
-            { id: 903, label: "Refrigerator", value: "refrigerator" },
-            { id: 905, label: "Iron", value: "iron" }
+            { id: 901, label: "Tea Gifts", value: "Tea Gifts" },
+            { id: 902, label: "Chocolate Gifts", value: "Chocolate Gifts" },
+            { id: 903, label: "Gourmet Gifts", value: "Gourmet Gifts" },
         ]
     }
 ];
