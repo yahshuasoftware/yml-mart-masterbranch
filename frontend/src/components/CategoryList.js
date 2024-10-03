@@ -164,6 +164,7 @@ const CategoryList = () => {
                 >
                     {getSubcategories(hoveredCategory).length > 0 ? (
                         getSubcategories(hoveredCategory).map((subcategory) => (
+                           
                             <Link
                                 key={subcategory.id}
                                 to={"/product-category?" + "subcategory=" + subcategory?.value}

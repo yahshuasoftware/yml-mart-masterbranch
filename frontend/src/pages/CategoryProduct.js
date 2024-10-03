@@ -5,7 +5,6 @@ import VerticalCard from '../components/VerticalCard';
 import SummaryApi from '../common';
 import { FaTimes, FaBars } from "react-icons/fa";
 
-
 const CategoryProduct = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -17,7 +16,6 @@ const CategoryProduct = () => {
     // Toggle Sidebar function
     const toggleSidebar = () => {
         setIsSidebarVisible(!isSidebarVisible);
-        
     };
 
     const urlSearch = new URLSearchParams(location.search);
@@ -60,28 +58,6 @@ const CategoryProduct = () => {
         setLoading(false);
     };
 
-    // Category selection handler
-    const handleSelectCategory = (e) => {
-        const { value, checked } = e.target;
-        setSelectCategory((prev) => ({
-            ...prev,
-            [value]: checked
-        }));
-        setIsSidebarVisible(false)
-        
-    };
-
-    // Subcategory selection handler
-    const handleSelectSubcategory = (e) => {
-        const { value, checked } = e.target;
-        setSelectSubcategory((prev) => ({
-            ...prev,
-            [value]: checked
-        }));
-        setIsSidebarVisible(false)
-
-    };
-
     // Update filterCategoryList and URL based on selected categories and subcategories
     useEffect(() => {
         const arrayOfCategory = Object.keys(selectCategory).filter(key => selectCategory[key]);
@@ -91,21 +67,47 @@ const CategoryProduct = () => {
         setFilterSubcategoryList(arrayOfSubcategory);
 
         const urlFormat = [...arrayOfCategory.map(el => `category=${el}`), ...arrayOfSubcategory.map(el => `subcategory=${el}`)];
-        navigate("/product-category?" + urlFormat.join("&"));
-    }, [selectCategory, selectSubcategory, navigate]);
+
+        // Update the URL if the filter changes
+        if (location.search !== urlFormat.join("&")) {
+            navigate("/product-category?" + urlFormat.join("&"));
+        }
+    }, [selectCategory, selectSubcategory, navigate, location.search]);
 
     // Fetch data when filterCategoryList, filterSubcategoryList, or sortBy changes
     useEffect(() => {
-        fetchData();
+        if (filterCategoryList.length > 0 || filterSubcategoryList.length > 0) {
+            fetchData();
+        }
     }, [filterCategoryList, filterSubcategoryList, sortBy]);
+
+    // Category selection handler
+    const handleSelectCategory = (e) => {
+        const { value, checked } = e.target;
+        setSelectCategory((prev) => ({
+            ...prev,
+            [value]: checked
+        }));
+        // Fetch data immediately after checkbox change
+        fetchData();
+    };
+
+    // Subcategory selection handler
+    const handleSelectSubcategory = (e) => {
+        const { value, checked } = e.target;
+        setSelectSubcategory((prev) => ({
+            ...prev,
+            [value]: checked
+        }));
+        // Fetch data immediately after checkbox change
+        fetchData();
+    };
 
     const handleOnChangeSortBy = (e) => {
         const { value } = e.target;
         setSortBy(value);
-
-        setIsSidebarVisible(false)
-
-
+        // Fetch data immediately after sort change
+        fetchData();
     };
 
     return (

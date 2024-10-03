@@ -12,7 +12,7 @@ import homeDecorImage from '../assest/Images/Kitchen/11.jpeg';
 import groceriesImage from '../assest/Images/Groceries/4.png';
 
 const categoryImages = {
-    "personal ": personalCareImage,
+    "personal care": personalCareImage,
     "home care": homeCareImage,
     "medicines": medicinesImage,
     "fruits": fruitsImage,

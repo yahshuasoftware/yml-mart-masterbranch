@@ -8,8 +8,8 @@ const productCategory = [
             { id: 102, label: "Skin Care", value: "skin care" },
             { id: 103, label: "Oral Care", value: "oral care" },
             { id: 104, label: "Men's Grooming", value: "men's grooming" },
-            { id: 105, label: "Deo & Fragrances", value: "deo & fragrances" },
-            { id: 106, label: "Health & Wellness", value: "health & wellness" },
+            { id: 105, label: "Deo & Fragrances", value: "deo , fragrances" },
+            { id: 106, label: "Health & Wellness", value: "health, wellness" },
         ]
     },
     { 
@@ -17,12 +17,12 @@ const productCategory = [
         label: "Kitchenware", 
         value: "kitchenware", 
         subcategories: [
-            { id: 201, label: "Cookers & Steamers", value: "cookers & steamers" },
+            { id: 201, label: "Cookers & Steamers", value: "cookers, steamers" },
             { id: 202, label: "Kitchen Tools", value: "kitchen tools" },
-            { id: 203, label: "Pots & Pans", value: "pots & pans" },
-            { id: 204, label: "Containers & Storage", value: "containers & storage" },
-            { id: 205, label: "Flask, Bottle & Tiffin Boxes", value: "flask, bottle & tiffin boxes" },
-            { id: 206, label: "Cutting & Chopping", value: "Cutting & Chopping" },
+            { id: 203, label: "Pots & Pans", value: "pots, pans" },
+            { id: 204, label: "Containers & Storage", value: "containers, storage" },
+            { id: 205, label: "Flask, Bottle & Tiffin Boxes", value: "flask, bottle, tiffin boxes" },
+            { id: 206, label: "Cutting & Chopping", value: "cutting, chopping" },
         ]
     },
     { 
@@ -30,8 +30,8 @@ const productCategory = [
         label: "Toys & Games", 
         value: "toys & games", 
         subcategories: [
-            { id: 301, label: "Bikes, Trikes & Ride-Ons", value: "bikes, trikes & ride-ons" },
-            { id: 302, label: "Remote & App-Controlled Toys", value: "remote & app-controlled toys" },
+            { id: 301, label: "Bikes, Trikes & Ride-Ons", value: "bikes, trikes, ride-ons" },
+            { id: 302, label: "Remote & App-Controlled Toys", value: "remote, app-controlled toys" },
             { id: 302, label: "Toy Vehicles", value: "toy vehicles" },
             { id: 302, label: "Model Building Kits", value: "model building kits" },
         ]
@@ -42,7 +42,7 @@ const productCategory = [
         value: "beauty", 
         subcategories: [
             { id: 401, label: "Beauty Accessories", value: "beauty accessories" },
-            { id: 402, label: "Nails & Lips", value: "nails & lips" },
+            { id: 402, label: "Nails & Lips", value: "nails, lips" },
             { id: 403, label: "Eyes", value: "eyes" },
             { id: 404, label: "Face", value: "face" },
         ]
@@ -90,11 +90,10 @@ const productCategory = [
             { id: 801, label: "Biscuits & Drinks", value: "biscuits, drinks" },
             { id: 802, label: "Fruits & Vegetables", value: "fruits, vegetables" },
             { id: 803, label: "Cooking Essentials", value: "cooking essentials" },
-            { id: 804, label: "Dairy & Bakery", value: "dairy & bakery" },
+            { id: 804, label: "Dairy & Bakery", value: "dairy, bakery" },
             { id: 805, label: "Mom & Baby Care", value: "mom, baby care" },
             { id: 806, label: "Disposables", value: "disposables" },
-            { id: 807, label: "Dairy & Bakery", value: "dairy & bakery" },
-            { id: 808, label: "Dairy & Bakery", value: "dairy & bakery" },
+
 
         ]
     },
@@ -103,9 +102,9 @@ const productCategory = [
         label: "Gifts & Hampers", 
         value: "gifts & hampers", 
         subcategories: [
-            { id: 901, label: "Tea Gifts", value: "Tea Gifts" },
-            { id: 902, label: "Chocolate Gifts", value: "Chocolate Gifts" },
-            { id: 903, label: "Gourmet Gifts", value: "Gourmet Gifts" },
+            { id: 901, label: "Tea Gifts", value: "tea gifts" },
+            { id: 902, label: "Chocolate Gifts", value: "chocolate gifts" },
+            { id: 903, label: "Gourmet Gifts", value: "gourmet gifts" },
         ]
     }
 ];
