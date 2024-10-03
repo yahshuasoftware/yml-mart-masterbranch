@@ -126,7 +126,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                                 <div className="flex justify-center pt-1"> {/* Reduced spacing */}
                                     {product?.quantity > 0 ? (
                                         <button
-                                            className=" text-sm text-green border border-black px-4 py-1 rounded-full mt-1 transition-colors duration-300 hover:bg-white hover:text-sky-600"
+                                            className="text-xs text-white bg-green-600 border border-green-600 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600"
                                             onClick={(e) => handleAddToCart(e, product?._id)}
                                         >
                                             Add to Cart

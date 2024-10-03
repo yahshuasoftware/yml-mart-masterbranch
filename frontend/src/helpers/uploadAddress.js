@@ -4,8 +4,7 @@ import SummaryApi from '../common';
 import Context from '../context/index';
 
 
-export const uploadAddress = async (address, setUserData, authToken) => {
-alert()
+export const uploadAddress = async (address, setUserData,authToken) => {
   try {
     const response = await fetch(SummaryApi.uploadAddress.url, {  
       method: 'POST',

@@ -210,6 +210,8 @@ const ProductDetails = () => {
               <p>{data?.soldBy}</p>
               <p className='text-slate-600 font-medium my-1'>Features:</p>
               <p>{data?.features}</p>
+              <p className='text-slate-600 font-medium my-1'><strong>Product Details:</strong></p>
+              <p>{data?.productInfo}</p>
             </div>
           </div>
         )}
