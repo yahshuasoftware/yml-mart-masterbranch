@@ -34,7 +34,7 @@ const Cart = () => {
     name: "", 
     mobileNo: "",
     street: "",
-    city: "",
+    city: "Pune",
     state: "Maharashtra", // Pre-fill with "Maharashtra"
     zip: "",
   });
@@ -46,8 +46,10 @@ const Cart = () => {
       alert("Please enter an address in Maharashtra");
       return;
     }
+
+    
     //here user should be updated ex setUserData
-    await uploadAddress(address, setUserData);
+    await uploadAddress(address, setUserData,authToken);
     setShowAddressForm(false);
   };
 
@@ -95,7 +97,7 @@ const Cart = () => {
   const handleAddNewAddress = () => {
     setShowAddressForm((prevState) => !prevState);
     if (!showAddressForm) {
-      setAddress({ name: "", mobileNo: "", street: "", city: "", state: "Maharashtra", zip: "" });
+      setAddress({ name: "", mobileNo: "", street: "", city: "Pune", state: "Maharashtra", zip: "" });
     }
   };
 
@@ -413,9 +415,9 @@ const Cart = () => {
           name="street"
           placeholder="Street"
           value={address.street}
-          onChange={handleStreetChange}
           className="border p-2 rounded-lg w-full"
           required
+          onChange={handleStreetChange}
         />
         {streetSuggestions.length > 0 && (
           <ul className="border border-gray-300 p-2 rounded-lg bg-white">
@@ -444,6 +446,7 @@ const Cart = () => {
           onChange={handleCityChange}
           className="border p-2 rounded-lg w-full"
           required
+          readOnly
         />
         {citySuggestions.length > 0 && (
           <ul className="border border-gray-300 p-2 rounded-lg bg-white">

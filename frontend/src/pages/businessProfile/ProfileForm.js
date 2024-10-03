@@ -101,12 +101,14 @@ const handleUploadKYC = async (e) => {
 };
 
 const uploadImageToS3 = async (file) => {
+  console.log(file)
   const params = {
     Bucket: process.env.REACT_APP_BUCKET_NAME,
     Key: `kycDocuments/${Date.now()}_${file.name}`, // S3 folder structure
     Body: file,
     ContentType: file.type,
   };
+  console.log(params.Key)
 
   return new Promise((resolve, reject) => {
     s3.upload(params, (err, data) => {
@@ -154,34 +156,24 @@ const handleChange = (e) => {
     }
   
     // Upload files to AWS S3
-    let panCardUrl = null;
-    let aadharUrl = null;
-    let passbookUrl = null;
+
   
     try {
-      if (kycDetails.panCardFile) {
-        panCardUrl = await uploadImageToS3(kycDetails.panCardFile, 'kycDocs/panCards');
-      }
-      if (kycDetails.aadharFile) {
-        aadharUrl = await uploadImageToS3(kycDetails.aadharFile, 'kycDocs/aadharCards');
-      }
-      if (kycDetails.passbookFile) {
-        passbookUrl = await uploadImageToS3(kycDetails.passbookFile, 'kycDocs/passbooks');
-      }
-  
+
+
       // Send data to backend API
       const formData = {
         userId,
         panNumber: kycDetails.panNumber,
         panName: kycDetails.panName,
-        panCardFile: panCardUrl,
+        panCardFile: kycDetails.panCardFile,
         aadharNumber: kycDetails.aadharNumber,
         aadharName: kycDetails.aadharName,
-        aadharFile: aadharUrl,
+        aadharFile: kycDetails.aadharFile,
         accountHolderName: kycDetails.accountHolderName,
         accountNumber: kycDetails.accountNumber,
         ifscCode: kycDetails.ifscCode,
-        passbookFile: passbookUrl,
+        passbookFile: kycDetails.passbookFile,
       };
   
       const response = await fetch(SummaryApi.uploadKYC.url, {
