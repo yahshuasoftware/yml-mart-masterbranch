@@ -50,9 +50,10 @@ const Cart = () => {
     
     //here user should be updated ex setUserData
     await uploadAddress(address, setUserData,authToken);
+    
     setShowAddressForm(false);
   };
-
+  
   // Fetch street suggestions from Nominatim for Maharashtra
   const fetchStreetSuggestions = async (query) => {
     if (query.length < 3) return; // Avoid too many API calls for short queries
@@ -143,6 +144,7 @@ const Cart = () => {
     if (!loading && data.length > 0) {
       const validProducts = data.filter(
         (product) => 
+          product.productId && 
           product.productId.quantity > 0 &&
           product.productId.quantity >= product.quantity
       );
@@ -155,7 +157,7 @@ const Cart = () => {
   }, [data, loading]);
   
   const totalQty = data
-    .filter(product => product.productId.quantity > 0 && product.quantity > 0)
+    .filter(product => product.productId && product.productId.quantity > 0 && product.quantity > 0)
     .reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
 
   const increaseQty = async (id, qty, prdId) => {
@@ -547,10 +549,16 @@ const Cart = () => {
         <p className="text-gray-600">Loading...</p>
       ) : (
         data.map((product) => {
-          // Check if product is out of stock (based on available stock)
-          const isOutOfStock = product.productId.quantity === 0;
-          const isPartialStock = product.productId.quantity < product.quantity;
-          
+  // Ensure productId exists before accessing its properties
+  if (!product.productId) {
+    return null; // Skip rendering this product if productId is null
+  }
+
+
+  // Check if product is out of stock (based on available stock)
+  const isOutOfStock = product.productId.quantity === 0;
+  const isPartialStock = product.productId.quantity < product.quantity;
+        
           return (
             <div
               key={product._id}
@@ -575,7 +583,7 @@ const Cart = () => {
                       </div>
                     )}
         
-                    {isPartialStock &&  !isOutOfStock && (
+                    {isPartialStock && !isOutOfStock && (
                       <div className="absolute top-0 left-0 w-full bg-yellow-600 text-white text-center font-bold py-1">
                         Only {product.productId.quantity} left
                       </div>
@@ -629,6 +637,7 @@ const Cart = () => {
             </div>
           );
         })
+        
       )}
     </div>
 

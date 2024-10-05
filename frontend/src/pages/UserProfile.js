@@ -74,8 +74,14 @@ const Profile = () => {
       return;
     }
     await uploadAddress(address, setUserData, authToken);
+    console.log(userData)
     setShowAddressForm(false);
   };
+  useEffect(() => {
+    if (userData?.address?.length > 0) {
+      console.log("Updated addresses:", userData.address);
+    }
+  }, [userData]);
   
   // Fetch street suggestions from Nominatim for streets in Pune, Maharashtra
   const fetchStreetSuggestions = async (query) => {

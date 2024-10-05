@@ -8,7 +8,7 @@ import { useUser } from '../context/userContext'; // Import UserContext to get u
 
 
 
-
+    
 const UploadBannerForm = ({authToken }) => { // Assuming userId is passed as a prop
     const [image, setImage] = useState(null);
     const { user } = useUser(); // Get user details from context

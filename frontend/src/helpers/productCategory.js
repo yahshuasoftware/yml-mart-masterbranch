@@ -28,7 +28,7 @@ const productCategory = [
     { 
         id: 3, 
         label: "Toys & Games", 
-        value: "toys & games", 
+        value: "toys, games", 
         subcategories: [
             { id: 301, label: "Bikes, Trikes & Ride-Ons", value: "bikes, trikes, ride-ons" },
             { id: 302, label: "Remote & App-Controlled Toys", value: "remote, app-controlled toys" },
@@ -100,7 +100,7 @@ const productCategory = [
     { 
         id: 9, 
         label: "Gifts & Hampers", 
-        value: "gifts & hampers", 
+        value: "gifts, hampers", 
         subcategories: [
             { id: 901, label: "Tea Gifts", value: "tea gifts" },
             { id: 902, label: "Chocolate Gifts", value: "chocolate gifts" },

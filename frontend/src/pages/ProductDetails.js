@@ -180,40 +180,49 @@ const ProductDetails = () => {
           </div>
         ) : (
           <div className='flex flex-col gap-1'>
-            <p className='bg-sky-200 text-sky-600 px-2 rounded-full inline-block w-fit'>{data?.brandName}</p>
-            <h2 className='text-2xl lg:text-4xl font-medium'>{data?.productName}</h2>
-            <p className='capitalize text-slate-400'>{data?.category}</p>
-            <div className="text-blue-600 flex items-center gap-1">
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStarHalf />
-              {/* Display the persisted rating count */}
-              <span className="ml-2">({data.ratingsCount})</span>
-            </div>
-            <div className='flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1'>
-              <p className='text-green-600'>{displayINRCurrency(data.sellingPrice)}</p>
-              <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
-            </div>
-            {data?.quantity > 0 ? (
-              <button className='border-2 border-sky-600 rounded px-2 py-1 min-w-[80px] font-medium text-white bg-sky-600 hover:text-sky-600 hover:bg-white' onClick={(e) => handleAddToCart(e, data?._id)}>Add To Cart</button>
-            ) : (
-              <span className="text-red-600 text-2xl font-bold">
-                Out of Stock
-              </span>
-            )}
-            <div className='flex flex-col mt-4'>
-              <p className='text-slate-600 font-medium my-1'>Description:</p>
-              <p>{data?.description}</p>
-              <p className='text-slate-600 font-medium my-1'>Sold By:</p>
-              <p>{data?.soldBy}</p>
-              <p className='text-slate-600 font-medium my-1'>Features:</p>
-              <p>{data?.features}</p>
-              <p className='text-slate-600 font-medium my-1'><strong>Product Details:</strong></p>
-              <p>{data?.productInfo}</p>
-            </div>
-          </div>
+  <p className='bg-sky-200 text-sky-600 px-2 rounded-full inline-block w-fit'>{data?.brandName}</p>
+  <h2 className='text-2xl lg:text-4xl font-medium'>{data?.productName}</h2>
+  <p className='capitalize text-slate-400'>{data?.category}</p>
+  <div className="text-blue-600 flex items-center gap-1">
+    <FaStar />
+    <FaStar />
+    <FaStar />
+    <FaStar />
+    <FaStarHalf />
+    <span className="ml-2">({data.ratingsCount})</span>
+  </div>
+  <div className='flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1'>
+    <p className='text-green-600'>{displayINRCurrency(data.sellingPrice)}</p>
+    <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
+  </div>
+
+  {data?.quantity > 0 ? (
+    <button className='border-2 border-sky-600 rounded px-2 py-1 w-36 font-medium text-white bg-sky-600 hover:text-sky-600 hover:bg-white' onClick={(e) => handleAddToCart(e, data?._id)}>Add To Cart</button>
+  ) : (
+    <span className="text-red-600 text-2xl font-bold">Out of Stock</span>
+  )}
+
+  {/* Adding scrollable div for the details */}
+  <div className='flex flex-col mt-4 overflow-y-auto max-h-80'> 
+    <p className='text-slate-600 font-medium my-1'><strong>Description:</strong></p>
+    <p>{data?.description}</p>
+    <p className='text-slate-600 font-medium my-1'><strong>Sold By:</strong></p>
+    <p>{data?.soldBy}</p>
+    <p className='text-slate-600 font-medium my-1'><strong>Features:</strong></p>
+    <p>{data?.features}</p>
+    <p className='text-slate-600 font-medium my-1'><strong>Product Details:</strong></p>
+
+    {data?.productInfo?.split('\n').map((line, index) => {
+      const [key, value] = line.split('\t'); // Split by tab character '\t'
+      return (
+        <p key={index}>
+          <strong className='text-slate-600 font-medium my-1'>{key}</strong>: {value}
+        </p>
+      );
+    })}
+  </div>
+</div>
+
         )}
       </div>
   
