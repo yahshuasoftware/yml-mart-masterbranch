@@ -252,7 +252,6 @@ const uploadImageToS3 = async (file) => {
             name='price'
             onChange={handleOnChange}
             className='p-2 bg-slate-100 border rounded'
-            required
           />
 
           <label htmlFor='sellingPrice' className='mt-3'>Selling Price :</label>

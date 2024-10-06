@@ -276,7 +276,7 @@ const Cart = () => {
         }
 
         const options = {
-          key: process.env.REACT_APP_RAZARPAY_KEY,
+          key: process.env.REACT_APP_RAZORPAY_KEY,
           amount: responseData.order.amount,
           currency: responseData.order.currency,
           name: "YML Mart",
