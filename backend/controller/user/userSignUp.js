@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 // const profilePicPath = `/uploads/userProfilePics/${req.file.filename}`;
 // user.profilePic = profilePicPath;
 
-
+const abc = {};
 const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
@@ -35,6 +35,7 @@ const upload = multer({
 }).single('profilePic');  // Accept only one file and the field name is 'profilePic'
 
 async function userSignUpController(req, res) {
+
   try {
     // Handle file upload
     upload(req, res, async function (err) {
@@ -43,6 +44,8 @@ async function userSignUpController(req, res) {
       }
 
       const { email, password, name, refferredbycode,mobileNo } = req.body;
+      const defaultReferredByCode = refferredbycode ? refferredbycode : "VBX523";
+
 
       const user = await userModel.findOne({ email });
 
@@ -96,22 +99,30 @@ async function userSignUpController(req, res) {
         profilePic: profilePicPath,  // Save profile picture path in the user data
         refferal: {
           refferalcode: referralCode,
-          refferredbycode  // Include the referredbycode from the request
+          refferredbycode:defaultReferredByCode  // Include the referredbycode from the request
         }
       };
 
       const userData = new userModel(payload);
+      await userData.save();
+
 
       // Handle referral system
-      const referrer = await userModel.findOne({ 'refferal.refferalcode': refferredbycode });
-      if (referrer) {
-        // Add the new user's ID to the referrer's myrefferals array
-        referrer.refferal.myrefferals.push({
-          'userId': userData._id,
-          'name': userData.name
-        });
-        await referrer.save();
+      if (userData.refferal.refferredbycode) {
+        const referrer = await userModel.findOne({ 'refferal.refferalcode': userData.refferal.refferredbycode });
+        
+        if (referrer) {
+          // Add the new user's ID and name to the referrer's myrefferals array
+          referrer.refferal.myrefferals.push({
+            userId: userData._id,
+            name: userData.name
+          });
+      
+          // Save the updated referrer details
+          await referrer.save();
+        }
       }
+      
 
       const saveUser = await userData.save();
 
@@ -119,7 +130,7 @@ async function userSignUpController(req, res) {
         data: saveUser,
         success: true,
         error: false,
-        message: "User created successfully!"
+        message:"User created successfully"
       });
     });
 

@@ -7,10 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useUser } from '../context/userContext'; // Import UserContext to get user details
 
 
-
     
 const UploadBannerForm = ({authToken }) => { // Assuming userId is passed as a prop
     const [image, setImage] = useState(null);
+
     const { user } = useUser(); // Get user details from context
     const handleImageChange = (e) => {
         setImage(e.target.files[0]);
@@ -26,6 +26,7 @@ const handleSubmit = async (e) => {
     }
 
     try {
+
         const uploadedImage = await uploadImage(image);
 
         // Assuming you have access to the user's ID from context or props  // Replace with actual user ID
