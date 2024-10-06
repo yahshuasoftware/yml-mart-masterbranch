@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import ChangeDeliveryStatus from '../components/ChangeDeliveryStatus';
 import * as XLSX from 'xlsx'; // Import xlsx for Excel manipulation
+import Loader from '../components/Loader';
 
 const OrderList = () => {
     const [orderData, setOrderData] = useState([]);
     const [openDropdown, setOpenDropdown] = useState(false);
+    const [loading, setLoading] = useState(true); // State for loading
+
     const [updateDeliveryDetails, setUpdateDeliveryDetails] = useState({
         _id: "",
         deliveryStatus: ""
@@ -39,7 +42,10 @@ const OrderList = () => {
     };
 
     const fetchAllOrders = async () => {
+        setLoading(true); // Set loading to true when fetching starts
+
         try {
+            
             const response = await fetch(SummaryApi.getOrders.url);
 
             if (!response.ok) {
@@ -50,6 +56,9 @@ const OrderList = () => {
             setOrderData(data.orders);
         } catch (error) {
             console.error('Error fetching orders:', error);
+        }finally{
+            setLoading(false); // Set loading to false when fetching ends
+
         }
     };
 
@@ -73,7 +82,11 @@ const OrderList = () => {
                     Get Excel Sheet
                 </button>
             </div>
-
+            {loading ? ( // Conditionally render Loader when loading is true
+                <div className="flex justify-center items-center w-full h-64">
+                    <Loader /> {/* Display Loader */}
+                </div>
+            ) : (
             <table className="min-w-full bg-white">
                 <thead>
                     <tr className="bg-black text-white">
@@ -144,6 +157,7 @@ const OrderList = () => {
                     </tbody>
                 ))}
             </table>
+            )}
 
             {openDropdown && (
                 <ChangeDeliveryStatus
