@@ -13,7 +13,6 @@ const UploadBannerForm = () => {
   const { authToken } = useContext(Context); 
 
  // Get the authToken from Context
-alert(user)
 
   const handleImageChange = (e) => {
     

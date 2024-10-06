@@ -8,6 +8,7 @@ import { useUser } from '../context/userContext'; // Import the useUser hook
 import { useCart } from '../context/CartContext';
 import { uploadAddress } from "../helpers/uploadAddress";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 
 
@@ -546,8 +547,7 @@ const Cart = () => {
 
     <div className="mb-4">
       {loading ? (
-        <p className="text-gray-600">Loading...</p>
-      ) : (
+<Loader></Loader>      ) : (
         data.map((product) => {
   // Ensure productId exists before accessing its properties
   if (!product.productId) {
