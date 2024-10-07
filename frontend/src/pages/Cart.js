@@ -210,7 +210,6 @@ const Cart = () => {
       }
     }
   };
-
   const deleteCartProduct = async (id) => {
     const response = await fetch(SummaryApi.deleteCartProduct.url, {
       method: SummaryApi.deleteCartProduct.method,
@@ -232,7 +231,6 @@ const Cart = () => {
     }
   };
   
-
   const handlePayment = async (finalAddress) => {
     
     if (!selectedAddress) {
@@ -303,6 +301,29 @@ const Cart = () => {
             const paymentResult = await paymentResponse.json();
             if (paymentResult.success) {
               alert("Payment Successful!");
+              setData([])
+
+              try {
+
+                const response = await fetch(SummaryApi.clear_cart.url, {
+                  method: SummaryApi.clear_cart.method,
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authToken}`, // Send the user token
+                  },
+                //  body: JSON.stringify({ userId: user._id }) // Pass userId in the request body
+
+                });
+          
+                const result = await response.json();
+                if (result.success) {
+                  console.log(result.message);
+                } else {
+                  console.error("Failed to clear cart on server.");
+                }
+              } catch (error) {
+                console.error("Error while clearing cart:", error);
+              }
             } else {
               alert("Payment successful, but order storing failed.");
             }

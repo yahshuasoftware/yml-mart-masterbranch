@@ -7,8 +7,8 @@ const path = require('path');
 
 
 const razorpay = new Razorpay({
-    key_id: 'rzp_live_ofCr4v27GIgGtH',
-    key_secret: '6XCf2uYOTWVFVc6TkgXGmh0y',
+    key_id: 'rzp_test_U4XuiM2cjeWzma',
+    key_secret: '2CXOAspw2Cgr0wlTz6vc0e8J',
 });
 
 const createOrder = async (req, res) => {
