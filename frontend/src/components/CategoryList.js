@@ -128,14 +128,15 @@ const CategoryList = () => {
         };
     }, []);
 
+
     return (
         <div className="container mx-auto pt-5 pb-8 px-4">
         {/* Category Wrapper */}
-        <div className="flex items-center gap-6 justify-between overflow-x-auto p-4 rounded-lg shadow-lg">
+        <div className="flex items-center gap-4 justify-between overflow-x-auto bg-white pt-2 pr-6 pl-6 pb-4 rounded-lg shadow-lg">
           {loading ? (
             categoryLoading.map((_, index) => (
               <div
-                className="h-20 w-20 md:w-24 md:h-24 rounded-full bg-slate-200 animate-pulse"
+                className="h-16 w-16 md:w-20 md:h-20 rounded-full bg-slate-200 animate-pulse"
                 key={"categoryLoading" + index}
               ></div>
             ))
@@ -151,16 +152,18 @@ const CategoryList = () => {
                   to={"/product-category?category=" + product?.category}
                   className="cursor-pointer"
                 >
-                  <div className="w-20 h-20 md:w-20 md:h-20 rounded-full p-4 flex items-center justify-center bg-white shadow-md transition-all transform hover:scale-110 hover:shadow-lg">
-                    <img
-                      src={categoryImages[product?.category.toLowerCase()] || categoryImages["default"]}
-                      alt={product?.productName || "Product Image"}
-                      className="h-full object-contain transition-transform duration-300"
-                    />
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-4 flex items-center justify-center">
+                      <img
+                        src={categoryImages[product?.category.toLowerCase()] || categoryImages["default"]}
+                        alt={product?.productName || "Product Image"}
+                        className="h-full object-scale-down hover:scale-125 transition-transform"
+                      />
+                    </div>
+                    <p className="text-center text-sm md:text-base capitalize">
+                      {product?.category}
+                    </p>
                   </div>
-                  <p className="text-center text-base  capitalize mt-2 text-gray-700 group-hover:text-sky-600 transition-colors">
-                    {product?.category}
-                  </p>
                 </Link>
               </div>
             ))
