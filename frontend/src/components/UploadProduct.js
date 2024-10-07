@@ -26,8 +26,9 @@ const UploadProduct = ({
     price: "",
     sellingPrice: "",
     quantity: "",
-    soldBy: '',
-    features: '',
+    soldBy: "",
+    features: "",
+    productInfo:""
   });
   const { authToken } = useContext(Context); // Get the authToken from Context
 
@@ -278,81 +279,54 @@ const uploadImageToS3 = async (file) => {
             required
           />
 
-          {/* Description Section */}
-          <label htmlFor='description' className='mt-3 block'>Description:</label>
-          <textarea
-            id='description'
-            placeholder='Enter description'
-            value={data.description}
-            name='description'
-            onChange={handleOnChange}
-            className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
-            required
-          ></textarea>
 
-{/* soldby Section */}
-<label htmlFor='description' className='mt-3 block'>Sold By:</label>
+{/* Description Section */}
+<label htmlFor='description' className='mt-3 block'>Description:</label>
 <textarea
-  id='soldBy'
-  placeholder='Enter Sold By'
-  value={data.soldBy}
-  name='soldBY'
+  id='description'
+  placeholder='Enter description'
+  value={data.description}
+  name='description'
   onChange={handleOnChange}
   className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
   required
 ></textarea>
 
-          {/* Features Section */}
-          <label htmlFor='features' className='mt-3 block'>Features:</label>
-          <textarea
-            id='features'
-            placeholder='Enter features (use new line for each bullet point)'
-            value={data.features}
-            name='features'
-            onChange={handleOnChange}
-            className='p-2 bg-slate-100 border rounded w-full h-24 overflow-y-auto'
-            required
-          ></textarea>
-
-          {/* Dynamically Display Features as Bullet Points */}
-          {data.features && (
-            <ul className='list-disc list-inside text-slate-600 mt-2'>
-              {handleBulletPoints(data.features)}
-            </ul>
-          )}
-
-{/* Specifications Section */}
-<label htmlFor='specifications' className='mt-3 block'>Specifications:</label>
+{/* soldby Section */}
+<label htmlFor='soldBy' className='mt-3 block'>Sold By:</label>
 <textarea
-  id='specifications'
-  placeholder='Enter specifications in the format Category: Value (one per line)'
-  value={data.specifications}
-  name='specifications'
+  id='soldBy'
+  placeholder='Enter Sold by'
+  value={data.soldBy}
+  name='soldBy'
   onChange={handleOnChange}
-  className='p-2 bg-slate-100 border rounded w-full h-24 overflow-y-auto'
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
   required
 ></textarea>
 
-{/* Render the structured specifications */}
-{data.specifications && (
-  <div className='mt-3'>
-    {data.specifications.split('\n').map((item, index) => {
-      const [category, value] = item.split(':'); // Split each line by ':'
-      return (
-        <div key={index} className='flex items-center justify-between mb-2'>
-          {/* Left part: Category (bolded) */}
-          <span className='font-bold text-gray-800 w-1/3'>{category?.trim()}:</span> 
-          
-          {/* Right part: Value (single-line display) */}
-          <span className='text-gray-600 w-2/3' style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {value?.trim()}
-          </span>
-        </div>
-      );
-    })}
-  </div>
-)}
+{/* Features Section */}
+<label htmlFor='features' className='mt-3 block'>Features:</label>
+<textarea
+  id='features'
+  placeholder='Enter features (use new line for each bullet point)'
+  value={data.features}
+  name='features'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
 
+{/* Product Information Section */}
+<label htmlFor='productInfo' className='mt-3 block'>Product Information:</label>
+<textarea
+  id='productInfo'
+  placeholder='Enter product information (use new line for each bullet point)'
+  value={data.productInfo}
+  name='productInfo'
+  onChange={handleOnChange}
+  className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
+  required
+></textarea>
 
 
           <button className='bg-sky-600 hover:bg-sky-800 text-white p-2 w-full rounded my-3' type='submit'>
