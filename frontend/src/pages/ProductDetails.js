@@ -193,6 +193,15 @@ const ProductDetails = () => {
               <p>{data?.soldBy}</p>
               <p className='text-slate-600 font-medium my-1'>Features:</p>
               <p>{data?.features}</p>
+              <p className='text-slate-600 font-medium my-1'><strong>Product Details:</strong></p>
+              {data?.productInfo?.split('\n').map((line, index) => {
+      const [key, value] = line.split('\t'); // Split by tab character '\t'
+      return (
+        <p key={index}>
+          <strong className='text-slate-600 font-medium my-1'>{key}</strong>: {value}
+        </p>
+      );
+    })}
             </div>
           </div>
         )}
