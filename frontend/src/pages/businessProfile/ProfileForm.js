@@ -107,6 +107,7 @@ const uploadImageToS3 = async (file) => {
     Key: `kycDocuments/${Date.now()}_${file.name}`, // S3 folder structure
     Body: file,
     ContentType: file.type,
+    
   };
   console.log(params.Key)
 

@@ -380,7 +380,7 @@ const Profile = () => {
                                 </div>
                                 <div className="ml-4 flex flex-col justify-between">
                                   <h3 className="text-lg font-semibold text-gray-800">
-                                    {product.name}
+                                    <a href={`/product/${product.productId}`}>{product.name}</a>
                                   </h3>
                                   <h4 className="text-sm text-gray-600">
                                     {product.category}
@@ -408,7 +408,13 @@ const Profile = () => {
                             <div className="absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg">
                               <p className="text-sm text-blue-600 font-semibold flex items-center">
                                 {getStatusIcon(order.deliveryStatus)}
-                                <span className="ml-2">Tracking Status: {order.deliveryStatus}</span>
+                                {order.status === 'created'?(          
+                                  <span className="ml-2">Tracking Status: Order Failled</span>
+                                ):(
+                                  <span className="ml-2"> Tracking Status: {order.deliveryStatus}</span>
+                                ) }
+
+                                
                               </p>
                             </div>
         

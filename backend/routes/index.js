@@ -45,6 +45,8 @@ router.get("/user-details", require('../middleware/authToken'), userDetailsContr
 router.get("/userLogout", require('../controller/user/userLogout'));
 router.post('/user-details', require('../middleware/authToken'), updateAddressController);
 router.get('/dashboard', orderController);
+router.post("/clear_cart", require("../controller/product/clearCart"));
+
 
 
 router.post('/businessPrices', businessPrices)
