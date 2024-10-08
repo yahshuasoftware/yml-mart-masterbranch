@@ -12,7 +12,7 @@ require('dotenv').config();
 const fs = require('fs');
 
 app.use(cors({
-    origin: ['http://ymlmart.com','http://172.20.10.5:8081','http://localhost:3000'],
+    origin: 'http://ymlmart.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
@@ -35,8 +35,8 @@ connectDB().then(() => {
         console.log(`Server is running on port ${PORT}`);
     });
 
-    
-    cron.schedule('0 0 1 * *', async () => {
+
+    cron.schedule('* * * * *', async () => {
         try {
             await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });
             console.log('Total purchase values reset to 0 for all users.');
@@ -44,5 +44,4 @@ connectDB().then(() => {
             console.error('Error resetting total purchases:', error);
         }
     });
-    
 });

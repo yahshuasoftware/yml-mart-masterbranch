@@ -72,6 +72,12 @@ const ProductDetails = () => {
     return Math.floor(Math.random() * (5000 - 500 + 1)) + 500;
   };
 
+  // Calculate discount percentage
+  const calculateDiscountPercentage = (price, sellingPrice) => {
+    if (!price || !sellingPrice) return 0;
+    return Math.round(((price - sellingPrice) / price) * 100);
+  };
+
   // Effect to fetch product details on component mount and params change
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -178,6 +184,7 @@ const ProductDetails = () => {
             <div className='flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1'>
               <p className='text-green-600'>{displayINRCurrency(data.sellingPrice)}</p>
               <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
+              <p className='text-red-500'>{calculateDiscountPercentage(data.price, data.sellingPrice)}% Off</p> {/* Discount Percentage */}
             </div>
             {data?.quantity > 0 ? (
               <button className='border-2 border-sky-600 rounded px-2 py-1 min-w-[80px] font-medium text-white bg-sky-600 hover:text-sky-600 hover:bg-white' onClick={(e) => handleAddToCart(e, data?._id)}>Add To Cart</button>
