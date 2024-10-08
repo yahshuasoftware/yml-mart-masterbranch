@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 // DB_URI = mongodb+srv://shrikantj2001:QQyMHleIsFtdzq4E@cluster0.a9lke.mongodb.net/yahshuadata
 
 
+
 async function connectDB() {
     try {
         await mongoose.connect(process.env.MONGODB_URI, {

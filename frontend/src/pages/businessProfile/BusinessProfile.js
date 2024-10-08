@@ -79,6 +79,7 @@ const BusinessProfile = () => {
       console.error("Error fetching order data:", error);
     }
   };
+
   
   const fetchUserData = async (authToken) => {
     try {
@@ -99,6 +100,7 @@ const BusinessProfile = () => {
       const data = await response.json();
       console.log(data);
       setUserData(data);
+
   
       if (data.orderDetail) {
         const totalAmount = data.orderDetail
@@ -168,29 +170,30 @@ const BusinessProfile = () => {
     case 'My Team':
       return (
         <div className="p-4">
-          {Array.isArray(usersData) && usersData.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200">
-                <thead className="bg-gray-100 border-b border-gray-200">
-                  <tr>
-                    <th className="py-3 px-4 text-left text-gray-600 font-semibold">Name</th>
-                    <th className="py-3 px-4 text-left text-gray-600 font-semibold">Created At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersData.map((referral, index) => (
-                    <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
-                      <td className="py-3 px-4 text-gray-700">{referral.name}</td>
-                      <td className="py-3 px-4 text-gray-700">{moment(referral?.createdAt).format('LL')}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="text-center text-gray-500">No referrals available.</div>
-          )}
-        </div>
+  {Array.isArray(userData?.data?.refferal.myrefferals) && userData.data.refferal.myrefferals.length > 0 ? (
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white border border-gray-200">
+        <thead className="bg-gray-100 border-b border-gray-200">
+          <tr>
+            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Name</th>
+            <th className="py-3 px-4 text-left text-gray-600 font-semibold">Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userData.data.refferal.myrefferals.map((referral, index) => (
+            <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
+              <td className="py-3 px-4 text-gray-700">{referral.name}</td>
+              <td className="py-3 px-4 text-gray-700">{moment(referral.createdAt).format('LL')}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p>No referrals available.</p>
+  )}
+</div>
+
       );
     default:
       return <div className="p-4">Select an item to view details</div>;

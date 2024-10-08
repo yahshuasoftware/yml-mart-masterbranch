@@ -17,7 +17,7 @@ const Cart = () => {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useUser(); // Get the user details from UserContext
+  const { user, setUser } = useUser(); // Assuming setUser is available to update user context
   const { updateCartProductCount } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -52,7 +52,17 @@ const Cart = () => {
     }
 
     // Here, you can update the user data with the new address
-    await uploadAddress(address, setUserData, authToken);
+    try {
+      await uploadAddress(address, setUserData, authToken); // Upload the new address
+  
+      // After uploading, fetch the updated user data with the latest addresses
+      const updatedUser = { ...user, address: [...user.address, address] }; // Add the new address to the user's address array locally
+  
+      setUser(updatedUser); // Update the user in context to trigger a re-render
+    } catch (error) {
+      console.error("Error uploading address:", error);
+    }
+  
 
     // Close the address form after submission
     setShowAddressForm(false);
@@ -283,6 +293,7 @@ const Cart = () => {
           return;
         }
 
+
         const options = {
           key: process.env.REACT_APP_RAZORPAY_KEY,
           amount: responseData.order.amount,
@@ -511,15 +522,19 @@ const Cart = () => {
         className="border p-2 rounded-lg"
         required
       />
-      <input
-        type="text"
-        name="zip"
-        placeholder="ZIP Code"
-        value={address.zip}
-        onChange={(e) => setAddress((prev) => ({ ...prev, zip: e.target.value }))}
-        className="border p-2 rounded-lg"
-        required
-      />
+      <select
+                  name="zip"
+                  value={address.zip}
+                  onChange={(e) => setAddress((prev) => ({ ...prev, zip: e.target.value }))}
+                  className="border p-2 rounded-lg w-full"
+                  required
+                >
+                  <option value="" disabled>Select Pincode</option>
+                  <option value="411057">411057</option>
+                  <option value="411033">411033</option>
+                  
+                  {/* Add more options as needed */}
+                </select>
     </div>
 
     <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"  >
