@@ -12,7 +12,7 @@ require('dotenv').config();
 const fs = require('fs');
 
 app.use(cors({
-    origin: 'http://ymlmart.com',
+    origin: ['http://ymlmart.com','http://172.20.10.5:8081','http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
