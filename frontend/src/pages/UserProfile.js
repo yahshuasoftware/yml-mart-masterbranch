@@ -528,15 +528,21 @@ const Profile = () => {
                     </div>
           
                     {/* ZIP Code Input */}
-                    <input
-                      type="text"
-                      name="zip"
-                      placeholder="ZIP Code"
-                      value={address.zip}
-                      onChange={(e) => setAddress((prev) => ({ ...prev, zip: e.target.value }))}
-                      className="border p-2 rounded-lg"
-                      required
-                    />
+                    
+                <select
+                  name="zip"
+                  value={address.zip}
+                  onChange={(e) => setAddress((prev) => ({ ...prev, zip: e.target.value }))}
+                  className="border p-2 rounded-lg w-full"
+                  required
+                >
+                  <option value="" disabled>Select Pincode</option>
+                  <option value="411057">411057</option>
+                  <option value="411033">411033</option>
+                  
+                  {/* Add more options as needed */}
+                </select>
+
           
                     <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-full">
                       Add New Address

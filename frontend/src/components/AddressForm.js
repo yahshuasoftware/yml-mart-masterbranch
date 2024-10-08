@@ -103,20 +103,24 @@ const AddressForm = ({ address, setAddress }) => {
           </div>
 
           <div className="w-1/2">
-            <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-2">Pincode No:</label>
-            <div className="relative">
-              <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input 
-                type="text"
-                id="zip"
-                name="zip"
-                value={address.zip}
-                onChange={handleOnChange}
-                className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
-                required
-              />
-            </div>
-          </div>
+  <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-2">Pincode No:</label>
+  <div className="relative">
+    <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+    <select
+      id="zip"
+      name="zip"
+      value={address.zip}
+      onChange={handleOnChange}
+      className="p-2 pl-10 border border-gray-300 rounded-md w-full focus:outline-none focus:border-sky-600"
+      required
+    >
+      <option value="" disabled>Select a Pincode</option>
+      <option value="123456">411057</option>
+      <option value="654321">411033</option>
+    </select>
+  </div>
+</div>
+
         </div>
       </div>
     </>
