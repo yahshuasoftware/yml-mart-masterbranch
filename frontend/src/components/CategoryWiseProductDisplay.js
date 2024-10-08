@@ -104,10 +104,10 @@ const CategroyWiseProductDisplay = ({ category, heading }) => {
                                 <div className="flex justify-center pt-2">
                                     {product?.quantity > 0 ? (
                                         <button
-                                            className="bg-white text-black text-xs font-bold border border-black-200 px-3 py-1 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
+                                           className="bg-white text-black text-xs font-bold border-2 border-black-200 px-3 py-1 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
                                             onClick={(e) => handleAddToCart(e, product?._id)}
                                         >
-                                            Add to Cart
+                                            Add
                                         </button>
                                     ) : (
                                         <span className="text-xs text-red-500 bg-red-100 px-3 py-1 rounded-full border border-red-500 font-semibold">
