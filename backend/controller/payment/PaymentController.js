@@ -4,9 +4,11 @@ const userModel = require("../../models/userModel");
 const productModel = require('../../models/productModel');
 
 const razorpay = new Razorpay({
-    key_id: 'rzp_test_U4XuiM2cjeWzma',
+    key_id: 'rzp_live_ofCr4v27GIgGtH',
     key_secret: '2CXOAspw2Cgr0wlTz6vc0e8J',
 });
+
+
 
 const createOrder = async (req, res) => {
     const { amount, currency, receipt, userId, products, deliveryAddress } = req.body;
