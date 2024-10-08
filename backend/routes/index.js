@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const userDetailsController = require('../controller/user/userDetails');
@@ -11,13 +10,15 @@ const ratingController = require('../controller/user/userProfileController'); //
 const getKYCController = require('../controller/user/getKycController'); // Import the KYC controller
 const kycController = require('../controller/user/kycController'); // Import your KYC controller
 const updateKycController  = require('../controller/user/updatekyc');
-const businessPrices = require("../controller/user/businessPrices")
-const reset = require("../controller/user/reset")
-// const getKyc =  require("../controller/user/getkyc")
-
+const businessPrices = require("../controller/user/businessPrices");
+const reset = require("../controller/user/reset");
 const getkyc = require('../controller/user/getkyc');
-router.get('/user-kyc/:userId',getkyc.getkyc);
 
+// Import your OTP controllers
+const sendOtpController = require('../controller/sendOtp'); // Add the send OTP controller
+const verifyOtpController = require('../controller/verifyOtp'); // Add the verify OTP controller
+
+router.get('/user-kyc/:userId', getkyc.getkyc);
 router.put('/upload-kyc/:userId', updateKycController);
 
 // Payment routes
@@ -34,9 +35,6 @@ router.post('/upload-kyc', upload.fields([
 // Define route to get users who have submitted KYC (GET)
 router.get('/users-with-kyc', getKYCController.getKYCController);
 
-module.exports = router;
-
-
 // User and Product routes
 router.put('/orders/:orderId', updateDeliveryController);
 router.post("/signup", require("../controller/user/userSignUp"));
@@ -47,9 +45,11 @@ router.post('/user-details', require('../middleware/authToken'), updateAddressCo
 router.get('/dashboard', orderController);
 router.post("/clear_cart", require("../controller/product/clearCart"));
 
+router.post('/businessPrices', businessPrices);
 
-
-router.post('/businessPrices', businessPrices)
+// OTP Routes
+router.post('/send-otp', sendOtpController); // Route for sending OTP
+router.post('/verify-otp', verifyOtpController); // Route for verifying OTP
 
 // Rating Routes
 router.post('/rating/saveRating', ratingController.saveRating);
@@ -73,7 +73,7 @@ router.post("/product-details", require('../controller/product/getProductDetails
 router.get("/search", require('../controller/product/searchProduct'));
 router.post("/filter-product", require('../controller/product/filterProduct'));
 router.post("/popularity", require('../controller/product/popularity'));
-router.get("/referralOrders", require('../middleware/authToken'), referralOrderController)
+router.get("/referralOrders", require('../middleware/authToken'), referralOrderController);
 
 // Banner
 router.post("/upload-banner", require('../middleware/authToken'), require('../controller/banner/uploadBanner'));
@@ -92,8 +92,7 @@ router.get("/view-card-product", require('../middleware/authToken'), require('..
 router.post("/update-cart-product", require('../middleware/authToken'), require('../controller/user/updateAddToCartProduct'));
 router.post("/delete-cart-product", require('../middleware/authToken'), require('../controller/user/deleteAddToCartProduct'));
 
-
-//reset totalPurchase
-router.post('/reset', reset)
+// Reset totalPurchase
+router.post('/reset', reset);
 
 module.exports = router;

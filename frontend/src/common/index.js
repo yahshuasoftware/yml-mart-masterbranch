@@ -1,11 +1,19 @@
-    const backendDomin = process.env.REACT_APP_API_URL
-// const backendDomin = process.env.REACT_APP_LOCALHOST_URI;
+    // const backendDomin = process.env.REACT_APP_API_URL
+const backendDomin = process.env.REACT_APP_LOCALHOST_URI;
 
 const SummaryApi = {
     signUP: {
         url: `${backendDomin}/api/signup`,
         method: "post"
     },
+    sendOtp: {
+        url: `${backendDomin}/api/send-otp`,
+        method: "post"
+      },
+    verifyOtp: {
+        url: `${backendDomin}/api/verify-otp`,
+        method: "post"
+      },
     signIn: {
         url: `${backendDomin}/api/signin`,
         method: "post"
