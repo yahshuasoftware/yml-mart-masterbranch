@@ -172,7 +172,7 @@ const ProductDetails = () => {
             <p className='bg-sky-200 text-sky-600 px-2 rounded-full inline-block w-fit'>{data?.brandName}</p>
             <h2 className='text-2xl lg:text-4xl font-medium'>{data?.productName}</h2>
             <p className='capitalize text-slate-400'>{data?.category}</p>
-            <div className="text-blue-600 flex items-center gap-1">
+            <div className="text-yellow-500 flex items-center gap-1">
               <FaStar />
               <FaStar />
               <FaStar />
@@ -184,7 +184,7 @@ const ProductDetails = () => {
             <div className='flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1'>
               <p className='text-green-600'>{displayINRCurrency(data.sellingPrice)}</p>
               <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
-              <p className='text-red-500'>{calculateDiscountPercentage(data.price, data.sellingPrice)}% Off</p> {/* Discount Percentage */}
+              <p className='bg-green-100 text-green-600 text-sm px-3 py-1.5 rounded-lg'>{calculateDiscountPercentage(data.price, data.sellingPrice)}% Off</p> {/* Discount Percentage */}
             </div>
             {data?.quantity > 0 ? (
               <button className='border-2 border-sky-600 rounded px-2 py-1 min-w-[80px] font-medium text-white bg-sky-600 hover:text-sky-600 hover:bg-white' onClick={(e) => handleAddToCart(e, data?._id)}>Add To Cart</button>

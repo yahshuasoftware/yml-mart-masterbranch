@@ -126,13 +126,13 @@ const GroceryCart = ({ category, heading }) => {
                                     </p>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-xs text-red-500 font-semibold bg-red-100 px-1 rounded">
+                                    <span className="text-xs text-green-600 font-semibold bg-green-100 px-1 rounded">
                                         {calculateDiscountPercentage(product?.price, product?.sellingPrice)}% Off
                                     </span>
                                     <div className="flex justify-center pt-1">
                                         {product?.quantity > 0 ? (
                                             <button
-                                                className="text-xs text-white bg-green-600 border border-green-600 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600"
+                                                className="bg-white text-black text-xs font-bold border border-black-200 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
                                                 onClick={(e) => handleAddToCart(e, product?._id)}
                                             >
                                                 Add to Cart
