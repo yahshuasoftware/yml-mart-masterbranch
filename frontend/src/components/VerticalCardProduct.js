@@ -118,10 +118,10 @@ const VerticalCardProduct = ({ category, heading }) => {
                                         alt={product?.productName}
                                     />
                                     {discountPercentage > 0 && (
-                                        <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                                            {discountPercentage}% OFF
-                                        </span>
-                                    )}
+    <span className="absolute top-2 left-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-lg">
+        {discountPercentage}% Off
+    </span>
+)}
                                 </div>
                                 <div className="px-4 pt-2 pb-3 h-30 space-y-1">
                                     <h3 className="text-xs md:text-sm font-semibold text-gray-800 truncate">
@@ -138,7 +138,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                                     <div className="flex justify-center pt-1">
                                         {product?.quantity > 0 ? (
                                             <button
-                                                className="text-xs text-white bg-green-600 border border-green-600 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-white hover:text-green-600"
+                                               className="bg-white text-black text-xs font-bold border border-black-200 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
                                                 onClick={(e) => handleAddToCart(e, product?._id)}
                                             >
                                                 Add to Cart
