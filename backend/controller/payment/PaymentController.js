@@ -3,9 +3,10 @@ const Order = require('../../models/order');
 const userModel = require("../../models/userModel");
 const productModel = require('../../models/productModel');
 
+
 const razorpay = new Razorpay({
     key_id: 'rzp_live_ofCr4v27GIgGtH',
-    key_secret: '2CXOAspw2Cgr0wlTz6vc0e8J',
+    key_secret: '6XCf2uYOTWVFVc6TkgXGmh0y',
 });
 
 
