@@ -32,32 +32,35 @@ const Cart = () => {
   const [streetSuggestions, setStreetSuggestions] = useState([]);
   const [citySuggestions, setCitySuggestions] = useState([]);
   const [address, setAddress] = useState({
-    name: "", 
+    name: "",
     mobileNo: "",
     street: "",
-    city: "Pune",
-    state: "Maharashtra", // Pre-fill with "Maharashtra"
+    city: "Pune",  // Prefill with "Pune"
+    state: "Maharashtra",  // Prefill with "Maharashtra"
     zip: "",
   });
-  
 
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the state is Maharashtra (it should always be)
     if (address.state !== "Maharashtra") {
       alert("Please enter an address in Maharashtra");
       return;
     }
 
-    
-    //here user should be updated ex setUserData
-    await uploadAddress(address, setUserData,authToken);
-    
+    // Here, you can update the user data with the new address
+    await uploadAddress(address, setUserData, authToken);
+
+    // Close the address form after submission
     setShowAddressForm(false);
   };
-  
+
   // Fetch street suggestions from Nominatim for Maharashtra
   const fetchStreetSuggestions = async (query) => {
-    if (query.length < 3) return; // Avoid too many API calls for short queries
+    if (query.length < 3) return;  // Avoid too many API calls for short queries
     try {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/search?street=${query}&state=Maharashtra&countrycodes=IN&format=json`
@@ -95,19 +98,26 @@ const Cart = () => {
     fetchCitySuggestions(value);
   };
 
-
+  // Toggle the address form
   const handleAddNewAddress = () => {
     setShowAddressForm((prevState) => !prevState);
     if (!showAddressForm) {
-      setAddress({ name: "", mobileNo: "", street: "", city: "Pune", state: "Maharashtra", zip: "" });
+      setAddress({
+        name: "", 
+        mobileNo: "", 
+        street: "", 
+        city: "Pune", 
+        state: "Maharashtra", 
+        zip: ""
+      });
     }
   };
 
+  // Handle address selection
   const handleSelectAddress = (address) => {
-    setSelectedAddress(address);
-    setShowAllAddresses(false); // Hide the list once an address is selected
+    setAddress(address);
+    setShowAddressForm(false); // Hide form once an address is selected
   };
-
   const fetchData = async (authToken) => {
     try {
       const response = await fetch(SummaryApi.addToCartProductView.url, {
@@ -477,7 +487,6 @@ const Cart = () => {
         name="state"
         placeholder="State"
         value={address.state}
-        onChange={(e) => setAddress((prev) => ({ ...prev, state: e.target.value }))}
         className="border p-2 rounded-lg"
         required
       />
@@ -492,7 +501,7 @@ const Cart = () => {
       />
     </div>
 
-    <button         className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"  >
+    <button className="bg-green-600 text-white py-2 px-4 rounded-lg w-[300px]"  >
       Add New Address
     </button>
   </form>

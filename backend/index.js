@@ -26,7 +26,8 @@ const fs = require('fs');
 // app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
 app.use(cors({
-    origin: 'http://ymlmart.com',
+    //origin: 'http://3.85.148.197',
+     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow cookies and other credentials
@@ -49,8 +50,8 @@ connectDB().then(() => {
         console.log(`Server is running on port ${PORT}`);
     });
 
-    
-    cron.schedule('0 0 1 * *', async () => {
+
+    cron.schedule('* * * * *', async () => {
         try {
             await User.updateMany({}, { 'businessPrices.totalPurchase': 0 });
             console.log('Total purchase values reset to 0 for all users.');
@@ -58,5 +59,4 @@ connectDB().then(() => {
             console.error('Error resetting total purchases:', error);
         }
     });
-    
 });

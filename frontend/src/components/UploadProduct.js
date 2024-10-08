@@ -28,6 +28,7 @@ const UploadProduct = ({
     quantity: "",
     soldBy: '',
     features: '',
+    percentOff: "" 
   });
   const { authToken } = useContext(Context); // Get the authToken from Context
 
@@ -38,10 +39,25 @@ const UploadProduct = ({
   
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    setData((prev) => {
+      const updatedData = {
+        ...prev,
+        [name]: value
+      };
+
+      // If either price or sellingPrice changes, calculate the percentOff
+      if (updatedData.price && updatedData.sellingPrice) {
+        const priceValue = parseFloat(updatedData.price);
+        const sellingPriceValue = parseFloat(updatedData.sellingPrice);
+
+        if (priceValue > 0 && sellingPriceValue > 0) {
+          const discount = ((priceValue - sellingPriceValue) / priceValue) * 100;
+          updatedData.percentOff = discount.toFixed(2); // Calculate and set percent off
+        }
+      }
+
+      return updatedData;
+    });
   };
 
   // Handle category change and update subcategories
@@ -266,6 +282,18 @@ const uploadImageToS3 = async (file) => {
             required
           />
 
+          {/* Percent Off */}
+          <label htmlFor='percentOff' className='mt-3'>Percent Off :</label>
+          <input
+            type='text'
+            id='percentOff'
+            placeholder='Percent off'
+            value={data.percentOff}
+            name='percentOff'
+            className='p-2 bg-slate-100 border rounded'
+            readOnly
+          />
+
           <label htmlFor='quantity' className='mt-3'>Quantity :</label>
           <input
             type='Number'
@@ -291,12 +319,12 @@ const uploadImageToS3 = async (file) => {
           ></textarea>
 
 {/* soldby Section */}
-<label htmlFor='description' className='mt-3 block'>Sold By:</label>
+<label htmlFor='soldBy' className='mt-3 block'>Sold By:</label>
 <textarea
   id='soldBy'
   placeholder='Enter Sold By'
   value={data.soldBy}
-  name='soldBY'
+  name='soldBy'
   onChange={handleOnChange}
   className='p-2 bg-slate-100 border rounded w-full h-10 overflow-y-auto'
   required

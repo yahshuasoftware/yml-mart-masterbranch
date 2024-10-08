@@ -4,6 +4,7 @@ import BannerProduct from '../components/BannerProduct'
 import HorizontalCardProduct from '../components/HorizontalCardProduct'
 import VerticalCardProduct from '../components/VerticalCardProduct'
 import AdBanner from '../components/AdBannerProduct'
+import GroceryCart from '../components/GroceryCard'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
@@ -13,7 +14,7 @@ const Home = () => {
       <BannerProduct/>
       <Link to={"/refer"}><AdBanner/></Link>
       
-      <VerticalCardProduct category={"groceries"} heading={"Popular's Groceries"}/>
+      <GroceryCart category={"groceries"} heading={"Popular's Groceries"}/>
 
       <VerticalCardProduct category={"medicines"} heading={"Medicines"}/>
       <VerticalCardProduct category={"fruits"} heading={"Fruits & Vegetables"}/>
