@@ -60,22 +60,23 @@ const GroceryCart = ({ category, heading }) => {
             <div className="flex justify-between items-center">
                 <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
                 <button
-                    className="text-blue-500 hover:underline"
+                    className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-transform duration-300 hover:scale-105 hover:bg-blue-600"
                     onClick={handleViewAll}
                 >
                     View All
                 </button>
+
             </div>
 
             {/* Scroll buttons */}
             <button
-                className='bg-white shadow-md rounded-full p-1 absolute left-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
+                className='bg-white shadow-md rounded-full p-2 absolute left-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
                 onClick={scrollLeft}
             >
                 <FaAngleLeft />
             </button>
             <button
-                className='bg-white shadow-md rounded-full p-1 absolute right-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
+                className='bg-white shadow-md rounded-full p-2 absolute right-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
                 onClick={scrollRight}
             >
                 <FaAngleRight />
@@ -131,14 +132,16 @@ const GroceryCart = ({ category, heading }) => {
                                     </span>
                                     <div className="flex justify-center pt-1">
                                         {product?.quantity > 0 ? (
-                                            <button
-                                                className="bg-white text-black text-xs font-bold border-2 border-black-200 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
-                                                onClick={(e) => handleAddToCart(e, product?._id)}
-                                            >
-                                                Add
-                                            </button>
+                                          <button
+                                          className="bg-white text-black text-xs font-bold border-2 border-black-200 px-4 py-2 w-20 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
+                                          onClick={(e) => handleAddToCart(e, product?._id)}
+                                      >
+                                          Add
+                                      </button>
+                                      
+                                       
                                         ) : (
-                                            <span className="text-xs text-white bg-gray-400 border border-gray-400 px-2 py-1 rounded-full">
+                                            <span className="text-xs text-white bg-gray-400 border border-gray-400 px-4 py-2 rounded-full">
                                                 Out of Stock
                                             </span>
                                         )}

@@ -137,12 +137,13 @@ const VerticalCardProduct = ({ category, heading }) => {
                                     </div>
                                     <div className="flex justify-center pt-1">
                                         {product?.quantity > 0 ? (
-                                            <button
-                                               className="bg-white text-black text-xs font-bold border-2 border-black-200 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
-                                                onClick={(e) => handleAddToCart(e, product?._id)}
-                                            >
-                                                Add
-                                            </button>
+                                           <button
+                                           className="bg-white text-black text-xs font-bold border-2 border-black-200 px-4 py-2 w-full rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
+                                           onClick={(e) => handleAddToCart(e, product?._id)}
+                                       >
+                                           Add
+                                       </button>
+                                       
                                         ) : (
                                             <span className="text-xs text-white bg-red-600 border border-red-600 px-2 py-1 rounded-full">
                                                 Out of Stock
