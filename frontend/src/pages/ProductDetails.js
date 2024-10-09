@@ -67,10 +67,10 @@ const ProductDetails = () => {
     }
   };
 
-  // Generate random ratings count
   const generateRandomRatings = () => {
-    return Math.floor(Math.random() * (5000 - 500 + 1)) + 500;
+    return Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
   };
+  
 
   // Calculate discount percentage
   const calculateDiscountPercentage = (price, sellingPrice) => {
@@ -172,7 +172,7 @@ const ProductDetails = () => {
             <p className='bg-sky-200 text-sky-600 px-2 rounded-full inline-block w-fit'>{data?.brandName}</p>
             <h2 className='text-2xl lg:text-4xl font-medium'>{data?.productName}</h2>
             <p className='capitalize text-slate-400'>{data?.category}</p>
-            <div className="text-yellow-500 flex items-center gap-1">
+            <div className="text-yellow-400 flex items-center gap-1">
               <FaStar />
               <FaStar />
               <FaStar />
