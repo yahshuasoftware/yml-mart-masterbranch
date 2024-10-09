@@ -89,12 +89,11 @@ const productCategory = [
         subcategories: [
             { id: 801, label: "Biscuits & Drinks", value: "biscuits, drinks" },
             { id: 802, label: "Fruits & Vegetables", value: "fruits, vegetables" },
-            { id: 803, label: "Cooking Essentials", value: "cooking essentials" },
-            { id: 804, label: "Dairy & Bakery", value: "dairy, bakery" },
-            { id: 805, label: "Mom & Baby Care", value: "mom, baby care" },
-            { id: 806, label: "Disposables", value: "disposables" },
-
-
+            { id: 803, label: "Dry Fish", value: "dry fish" },
+            { id: 804, label: "Cooking Essentials", value: "cooking essentials" },
+            { id: 805, label: "Dairy & Bakery", value: "dairy, bakery" },
+            { id: 806, label: "Mom & Baby Care", value: "mom, baby care" },
+            { id: 807, label: "Disposables", value: "disposables" },
         ]
     },
     { 

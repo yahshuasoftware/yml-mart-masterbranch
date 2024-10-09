@@ -138,16 +138,18 @@ const CategoryList = () => {
                                 to={"/product-category?category=" + product?.category}
                                 className="cursor-pointer"
                             >
-                                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-4 flex items-center justify-center">
-                                    <img
-                                        src={product?.productImage[0]}
-                                        alt={product?.productName || "Product Image"}
-                                        className="h-full object-scale-down hover:scale-125 transition-transform"
-                                    />
+                                <div className="flex flex-col items-center">
+                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-4 flex items-center justify-center">
+                                        <img
+                                            src={product?.productImage[0]}
+                                            alt={product?.productName || "Product Image"}
+                                            className="h-full object-scale-down hover:scale-125 transition-transform"
+                                        />
+                                    </div>
+                                    <p className="text-center text-sm md:text-base capitalize mt-2">
+                                        {product?.category}
+                                    </p>
                                 </div>
-                                <p className="text-center text-sm md:text-base capitalize mt-2">
-                                    {product?.category}
-                                </p>
                             </Link>
                         </div>
                     ))

@@ -26,7 +26,6 @@ const UploadBannerForm = () => {
       alert('Please select an image');
       return;
     }
-    console.log(user)
     if (!user || (user.role !== ROLE.ADMIN && user.role !== ROLE.SUPER_ADMIN)) {
       return <p>You do not have permission to upload banners.</p>;
     }

@@ -1,5 +1,5 @@
-    const backendDomin = process.env.REACT_APP_API_URL
-// const backendDomin = process.env.REACT_APP_LOCALHOST_URI;
+    // const backendDomin = process.env.REACT_APP_API_URL
+const backendDomin = process.env.REACT_APP_LOCALHOST_URI;
 
 const SummaryApi = {
     signUP: {
@@ -18,7 +18,6 @@ const SummaryApi = {
         url: `${backendDomin}/api/clear_cart`,
         method: "post"
     },
-    
     logout_user: {
         url: `${backendDomin}/api/userLogout`,
         method: 'get'
