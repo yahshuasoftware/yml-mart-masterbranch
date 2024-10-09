@@ -2,7 +2,6 @@ const Razorpay = require('razorpay');
 const Order = require('../../models/order');
 const userModel = require("../../models/userModel");
 const productModel = require('../../models/productModel');
-const moment = require('moment-timezone');
 
 
 
@@ -16,7 +15,6 @@ const razorpay = new Razorpay({
 
 const createOrder = async (req, res) => {
     const { amount, currency, receipt, userId, products, deliveryAddress } = req.body;
-    const currentISTDate = moment.tz(Date.now(), 'Asia/Kolkata').toDate();
 
 
     try {
@@ -44,7 +42,6 @@ const createOrder = async (req, res) => {
             receipt: order.receipt,
             userId: userId,
             deliveryAddress: deliveryAddress,
-            createdAt: currentISTDate // Store the date in IST
 
         });
         
