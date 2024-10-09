@@ -48,7 +48,12 @@ const Footer = () => {
             {/* Download Section */}
             <div className="text-center">
               <a href="/">
-                <img src={yml} alt="Logo" className="mx-auto w-28 h-10 rounded-lg" />
+                      <img
+                  src={yml}
+                  alt="Logo"
+                  className="mx-auto w-28 h-10"
+                  style={{ borderRadius: '5px' }} // Adjust the value as needed
+                  />
               </a>
               <h2 className="mt-3 text-lg font-bold text-white">Download our app</h2>
               <div className="flex justify-center items-center gap-3 mt-3">

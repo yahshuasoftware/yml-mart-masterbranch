@@ -18,7 +18,6 @@ const ChangeUserRole = ({
 
     const handleOnChangeSelect = (e) => {
         setUserRole(e.target.value)
-
         console.log(e.target.value)
     }
 

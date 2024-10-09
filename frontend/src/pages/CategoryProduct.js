@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import productCategory from "../helpers/productCategory";
 import VerticalCard from "../components/VerticalCard";
-import Loader from "../components/Loader"; // Import the Loader component
+import Loader from "../components/Loader";
 import SummaryApi from "../common";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -12,7 +12,7 @@ const CategoryProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true); // Open sidebar by default
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true); // Sidebar visible by default
   const [selectCategory, setSelectCategory] = useState({});
   const [selectSubcategory, setSelectSubcategory] = useState({});
   const [filterCategoryList, setFilterCategoryList] = useState([]);
@@ -190,7 +190,8 @@ const CategoryProduct = () => {
                     <label htmlFor={category.value}>{category.label}</label>
                   </div>
 
-                  {selectCategory[category.value] &&
+                  {/* Auto-expand subcategory if it's selected */}
+                  {selectCategory[category.value] || Object.keys(selectSubcategory).some(sub => category.subcategories.some(s => s.value === sub)) ? (
                     category.subcategories?.map((subcategory, subIndex) => (
                       <div className="ml-5" key={subIndex}>
                         <div className="flex items-center gap-3">
@@ -205,7 +206,8 @@ const CategoryProduct = () => {
                           <label htmlFor={subcategory.value}>{subcategory.label}</label>
                         </div>
                       </div>
-                    ))}
+                    ))
+                  ) : null}
                 </div>
               ))}
             </form>
@@ -237,43 +239,12 @@ const CategoryProduct = () => {
       <div
         className={`lg:hidden fixed pt-8 top-16 left-0 bg-white p-2 h-full min-h-[calc(100vh-120px)] shadow-md z-40 overflow-y-scroll ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}
       >
-        <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Sort by</h3>
-        <form className="text-sm flex flex-col gap-2 py-2">
-          <div className="flex items-center gap-3">
-            <input
-              type="radio"
-              name="sortBy"
-              checked={sortBy === "asc"}
-              onChange={handleOnChangeSortBy}
-              value={"asc"}
-            />
-            <label>Price - Low to High</label>
-          </div>
-          <div className="flex items-center gap-3">
-            <input
-              type="radio"
-              name="sortBy"
-              checked={sortBy === "dsc"}
-              onChange={handleOnChangeSortBy}
-              value={"dsc"}
-            />
-            <label>Price - High to Low</label>
-          </div>
-          <div className="flex items-center gap-3">
-            <input
-              type="radio"
-              name="sortBy"
-              checked={sortBy === "popularity"}
-              onChange={handleOnChangeSortBy}
-              value={"popularity"}
-            />
-            <label>Popularity</label>
-          </div>
-        </form>
-
         <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Category</h3>
         <form className="text-sm flex flex-col gap-2 py-2">
-          {productCategory.map((category, index) => (
+          {[
+            ...productCategory.filter((category) => selectCategory[category.value]),
+            ...productCategory.filter((category) => !selectCategory[category.value]),
+          ].map((category, index) => (
             <div key={index}>
               <div className="flex items-center gap-3">
                 <input
@@ -287,7 +258,8 @@ const CategoryProduct = () => {
                 <label htmlFor={category.value}>{category.label}</label>
               </div>
 
-              {selectCategory[category.value] &&
+              {/* Auto-expand subcategory if it's selected */}
+              {selectCategory[category.value] || Object.keys(selectSubcategory).some(sub => category.subcategories.some(s => s.value === sub)) ? (
                 category.subcategories?.map((subcategory, subIndex) => (
                   <div className="ml-5" key={subIndex}>
                     <div className="flex items-center gap-3">
@@ -302,7 +274,8 @@ const CategoryProduct = () => {
                       <label htmlFor={subcategory.value}>{subcategory.label}</label>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : null}
             </div>
           ))}
         </form>
