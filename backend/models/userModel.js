@@ -53,7 +53,12 @@ const userSchema = new mongoose.Schema({
         myPurchase: { type: Number, default: 0 },
         totalPurchase: { type: Number, default: 0 },
         totalIncentive: { type: Number, default: 0 }
-    }},{
+    },
+    otp: String,  // Field to store the OTP
+    otpExpires: Date,
+},
+    
+    {
     timestamps : true
 })
 

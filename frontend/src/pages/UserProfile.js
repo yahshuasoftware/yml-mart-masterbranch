@@ -358,84 +358,83 @@ const Profile = () => {
             <div>
               <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
         
-              {orderData ? (
-                <div className="w-full max-w-3xl">
-                  {orderData.length > 0 ? (
-                    <div>
-                      <h2 className="text-xl font-semibold mb-4">Order Details</h2>
-                      {orderData.map((order) => (
+              {orderData ? ( 
+    <div className="w-full max-w-3xl">
+        {orderData.length > 0 ? (
+            <div>
+                <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+                {orderData
+                    .filter(order => order.status !== 'created') // Filter out orders with status 'created'
+                    .map((order) => (
                         <div key={order._id} className="mb-6 relative">
-                          <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
-                            {order.products.map((product) => (
-                              <div
-                                key={product._id}
-                                className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm"
-                              >
-                                <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
-                                  <img
-                                    src={product.image[0]}
-                                    alt={product.name}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <div className="ml-4 flex flex-col justify-between">
-                                  <h3 className="text-lg font-semibold text-gray-800">
-                                    <a href={`/product/${product.productId}`}>{product.name}</a>
-                                  </h3>
-                                  <h4 className="text-sm text-gray-600">
-                                    {product.category}
-                                  </h4>
-                                  <p className="text-sm text-gray-700">
-                                    <strong>Quantity:</strong> {product.quantity}
-                                  </p>
-                                  <p className="text-sm text-gray-700">
-                                    <strong>Total Cost:</strong>{" "}
-                                    <span className="font-bold text-gray-800">
-                                      {"₹" + product.price * product.quantity}
-                                    </span>
-                                  </p>
-                                  <p className="text-sm flex items-center">
-                                    <strong>Status:</strong>{" "}
-                                    <span className="text-green-700 font-semibold flex items-center">
-                                      <span className="ml-2">{order.status}</span>
-                                    </span>
-                                  </p>
-                                </div>
-                              </div>
-                            ))}
-        
-                            {/* Order ID and Tracking Status */}
-                            <div className="absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg">
-                              <p className="text-sm text-blue-600 font-semibold flex items-center">
-                                {getStatusIcon(order.deliveryStatus)}
-                                {order.status === 'created'?(          
-                                  <span className="ml-2">Tracking Status: Order Failled</span>
-                                ):(
-                                  <span className="ml-2"> Tracking Status: {order.deliveryStatus}</span>
-                                ) }
+                            <div className="order-container p-6 border border-gray-300 rounded-lg bg-white shadow-lg relative">
+                                {order.products.map((product) => (
+                                    <div
+                                        key={product._id}
+                                        className="w-full h-32 my-3 p-3 border border-gray-200 rounded-lg flex items-center bg-sky-50 shadow-sm"
+                                    >
+                                        <div className="h-24 w-24 overflow-hidden rounded-lg shadow-md">
+                                            <img
+                                                src={product.image[0]}
+                                                alt={product.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="ml-4 flex flex-col justify-between">
+                                            <h3 className="text-lg font-semibold text-gray-800">
+                                                <a href={`/product/${product.productId}`}>{product.name}</a>
+                                            </h3>
+                                            <h4 className="text-sm text-gray-600">
+                                                {product.category}
+                                            </h4>
+                                            <p className="text-sm text-gray-700">
+                                                <strong>Quantity:</strong> {product.quantity}
+                                            </p>
+                                            <p className="text-sm text-gray-700">
+                                                <strong>Total Cost:</strong>{" "}
+                                                <span className="font-bold text-gray-800">
+                                                    {"₹" + product.price * product.quantity}
+                                                </span>
+                                            </p>
+                                            <p className="text-sm flex items-center">
+                                                <strong>Status:</strong>{" "}
+                                                <span className="text-green-700 font-semibold flex items-center">
+                                                    <span className="ml-2">{order.status}</span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
 
-                                
-                              </p>
+                                {/* Order ID and Tracking Status */}
+                                <div className="absolute bottom-0 right-0 p-4 bg-white rounded-lg shadow-lg">
+                                    <p className="text-sm text-blue-600 font-semibold flex items-center">
+                                        {getStatusIcon(order.deliveryStatus)}
+                                        {order.status === 'created' ? (          
+                                            <span className="ml-2">Tracking Status: Order Failed</span>
+                                        ) : (
+                                            <span className="ml-2"> Tracking Status: {order.deliveryStatus}</span>
+                                        )}
+                                    </p>
+                                </div>
                             </div>
-        
-                           
-                          </div>
                         </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center">
-                      <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
-                      <p>No orders found!</p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center">
-                  <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
-                  <p>No order found!</p>
-                </div>
-              )}
+                    ))}
+            </div>
+        ) : (
+            <div className="flex flex-col items-center">
+                <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+                <p>No orders found!</p>
+            </div>
+        )}
+    </div>
+) : (
+    <div className="flex flex-col items-center">
+        <BsBagXFill style={{ fontSize: "6rem" }} className="text-sky-600 text-6xl mb-2" />
+        <p>No order found!</p>
+    </div>
+)}
+
             </div>
           );
 

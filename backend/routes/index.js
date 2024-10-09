@@ -36,6 +36,13 @@ router.get('/users-with-kyc', getKYCController.getKYCController);
 
 module.exports = router;
 
+//otp very
+// router.post("/send-otp", require("../controller/user/sendOtp"));
+// router.post("/verify-otp", require("../controller/user/verifyOtp"));
+
+
+
+
 
 // User and Product routes
 router.put('/orders/:orderId', updateDeliveryController);

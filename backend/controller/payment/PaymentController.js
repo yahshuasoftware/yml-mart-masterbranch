@@ -2,17 +2,22 @@ const Razorpay = require('razorpay');
 const Order = require('../../models/order');
 const userModel = require("../../models/userModel");
 const productModel = require('../../models/productModel');
+const moment = require('moment-timezone');
+
+
 
 
 const razorpay = new Razorpay({
-    key_id: 'rzp_live_ofCr4v27GIgGtH',
-    key_secret: '6XCf2uYOTWVFVc6TkgXGmh0y',
+    key_id: 'rzp_test_U4XuiM2cjeWzma',
+    key_secret: '2CXOAspw2Cgr0wlTz6vc0e8J',
 });
 
 
 
 const createOrder = async (req, res) => {
     const { amount, currency, receipt, userId, products, deliveryAddress } = req.body;
+    const currentISTDate = moment.tz(Date.now(), 'Asia/Kolkata').toDate();
+
 
     try {
         const options = {
@@ -22,6 +27,7 @@ const createOrder = async (req, res) => {
         };
 
         const order = await razorpay.orders.create(options);
+
 
         // Save a preliminary order to the database with status 'created'
         const newOrder = new Order({
@@ -37,7 +43,9 @@ const createOrder = async (req, res) => {
             currency: order.currency,
             receipt: order.receipt,
             userId: userId,
-            deliveryAddress: deliveryAddress
+            deliveryAddress: deliveryAddress,
+            createdAt: currentISTDate // Store the date in IST
+
         });
         
         await newOrder.save();
