@@ -15,8 +15,10 @@ const reset = require("../controller/user/reset");
 const getkyc = require('../controller/user/getkyc');
 
 // Import your OTP controllers
-const sendOtpController = require('../controller/sendOtp'); // Add the send OTP controller
+const sendOtpController = require('../controller/user/userSignUp'); // Add the send OTP controller
 const verifyOtpController = require('../controller/verifyOtp'); // Add the verify OTP controller
+import UserController from '../controller/user/userSignUp'
+
 
 router.get('/user-kyc/:userId', getkyc.getkyc);
 router.put('/upload-kyc/:userId', updateKycController);
@@ -48,8 +50,8 @@ router.post("/clear_cart", require("../controller/product/clearCart"));
 router.post('/businessPrices', businessPrices);
 
 // OTP Routes
-router.post('/send-otp', sendOtpController); // Route for sending OTP
-router.post('/verify-otp', verifyOtpController); // Route for verifying OTP
+router.post('/login', UserController.userLogin)
+router.post('/verify', UserController.verifyOTP)
 
 // Rating Routes
 router.post('/rating/saveRating', ratingController.saveRating);
