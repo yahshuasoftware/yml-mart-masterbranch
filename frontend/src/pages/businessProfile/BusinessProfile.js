@@ -141,13 +141,20 @@ const BusinessProfile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {userData.data.refferal.myrefferals.map((referral, index) => (
-                      <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
-                        <td className="py-3 px-4 text-gray-700">{referral.name}</td>
-                        <td className="py-3 px-4 text-gray-700">{moment(referral.createdAt).format('LL')}</td>
-                      </tr>
-                    ))}
-                  </tbody>
+          {usersData.map((referral, index) => (
+            <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
+              <td className="py-3 px-4 text-gray-700">{referral.name}</td>
+              <td className="py-3 px-4 text-gray-700">
+                {/* Format the createdAt field */}
+                {new Date(referral.createdAt).toLocaleDateString("en-IN", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </td>
+            </tr>
+          ))}
+        </tbody>
                 </table>
               </div>
             ) : (
