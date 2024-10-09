@@ -144,9 +144,11 @@ const VerticalCardProduct = ({ category, heading }) => {
                                                 Add to Cart
                                             </button>
                                         ) : (
-                                            <span className="text-xs text-white bg-red-600 border border-red-600 px-2 py-1 rounded-full">
-                                                Out of Stock
-                                            </span>
+                                            <button
+                                               className="bg-white text-black text-xs font-bold border border-black-200 px-2 py-1 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
+                                            >
+                                               Add to Cart
+                                            </button>
                                         )}
                                     </div>
                                 </div>

@@ -18,6 +18,14 @@ const SummaryApi = {
         url: `${backendDomin}/api/clear_cart`,
         method: "post"
     },
+    sendOtp: {
+        url: `${backendDomin}/api/send-otp`,
+        method: "post"
+    },
+    verifyOtp: {
+        url: `${backendDomin}/api/verify-otp`,
+        method: "post"
+    },
     
     logout_user: {
         url: `${backendDomin}/api/userLogout`,

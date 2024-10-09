@@ -80,7 +80,6 @@ const BusinessProfile = () => {
     }
   };
 
-  
   const fetchUserData = async (authToken) => {
     try {
       // alert(authToken)
@@ -122,7 +121,8 @@ const BusinessProfile = () => {
       console.error("Error:", error);
     }
   };
-  
+  console.log(usersData)
+
 
   
 
@@ -170,7 +170,7 @@ const BusinessProfile = () => {
     case 'My Team':
       return (
         <div className="p-4">
-  {Array.isArray(userData?.data?.refferal.myrefferals) && userData.data.refferal.myrefferals.length > 0 ? (
+  {Array.isArray(usersData) && usersData.length > 0 ? ( 
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-200">
         <thead className="bg-gray-100 border-b border-gray-200">
@@ -180,10 +180,17 @@ const BusinessProfile = () => {
           </tr>
         </thead>
         <tbody>
-          {userData.data.refferal.myrefferals.map((referral, index) => (
+          {usersData.map((referral, index) => (
             <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
               <td className="py-3 px-4 text-gray-700">{referral.name}</td>
-              <td className="py-3 px-4 text-gray-700">{moment(referral.createdAt).format('LL')}</td>
+              <td className="py-3 px-4 text-gray-700">
+                {/* Format the createdAt field */}
+                {new Date(referral.createdAt).toLocaleDateString("en-IN", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -192,6 +199,7 @@ const BusinessProfile = () => {
   ) : (
     <p>No referrals available.</p>
   )}
+
 </div>
 
       );
@@ -221,7 +229,7 @@ return (
           className="px-4 py-2 bg-sky-600 z-30 text-white rounded-md hover:bg-sky-700"
           onClick={handleProfileClick}
         >
-          {showProfileForm ? 'Close Profile' : 'My Profile'}
+          {showProfileForm ? 'Close KYC' : 'KYC Details'}
         </button>
       </div>
 

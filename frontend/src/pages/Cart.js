@@ -124,9 +124,9 @@ const Cart = () => {
   };
 
   // Handle address selection
-  const handleSelectAddress = (address) => {
-    setAddress(address);
-    setShowAddressForm(false); // Hide form once an address is selected
+  const handleSelectAddress = (addres) => {
+    setSelectedAddress(addres);
+    setShowAllAddresses(false); // Hide form once an address is selected
   };
   const fetchData = async (authToken) => {
     try {
