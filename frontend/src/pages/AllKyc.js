@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import ChangeKycStatus from '../components/ChangeKyc';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 
 const AllKyc = ({ setGlobalKycStatus }) => {
     const [kycData, setKycData] = useState([]);
@@ -71,7 +73,7 @@ const AllKyc = ({ setGlobalKycStatus }) => {
                 {kyc.aadharFilePath ? (
                     <a
                         href={kyc.aadharFilePath}
-                        target="_blank"
+                        target=""
                         rel="noopener noreferrer"
                         className="bg-sky-600 text-white px-2 py-1 rounded-lg shadow hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-opacity-50 transition duration-200"
                     >
