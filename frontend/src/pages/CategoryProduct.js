@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import productCategory from "../helpers/productCategory";
 import VerticalCard from "../components/VerticalCard";
 import Loader from "../components/Loader"; // Import the Loader component
-
 import SummaryApi from "../common";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -13,25 +12,23 @@ const CategoryProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true); // Open sidebar by default
+  const [selectCategory, setSelectCategory] = useState({});
+  const [selectSubcategory, setSelectSubcategory] = useState({});
+  const [filterCategoryList, setFilterCategoryList] = useState([]);
+  const [filterSubcategoryList, setFilterSubcategoryList] = useState([]);
+  const [sortBy, setSortBy] = useState("");
   const prevSearchRef = useRef("");
 
   const toggleSidebar = () => {
-    setIsSidebarVisible(!isSidebarVisible);
+    setIsSidebarVisible((prev) => !prev);
   };
 
   const urlSearch = new URLSearchParams(location.search);
   const urlCategoryListinArray = urlSearch.getAll("category");
   const urlSubcategoryListinArray = urlSearch.getAll("subcategory");
 
-  const [selectCategory, setSelectCategory] = useState({});
-  const [selectSubcategory, setSelectSubcategory] = useState({});
-  const [filterCategoryList, setFilterCategoryList] = useState([]);
-  const [filterSubcategoryList, setFilterSubcategoryList] = useState([]);
-  const [sortBy, setSortBy] = useState("");
-
-  // Sync state with URL parameters
+  // Sync state with URL parameters and open sidebar by default
   useEffect(() => {
     const urlCategoryListObject = {};
     const urlSubcategoryListObject = {};
@@ -46,6 +43,7 @@ const CategoryProduct = () => {
 
     setSelectCategory(urlCategoryListObject);
     setSelectSubcategory(urlSubcategoryListObject);
+    setIsSidebarVisible(true); // Open sidebar when the page loads
   }, [location.search]);
 
   // Fetch data based on filters
@@ -54,7 +52,7 @@ const CategoryProduct = () => {
     const response = await fetch(SummaryApi.filterProduct.url, {
       method: SummaryApi.filterProduct.method,
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         category: filterCategoryList,
@@ -77,16 +75,11 @@ const CategoryProduct = () => {
       (key) => selectSubcategory[key]
     );
 
-    if (
-      JSON.stringify(arrayOfCategory) !== JSON.stringify(filterCategoryList)
-    ) {
+    if (JSON.stringify(arrayOfCategory) !== JSON.stringify(filterCategoryList)) {
       setFilterCategoryList(arrayOfCategory);
     }
 
-    if (
-      JSON.stringify(arrayOfSubcategory) !==
-      JSON.stringify(filterSubcategoryList)
-    ) {
+    if (JSON.stringify(arrayOfSubcategory) !== JSON.stringify(filterSubcategoryList)) {
       setFilterSubcategoryList(arrayOfSubcategory);
     }
 
@@ -137,13 +130,12 @@ const CategoryProduct = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 ">
+    <div className="container mx-auto p-4">
       <div className="lg:grid grid-cols-[200px,1fr]">
-        <div className="hidden lg:block bg-white p-2 min-h-[calc(100vh-120px)] overflow-y-scroll">
+        {/* Sidebar */}
+        <div className={`hidden lg:block bg-white p-2 min-h-[calc(100vh-120px)] overflow-y-scroll ${isSidebarVisible ? '' : 'hidden'}`}>
           <div>
-            <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">
-              Sort by
-            </h3>
+            <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Sort by</h3>
             <form className="text-sm flex flex-col gap-2 py-2">
               <div className="flex items-center gap-3">
                 <input
@@ -179,21 +171,11 @@ const CategoryProduct = () => {
           </div>
 
           <div>
-            <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">
-              Category
-            </h3>
+            <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Category</h3>
             <form className="text-sm flex flex-col gap-2 py-2">
-              {/* For Categories */}
               {[
-                // Active categories first
-                ...productCategory.filter(
-                  (category) => selectCategory[category.value]
-                ),
-
-                // Then the remaining categories
-                ...productCategory.filter(
-                  (category) => !selectCategory[category.value]
-                ),
+                ...productCategory.filter((category) => selectCategory[category.value]),
+                ...productCategory.filter((category) => !selectCategory[category.value]),
               ].map((category, index) => (
                 <div key={index}>
                   <div className="flex items-center gap-3">
@@ -208,7 +190,6 @@ const CategoryProduct = () => {
                     <label htmlFor={category.value}>{category.label}</label>
                   </div>
 
-                  {/* Subcategories inside a category */}
                   {selectCategory[category.value] &&
                     category.subcategories?.map((subcategory, subIndex) => (
                       <div className="ml-5" key={subIndex}>
@@ -216,16 +197,12 @@ const CategoryProduct = () => {
                           <input
                             type="checkbox"
                             name="subcategory"
-                            checked={
-                              selectSubcategory[subcategory.value] || false
-                            }
+                            checked={selectSubcategory[subcategory.value] || false}
                             value={subcategory.value}
                             id={subcategory.value}
                             onChange={handleSelectSubcategory}
                           />
-                          <label htmlFor={subcategory.value}>
-                            {subcategory.label}
-                          </label>
+                          <label htmlFor={subcategory.value}>{subcategory.label}</label>
                         </div>
                       </div>
                     ))}
@@ -235,22 +212,20 @@ const CategoryProduct = () => {
           </div>
         </div>
 
+        {/* Main Content */}
         <div className="px-0 mt-8 lg:px-4">
-          <p className="font-medium text-slate-800 text-lg my-2">
-            Search Results: {data.length}
-          </p>
+          <p className="font-medium text-slate-800 text-lg my-2">Showing Results: {data.length}</p>
           <div className="min-h-[calc(100vh-120px)] overflow-y-scroll max-h-[calc(100vh-120px)]">
             {loading ? (
               <Loader /> // Show Loader when loading is true
             ) : (
-              data.length !== 0 && (
-                <VerticalCard data={data} loading={loading} />
-              )
+              data.length !== 0 && <VerticalCard data={data} loading={loading} />
             )}
           </div>
         </div>
       </div>
 
+      {/* Toggle Sidebar Button */}
       <button
         onClick={toggleSidebar}
         className="lg:hidden fixed top-16 left-0 bg-white text-sky-500 px-2 py-1 rounded-full z-50"
@@ -258,104 +233,79 @@ const CategoryProduct = () => {
         {isSidebarVisible ? <FaTimes size={24} /> : <FaBars size={24} />}
       </button>
 
+      {/* Mobile Sidebar */}
       <div
-        className={`lg:hidden fixed pt-8 top-16 left-0 bg-white p-2 h-full min-h-[calc(100vh-120px)] shadow-md z-40 overflow-y-scroll ${
-          isSidebarVisible ? "translate-x-0" : "-translate-x-[100vw]"
-        } transition-all ease-in-out duration-300`}
+        className={`lg:hidden fixed pt-8 top-16 left-0 bg-white p-2 h-full min-h-[calc(100vh-120px)] shadow-md z-40 overflow-y-scroll ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}
       >
-        <div>
-          <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">
-            Sort by
-          </h3>
-          <form className="text-sm flex flex-col gap-2 py-2">
-            <div className="flex items-center gap-3">
-              <input
-                type="radio"
-                name="sortBy"
-                checked={sortBy === "asc"}
-                onChange={handleOnChangeSortBy}
-                value={"asc"}
-              />
-              <label>Price - Low to High</label>
-            </div>
-            <div className="flex items-center gap-3">
-              <input
-                type="radio"
-                name="sortBy"
-                checked={sortBy === "dsc"}
-                onChange={handleOnChangeSortBy}
-                value={"dsc"}
-              />
-              <label>Price - High to Low</label>
-            </div>
-            <div className="flex items-center gap-3">
-              <input
-                type="radio"
-                name="sortBy"
-                checked={sortBy === "popularity"}
-                onChange={handleOnChangeSortBy}
-                value={"popularity"}
-              />
-              <label>Popularity</label>
-            </div>
-          </form>
-        </div>
+        <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Sort by</h3>
+        <form className="text-sm flex flex-col gap-2 py-2">
+          <div className="flex items-center gap-3">
+            <input
+              type="radio"
+              name="sortBy"
+              checked={sortBy === "asc"}
+              onChange={handleOnChangeSortBy}
+              value={"asc"}
+            />
+            <label>Price - Low to High</label>
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="radio"
+              name="sortBy"
+              checked={sortBy === "dsc"}
+              onChange={handleOnChangeSortBy}
+              value={"dsc"}
+            />
+            <label>Price - High to Low</label>
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="radio"
+              name="sortBy"
+              checked={sortBy === "popularity"}
+              onChange={handleOnChangeSortBy}
+              value={"popularity"}
+            />
+            <label>Popularity</label>
+          </div>
+        </form>
 
-        <div>
-          <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">
-            Category
-          </h3>
-          <form className="text-sm flex flex-col gap-2 py-2">
-            {/* For Categories */}
-            {[
-              // Active categories first
-              ...productCategory.filter(
-                (category) => selectCategory[category.value]
-              ),
-
-              // Then the remaining categories
-              ...productCategory.filter(
-                (category) => !selectCategory[category.value]
-              ),
-            ].map((category, index) => (
-              <div key={index}>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    name="category"
-                    checked={selectCategory[category.value] || false}
-                    value={category.value}
-                    id={category.value}
-                    onChange={handleSelectCategory}
-                  />
-                  <label htmlFor={category.value}>{category.label}</label>
-                </div>
-
-                {/* Subcategories inside a category */}
-                {selectCategory[category.value] &&
-                  category.subcategories?.map((subcategory, subIndex) => (
-                    <div className="ml-5" key={subIndex}>
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          name="subcategory"
-                          checked={
-                            selectSubcategory[subcategory.value] || false
-                          }
-                          value={subcategory.value}
-                          id={subcategory.value}
-                          onChange={handleSelectSubcategory}
-                        />
-                        <label htmlFor={subcategory.value}>
-                          {subcategory.label}
-                        </label>
-                      </div>
-                    </div>
-                  ))}
+        <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Category</h3>
+        <form className="text-sm flex flex-col gap-2 py-2">
+          {productCategory.map((category, index) => (
+            <div key={index}>
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  name="category"
+                  checked={selectCategory[category.value] || false}
+                  value={category.value}
+                  id={category.value}
+                  onChange={handleSelectCategory}
+                />
+                <label htmlFor={category.value}>{category.label}</label>
               </div>
-            ))}
-          </form>
-        </div>
+
+              {selectCategory[category.value] &&
+                category.subcategories?.map((subcategory, subIndex) => (
+                  <div className="ml-5" key={subIndex}>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        name="subcategory"
+                        checked={selectSubcategory[subcategory.value] || false}
+                        value={subcategory.value}
+                        id={subcategory.value}
+                        onChange={handleSelectSubcategory}
+                      />
+                      <label htmlFor={subcategory.value}>{subcategory.label}</label>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </form>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FaInstagram, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { IoIosCall, IoMdMail } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import yml from '../assest/banner/yml.png';
@@ -51,14 +51,15 @@ const Footer = () => {
                 <img src={yml} alt="Logo" className="mx-auto w-28 h-10 rounded-lg" />
               </a>
               <h2 className="mt-3 text-lg font-bold text-white">Download our app</h2>
-              <div className="flex justify-center gap-3 mt-3">
-                <a href="https://play.google.com/">
-                  <img src="Google-play.png" alt="Google Play" className="w-28" />
-                </a>
-                <a href="https://www.apple.com/in/app-store/">
-                  <img src="App-store.png" alt="App Store" className="w-28" />
-                </a>
-              </div>
+              <div className="flex justify-center items-center gap-3 mt-3">
+  <a href="https://play.google.com/">
+    <img src="Google-play.png" alt="Google Play" className="w-28 h-19" />
+  </a>
+  <a href="https://www.apple.com/in/app-store/">
+    <img src="App-store.png" alt="App Store" className="w-28 " />
+  </a>
+</div>
+
             </div>
 
             {/* Special Section */}
