@@ -5,7 +5,7 @@ import personalCareImage from '../assest/Images/Personal Care/8.jpeg';
 import homeCareImage from '../assest/Images/Home Care/5.jpeg';
 import medicinesImage from '../assest/Images/Medicines/7.jpeg';
 import fruitsImage from '../assest/Images/fruits/3.jpeg';
-import beautyImage from '../assest/Images/Beauty/1.jpeg';
+import beautyImage from '../assest/CategoryImgs/Beauty.jpg';
 import stationaryImage from '../assest/Images/Stationary/10.jpeg';
 import electronicsImage from '../assest/Images/Electronics/2.jpeg';
 import homeDecorImage from '../assest/Images/Kitchen/11.jpeg';

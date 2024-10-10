@@ -23,28 +23,11 @@ const Footer = () => {
       </div>
 
       {/* Footer Section */}
-      <div className="bg-gray-100 text-gray-700">
-        {/* Top Section */}
-        <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-            <Link to="/about" className="flex flex-col items-center">
-              <img src="comp1.png" alt="About Company" className="w-12" />
-              <p className="mt-2 text-black hover:text-gray-500">About Company</p>
-            </Link>
-            <Link to="/contact" className="flex flex-col items-center">
-              <img src="support.png" alt="Contact Us" className="w-12" />
-              <p className="mt-2 text-black hover:text-gray-500">Contact Us</p>
-            </Link>
-            <Link to="/askquestion" className="flex flex-col items-center">
-              <img src="question.png" alt="Ask Question" className="w-12" />
-              <p className="mt-2 text-black hover:text-gray-500">Ask Question</p>
-            </Link>
-          </div>
-        </div>
+     
 
         {/* Bottom Section */}
         <div className="bg-sky-600 py-6">
-          <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+          <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 px-4">
             {/* Download Section */}
             <div className="text-center">
               <a href="/">
@@ -86,6 +69,18 @@ const Footer = () => {
                 <li><Link to="/user-details" className="hover:text-gray-300">Profile</Link></li>
                 <li><Link to="/cart" className="hover:text-gray-300">Check your Carts & Discounts</Link></li>
                 <li><Link to="/refer" className="hover:text-gray-300">Refer a Friend</Link></li>
+       
+
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3 text-white">About us & more</h3>
+              <ul className="space-y-1 text-white">
+             
+                <li><Link to="/about" className="hover:text-gray-300">About Company</Link></li>
+                <li><Link to="/contact" className="hover:text-gray-300">Contact Us</Link></li>
+                <li><Link to="/askquestion" className="hover:text-gray-300">Ask Questions</Link></li>
+
               </ul>
             </div>
 
@@ -155,7 +150,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
