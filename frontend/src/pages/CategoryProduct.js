@@ -41,8 +41,21 @@ const CategoryProduct = () => {
       urlSubcategoryListObject[el] = true;
     });
 
+    // Set selected categories and subcategories from URL
     setSelectCategory(urlCategoryListObject);
     setSelectSubcategory(urlSubcategoryListObject);
+
+    // Check each subcategory's parent category
+    urlSubcategoryListinArray.forEach((subcat) => {
+      const parentCategory = productCategory.find(category =>
+        category.subcategories.some(s => s.value === subcat)
+      );
+      if (parentCategory) {
+        urlCategoryListObject[parentCategory.value] = true; // Select the parent category
+      }
+    });
+
+    setSelectCategory(urlCategoryListObject);
     setIsSidebarVisible(true); // Open sidebar when the page loads
   }, [location.search]);
 
@@ -114,14 +127,49 @@ const CategoryProduct = () => {
       ...prev,
       [value]: checked,
     }));
+
+    // Uncheck all subcategories if the main category is unchecked
+    if (!checked) {
+      const category = productCategory.find(cat => cat.value === value);
+      category.subcategories.forEach(sub => {
+        setSelectSubcategory(prev => ({
+          ...prev,
+          [sub.value]: false,
+        }));
+      });
+    } else {
+      // Check all subcategories if the main category is checked
+      const category = productCategory.find(cat => cat.value === value);
+      category.subcategories.forEach(sub => {
+        setSelectSubcategory(prev => ({
+          ...prev,
+          [sub.value]: true,
+        }));
+      });
+    }
   };
 
+  // Handle subcategory selection and ensure its parent category is checked
   const handleSelectSubcategory = (e) => {
     const { value, checked } = e.target;
+
+    // Update subcategory selection
     setSelectSubcategory((prev) => ({
       ...prev,
       [value]: checked,
     }));
+
+    // Check the parent category of the selected subcategory
+    const parentCategory = productCategory.find(category =>
+      category.subcategories.some(subcat => subcat.value === value)
+    );
+
+    if (parentCategory) {
+      setSelectCategory((prev) => ({
+        ...prev,
+        [parentCategory.value]: true, // Ensure parent category is selected
+      }));
+    }
   };
 
   const handleOnChangeSortBy = (e) => {
@@ -173,10 +221,7 @@ const CategoryProduct = () => {
           <div>
             <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Category</h3>
             <form className="text-sm flex flex-col gap-2 py-2">
-              {[
-                ...productCategory.filter((category) => selectCategory[category.value]),
-                ...productCategory.filter((category) => !selectCategory[category.value]),
-              ].map((category, index) => (
+              {productCategory.map((category, index) => (
                 <div key={index}>
                   <div className="flex items-center gap-3">
                     <input
@@ -190,7 +235,7 @@ const CategoryProduct = () => {
                     <label htmlFor={category.value}>{category.label}</label>
                   </div>
 
-                  {/* Auto-expand subcategory if it's selected */}
+                  {/* Expand and select subcategory */}
                   {selectCategory[category.value] || Object.keys(selectSubcategory).some(sub => category.subcategories.some(s => s.value === sub)) ? (
                     category.subcategories?.map((subcategory, subIndex) => (
                       <div className="ml-5" key={subIndex}>
@@ -241,10 +286,7 @@ const CategoryProduct = () => {
       >
         <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Category</h3>
         <form className="text-sm flex flex-col gap-2 py-2">
-          {[
-            ...productCategory.filter((category) => selectCategory[category.value]),
-            ...productCategory.filter((category) => !selectCategory[category.value]),
-          ].map((category, index) => (
+          {productCategory.map((category, index) => (
             <div key={index}>
               <div className="flex items-center gap-3">
                 <input
@@ -258,7 +300,7 @@ const CategoryProduct = () => {
                 <label htmlFor={category.value}>{category.label}</label>
               </div>
 
-              {/* Auto-expand subcategory if it's selected */}
+              {/* Expand and select subcategory */}
               {selectCategory[category.value] || Object.keys(selectSubcategory).some(sub => category.subcategories.some(s => s.value === sub)) ? (
                 category.subcategories?.map((subcategory, subIndex) => (
                   <div className="ml-5" key={subIndex}>
