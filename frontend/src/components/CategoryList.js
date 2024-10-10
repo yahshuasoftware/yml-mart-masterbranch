@@ -52,7 +52,16 @@ const CategoryList = () => {
         try {
             const response = await fetch(SummaryApi.categoryProduct.url);
             const dataResponse = await response.json();
-            setCategoryProduct(Array.isArray(dataResponse.data) ? dataResponse.data : []);
+            let products = Array.isArray(dataResponse.data) ? dataResponse.data : [];
+    
+            // Move 'grocery' category to the first position
+            products = products.sort((a, b) => {
+                if (a.category.toLowerCase() === 'groceries') return -1;
+                if (b.category.toLowerCase() === 'groceries') return 1;
+                return 0;
+            });
+    
+            setCategoryProduct(products);
         } catch (error) {
             console.error("Failed to fetch category products:", error);
             setCategoryProduct([]); // Set an empty array on error to prevent map errors
@@ -60,6 +69,7 @@ const CategoryList = () => {
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchCategoryProduct();
@@ -173,7 +183,7 @@ const CategoryList = () => {
                                 className="cursor-pointer"
                             >
                                 <div className="flex flex-col items-center">
-                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-4 flex items-center justify-center">
+                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center">
                                         <img
                                         src={categoryImages[product?.category.toLowerCase()] || categoryImages["default"]}
                                         alt={product?.productName || "Product Image"}

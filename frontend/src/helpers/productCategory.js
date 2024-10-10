@@ -1,15 +1,17 @@
 const productCategory = [
+    
     { 
         id: 1, 
-        label: "Personal Care", 
-        value: "personal care", 
+        label: "Groceries", 
+        value: "groceries", 
         subcategories: [
-            { id: 101, label: "Hair Care", value: "hair care" },
-            { id: 102, label: "Skin Care", value: "skin care" },
-            { id: 103, label: "Oral Care", value: "oral care" },
-            { id: 104, label: "Men's Grooming", value: "men's grooming" },
-            { id: 105, label: "Deo & Fragrances", value: "deo , fragrances" },
-            { id: 106, label: "Health & Wellness", value: "health, wellness" },
+            { id: 101, label: "Biscuits & Drinks", value: "biscuits, drinks" },
+            { id: 102, label: "Fruits & Vegetables", value: "fruits, vegetables" },
+            { id: 103, label: "Dry Fish", value: "dry fish" },
+            { id: 104, label: "Cooking Essentials", value: "cooking essentials" },
+            { id: 105, label: "Dairy & Bakery", value: "dairy, bakery" },
+            { id: 106, label: "Mom & Baby Care", value: "mom, baby care" },
+            { id: 107, label: "Disposables", value: "disposables" },
         ]
     },
     { 
@@ -84,16 +86,15 @@ const productCategory = [
     },
     { 
         id: 8, 
-        label: "Groceries", 
-        value: "groceries", 
+        label: "Personal Care", 
+        value: "personal care", 
         subcategories: [
-            { id: 801, label: "Biscuits & Drinks", value: "biscuits, drinks" },
-            { id: 802, label: "Fruits & Vegetables", value: "fruits, vegetables" },
-            { id: 803, label: "Dry Fish", value: "dry fish" },
-            { id: 804, label: "Cooking Essentials", value: "cooking essentials" },
-            { id: 805, label: "Dairy & Bakery", value: "dairy, bakery" },
-            { id: 806, label: "Mom & Baby Care", value: "mom, baby care" },
-            { id: 807, label: "Disposables", value: "disposables" },
+            { id: 801, label: "Hair Care", value: "hair care" },
+            { id: 802, label: "Skin Care", value: "skin care" },
+            { id: 803, label: "Oral Care", value: "oral care" },
+            { id: 804, label: "Men's Grooming", value: "men's grooming" },
+            { id: 805, label: "Deo & Fragrances", value: "deo , fragrances" },
+            { id: 806, label: "Health & Wellness", value: "health, wellness" },
         ]
     },
     { 
