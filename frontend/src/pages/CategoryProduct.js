@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import productCategory from "../helpers/productCategory";
-import VerticalCard from "../components/VerticalCard";
-import Loader from "../components/Loader";
-import SummaryApi from "../common";
-import { FaTimes, FaBars } from "react-icons/fa";
+import productCategory from "../helpers/productCategory"; // Ensure this file exports the category data structure
+import VerticalCard from "../components/VerticalCard"; // Ensure this is your product display component
+import Loader from "../components/Loader"; // Ensure this is your loading component
+import SummaryApi from "../common"; // Ensure this is your API configuration
+import { FaTimes, FaBars } from "react-icons/fa"; // For sidebar toggle icons
 
 const CategoryProduct = () => {
   const [data, setData] = useState([]);
@@ -41,21 +41,8 @@ const CategoryProduct = () => {
       urlSubcategoryListObject[el] = true;
     });
 
-    // Set selected categories and subcategories from URL
     setSelectCategory(urlCategoryListObject);
     setSelectSubcategory(urlSubcategoryListObject);
-
-    // Check each subcategory's parent category
-    urlSubcategoryListinArray.forEach((subcat) => {
-      const parentCategory = productCategory.find(category =>
-        category.subcategories.some(s => s.value === subcat)
-      );
-      if (parentCategory) {
-        urlCategoryListObject[parentCategory.value] = true; // Select the parent category
-      }
-    });
-
-    setSelectCategory(urlCategoryListObject);
     setIsSidebarVisible(true); // Open sidebar when the page loads
   }, [location.search]);
 
@@ -101,7 +88,6 @@ const CategoryProduct = () => {
       ...arrayOfSubcategory.map((el) => `subcategory=${el}`),
     ].join("&");
 
-    // Check if the search string is different from the previous one to prevent unnecessary navigation
     if (newSearch !== prevSearchRef.current) {
       navigate("/product-category?" + newSearch);
       prevSearchRef.current = newSearch;
@@ -128,7 +114,7 @@ const CategoryProduct = () => {
       [value]: checked,
     }));
 
-    // Uncheck all subcategories if the main category is unchecked
+    // Deselect all subcategories if the category is unchecked
     if (!checked) {
       const category = productCategory.find(cat => cat.value === value);
       category.subcategories.forEach(sub => {
@@ -137,29 +123,17 @@ const CategoryProduct = () => {
           [sub.value]: false,
         }));
       });
-    } else {
-      // Check all subcategories if the main category is checked
-      const category = productCategory.find(cat => cat.value === value);
-      category.subcategories.forEach(sub => {
-        setSelectSubcategory(prev => ({
-          ...prev,
-          [sub.value]: true,
-        }));
-      });
     }
   };
 
-  // Handle subcategory selection and ensure its parent category is checked
   const handleSelectSubcategory = (e) => {
     const { value, checked } = e.target;
 
-    // Update subcategory selection
-    setSelectSubcategory((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
+    // Deselect all other subcategories before selecting the new one
+    setSelectSubcategory({
+      [value]: checked, // Only one subcategory can be selected at a time
+    });
 
-    // Check the parent category of the selected subcategory
     const parentCategory = productCategory.find(category =>
       category.subcategories.some(subcat => subcat.value === value)
     );
@@ -272,56 +246,9 @@ const CategoryProduct = () => {
         </div>
       </div>
 
-      {/* Toggle Sidebar Button */}
-      <button
-        onClick={toggleSidebar}
-        className="lg:hidden fixed top-16 left-0 bg-white text-sky-500 px-2 py-1 rounded-full z-50"
-      >
-        {isSidebarVisible ? <FaTimes size={24} /> : <FaBars size={24} />}
+      <button onClick={toggleSidebar} className="fixed top-0 right-0 m-4 bg-blue-500 text-white p-2 rounded-lg lg:hidden">
+        {isSidebarVisible ? <FaTimes /> : <FaBars />}
       </button>
-
-      {/* Mobile Sidebar */}
-      <div
-        className={`lg:hidden fixed pt-8 top-16 left-0 bg-white p-2 h-full min-h-[calc(100vh-120px)] shadow-md z-40 overflow-y-scroll ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}
-      >
-        <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 border-slate-300">Category</h3>
-        <form className="text-sm flex flex-col gap-2 py-2">
-          {productCategory.map((category, index) => (
-            <div key={index}>
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  name="category"
-                  checked={selectCategory[category.value] || false}
-                  value={category.value}
-                  id={category.value}
-                  onChange={handleSelectCategory}
-                />
-                <label htmlFor={category.value}>{category.label}</label>
-              </div>
-
-              {/* Expand and select subcategory */}
-              {selectCategory[category.value] || Object.keys(selectSubcategory).some(sub => category.subcategories.some(s => s.value === sub)) ? (
-                category.subcategories?.map((subcategory, subIndex) => (
-                  <div className="ml-5" key={subIndex}>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        name="subcategory"
-                        checked={selectSubcategory[subcategory.value] || false}
-                        value={subcategory.value}
-                        id={subcategory.value}
-                        onChange={handleSelectSubcategory}
-                      />
-                      <label htmlFor={subcategory.value}>{subcategory.label}</label>
-                    </div>
-                  </div>
-                ))
-              ) : null}
-            </div>
-          ))}
-        </form>
-      </div>
     </div>
   );
 };

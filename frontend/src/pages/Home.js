@@ -5,6 +5,7 @@ import HorizontalCardProduct from '../components/HorizontalCardProduct'
 import VerticalCardProduct from '../components/VerticalCardProduct'
 import AdBanner from '../components/AdBannerProduct'
 import GroceryCart from '../components/GroceryCard'
+import Offer from '../components/Offer'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
@@ -13,6 +14,8 @@ const Home = () => {
       <CategoryList/>
       <BannerProduct/>
       <Link to={"/refer"}><AdBanner/></Link>
+      
+      <Offer/>
       
       <GroceryCart category={"groceries"} heading={"Popular's Groceries"}/>
 
