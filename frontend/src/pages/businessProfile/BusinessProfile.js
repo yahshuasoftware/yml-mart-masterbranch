@@ -107,7 +107,7 @@ const BusinessProfile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {orderData.map((order, index) => (
+                    {orderData?.map((order, index) => (
                       <React.Fragment key={index}>
                         {order.products.map((product, prodIndex) => (
                           <tr key={prodIndex} className="hover:bg-gray-50">
@@ -128,6 +128,8 @@ const BusinessProfile = () => {
         );
       case 'Business':
         return <div className="p-4">Business Content...</div>;
+      case 'Your KYC':
+        return <MyProfile />; 
       case 'My Team':
         return (
           <div className="p-4">
@@ -141,7 +143,7 @@ const BusinessProfile = () => {
                     </tr>
                   </thead>
                   <tbody>
-          {usersData.map((referral, index) => (
+          {usersData?.map((referral, index) => (
             <tr key={referral._id || index} className="border-b hover:bg-gray-50 border-gray-200">
               <td className="py-3 px-4 text-gray-700">{referral.name}</td>
               <td className="py-3 px-4 text-gray-700">
@@ -162,8 +164,7 @@ const BusinessProfile = () => {
             )}
           </div>
         );
-      case 'Your KYC':
-        return <MyProfile />; // Render the KYC form here
+      // Render the KYC form here
       default:
         return <div className="p-4">Select an item to view details</div>;
     }
@@ -193,6 +194,14 @@ const BusinessProfile = () => {
             <FaUserFriends className="mr-2" /> My Team
           </button>
           <button
+            onClick={() => setActiveSection('Your KYC')} // Set active section to Your KYC
+            className={`flex items-center w-full p-3 rounded-lg text-left transition ${
+              activeSection === 'Your KYC' ? 'bg-sky-600 text-white' : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <FaUserFriends className="mr-2" /> Your KYC
+          </button>
+          <button
             onClick={() => setActiveSection('Orders')}
             className={`flex items-center w-full p-3 rounded-lg text-left transition ${
               activeSection === 'Orders' ? 'bg-sky-600 text-white' : 'text-gray-700 hover:bg-gray-100'
@@ -208,20 +217,17 @@ const BusinessProfile = () => {
           >
             <FaMoneyCheckAlt className="mr-2" /> Transactions
           </button>
-          <button
-            onClick={() => setActiveSection('Your KYC')} // Set active section to Your KYC
-            className={`flex items-center w-full p-3 rounded-lg text-left transition ${
-              activeSection === 'Your KYC' ? 'bg-sky-600 text-white' : 'text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            <FaUserFriends className="mr-2" /> Your KYC
-          </button>
+          
         </nav>
       </div>
 
       {/* Right Column */}
       <div className="md:w-3/4 md:ml-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+            <h3 className="text-lg font-semibold text-gray-600">My Purchasing</h3>
+            <p className="text-2xl">₹{userData?.data?.businessPrices?.myPurchase}</p>
+          </div>
           <div className="p-4 bg-white shadow-lg rounded-lg">
             <h3 className="text-lg font-semibold text-gray-600">Total Purchasing</h3>
             <p className="text-2xl">₹{userData?.data?.businessPrices?.totalPurchase}</p>
@@ -230,10 +236,7 @@ const BusinessProfile = () => {
             <h3 className="text-lg font-semibold text-gray-600">Business Incentive</h3>
             <p className="text-2xl">₹{userData?.data?.businessPrices?.totalIncentive}</p>
           </div>
-          <div className="p-4 bg-white shadow-lg rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-600">My Purchasing</h3>
-            <p className="text-2xl">₹{userData?.data?.businessPrices?.myPurchase}</p>
-          </div>
+         
         </div>
         <div className="p-6 bg-white shadow-lg rounded-lg">
           {renderContent()}

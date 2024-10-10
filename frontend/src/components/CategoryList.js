@@ -2,8 +2,42 @@ import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
 import productCategory from '../helpers/productCategory'; // Assuming productCategory is an array with subcategories for each category
+import personalCareImage from '../assest/CategoryImgs/Personal Care.jpg';
+import homeCareImage from '../assest/CategoryImgs/Beauty.jpg';
+import medicinesImage from '../assest/CategoryImgs/Beauty.jpg';
+import fruitsImage from '../assest/CategoryImgs/Beauty.jpg';
+import beautyImage from '../assest/CategoryImgs/Beauty.jpg';
+import stationaryImage from '../assest/CategoryImgs/Stationary.jpg';
+import electronicsImage from '../assest/CategoryImgs/Electronics.jpg';
+import homeDecorImage from '../assest/CategoryImgs/Home Decor.jpg';
+import groceriesImage from '../assest/CategoryImgs/Groceries.jpg';
+import gifthampersImage from '../assest/CategoryImgs/Gifts & Hampers.jpg';
+import kitchenwareImage from '../assest/CategoryImgs/Kitchenware.jpg';
+import toysandgamesImage from '../assest/CategoryImgs/toys and games.jpg';
+
+
+
 
 const CategoryList = () => {
+
+    const categoryImages = {
+        "personal care": personalCareImage,
+        "home care": homeCareImage,
+        "medicines": medicinesImage,
+        "fruits": fruitsImage,
+        "beauty": beautyImage,
+        "stationary": stationaryImage,
+        "electronics": electronicsImage,
+        "home decor": homeDecorImage,
+        "groceries": groceriesImage,
+        "gifts, hampers": gifthampersImage,
+        "kitchenware": kitchenwareImage,
+        "toys, games": toysandgamesImage,
+
+
+
+        
+    };
     const [categoryProduct, setCategoryProduct] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hoveredCategory, setHoveredCategory] = useState(null); // To track the hovered category
@@ -141,8 +175,8 @@ const CategoryList = () => {
                                 <div className="flex flex-col items-center">
                                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-full p-4 flex items-center justify-center">
                                         <img
-                                            src={product?.productImage[0]}
-                                            alt={product?.productName || "Product Image"}
+                                        src={categoryImages[product?.category.toLowerCase()] || categoryImages["default"]}
+                                        alt={product?.productName || "Product Image"}
                                             className="h-full object-scale-down hover:scale-125 transition-transform"
                                         />
                                     </div>
