@@ -60,11 +60,12 @@ const GroceryCart = ({ category, heading }) => {
             <div className="flex justify-between items-center">
                 <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
                 <button
-                    className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-transform duration-300 hover:scale-105 hover:bg-blue-600"
-                    onClick={handleViewAll}
-                >
-                    View All
-                </button>
+    className="bg-blue-500 text-white font-semibold py-1 px-2 rounded-md"
+    onClick={handleViewAll}
+>
+    View All
+</button>
+
 
             </div>
 
