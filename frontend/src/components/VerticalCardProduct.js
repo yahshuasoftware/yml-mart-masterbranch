@@ -118,10 +118,10 @@ const VerticalCardProduct = ({ category, heading }) => {
                                         alt={product?.productName}
                                     />
                                     {discountPercentage > 0 && (
-    <span className="absolute top-2 left-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-lg">
-        {discountPercentage}% Off
-    </span>
-)}
+                                    <span className="absolute top-2 left-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-lg">
+                                    {discountPercentage}% Off
+                                    </span>
+                            )}
                                 </div>
                                 <div className="px-4 pt-2 pb-3 h-30 space-y-1">
                                     <h3 className="text-xs md:text-sm font-semibold text-gray-800 truncate">

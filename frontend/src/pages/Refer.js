@@ -57,7 +57,7 @@ const ReferCard = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-b from-yellow-200 to-blue-200 p-6">
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-b from-blue-200  p-6">
       {/* Image Section */}
       <div className="flex items-center mb-6 md:mb-0 pr-7">
         <img

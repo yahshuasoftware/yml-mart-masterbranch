@@ -60,7 +60,7 @@ const GroceryCart = ({ category, heading }) => {
             <div className="flex justify-between items-center">
                 <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
                 <button
-                    className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md transition-transform duration-300 hover:scale-105 hover:bg-blue-600"
+                    className="font-bold py-2 px-4 rounded-md transition-transform duration-300 hover:scale-105 text-sky-800"
                     onClick={handleViewAll}
                 >
                     View All
@@ -69,6 +69,13 @@ const GroceryCart = ({ category, heading }) => {
             </div>
 
             {/* Scroll buttons */}
+
+            {/* Products Slider */}
+            <div
+                ref={scrollElement}
+                className='flex gap-5 overflow-x-auto scrollbar-none'
+                style={{ scrollBehavior: 'smooth' }}
+            >
             <button
                 className='bg-white shadow-md rounded-full p-2 absolute left-2 top-1/2 transform -translate-y-1/2 text-lg md:flex justify-center items-center z-10'
                 onClick={scrollLeft}
@@ -81,13 +88,6 @@ const GroceryCart = ({ category, heading }) => {
             >
                 <FaAngleRight />
             </button>
-
-            {/* Products Slider */}
-            <div
-                ref={scrollElement}
-                className='flex gap-5 overflow-x-auto scrollbar-none'
-                style={{ scrollBehavior: 'smooth' }}
-            >
                 {loading ? (
                     loadingList.map((_, index) => (
                         <div key={index} className="bg-white rounded-lg shadow-lg">
@@ -114,12 +114,12 @@ const GroceryCart = ({ category, heading }) => {
                                     alt={product?.productName}
                                 />
                             </div>
-                            <div className="px-4 pt-2 pb-3 h-30 space-y-1">
+                            <div className="px-4 py-5 h-30 space-y-1">
                                 <h3 className="text-xs md:text-sm font-semibold text-gray-800 truncate">
                                     {product?.productName}
                                 </h3>
-                                <div className="flex items-center justify-between">
-                                    <p className="text-green-700 text-xs font-semibold">
+                                <div className="flex items-center justify-between pb-1">
+                                    <p className="text-gray-800 text-base font-semibold">
                                         {displayINRCurrency(product?.sellingPrice)}
                                     </p>
                                     <p className="text-slate-400 text-xs line-through">
@@ -127,24 +127,17 @@ const GroceryCart = ({ category, heading }) => {
                                     </p>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-xs text-green-600 font-semibold bg-green-100 px-1 rounded">
+                                    <span className="text-xs text-green-600 font-semibold bg-green-100 px-2 py-1 rounded">
                                         {calculateDiscountPercentage(product?.price, product?.sellingPrice)}% Off
                                     </span>
-                                    <div className="flex justify-center pt-1">
-                                        {product?.quantity > 0 ? (
-                                          <button
-                                          className="bg-white text-black text-xs font-bold border-2 border-black-200 px-4 py-2 w-20 rounded-full transition-colors duration-300 hover:bg-green-100 hover:text-green-600"
-                                          onClick={(e) => handleAddToCart(e, product?._id)}
-                                      >
-                                          Add
-                                      </button>
-                                      
-                                       
-                                        ) : (
-                                            <span className="text-xs text-white bg-gray-400 border border-gray-400 px-4 py-2 rounded-full">
-                                                Out of Stock
-                                            </span>
-                                        )}
+                                    <div className="flex justify-center">
+                                        {/* Removed stock checking */}
+                                        <button
+                                            className="bg-white text-gray-800 text-xs font-bold border-2 border-black-200 px-3 py-1 rounded-full transition-colors duration-300 hover:bg-blue-100"
+                                            onClick={(e) => handleAddToCart(e, product?._id)}
+                                        >
+                                            Add
+                                        </button>
                                     </div>
                                 </div>
                             </div>
